@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceler Landing Page Preview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --panel-bg: #1a1a1a;
+            --panel-border: #2a2a2a;
+            --panel-text: #e5e5e5;
+            --panel-muted: #888;
+            --panel-accent: #c2410c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0f0f0f;
+            color: var(--panel-text);
+        }
+
+        .app {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            background: var(--panel-bg);
+            border-right: 1px solid var(--panel-border);
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .panel-header {
+            margin-bottom: 32px;
+        }
+
+        .panel-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--panel-text);
+            margin-bottom: 4px;
+        }
+
+        .panel-subtitle {
+            font-size: 12px;
+            color: var(--panel-muted);
+        }
+
+        .control-section {
+            margin-bottom: 28px;
+        }
+
+        .control-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--panel-muted);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .control-options {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 14px;
+            background: transparent;
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .control-option:hover {
+            background: rgba(255,255,255,0.03);
+            border-color: #3a3a3a;
+        }
+
+        .control-option.active {
+            background: rgba(194, 65, 12, 0.15);
+            border-color: var(--panel-accent);
+        }
+
+        .control-option input {
+            display: none;
+        }
+
+        .option-indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #444;
+            margin-right: 12px;
+            transition: all 0.15s ease;
+        }
+
+        .control-option.active .option-indicator {
+            border-color: var(--panel-accent);
+            background: var(--panel-accent);
+            box-shadow: inset 0 0 0 3px var(--panel-bg);
+        }
+
+        .option-content {
+            flex: 1;
+        }
+
+        .option-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--panel-text);
+        }
+
+        .option-desc {
+            font-size: 11px;
+            color: var(--panel-muted);
+            margin-top: 2px;
+        }
+
+        /* Preview Canvas */
+        .preview-canvas {
+            background: #0a0a0a;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 32px;
+        }
+
+        .browser-frame {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+
+        .browser-chrome {
+            background: #f5f5f5;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .browser-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .browser-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .browser-dot:nth-child(1) { background: #ff5f57; }
+        .browser-dot:nth-child(2) { background: #febc2e; }
+        .browser-dot:nth-child(3) { background: #28c840; }
+
+        .browser-url {
+            flex: 1;
+            margin-left: 12px;
+            background: #fff;
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-size: 13px;
+            color: #666;
+            border: 1px solid #e0e0e0;
+        }
+
+        .landing-frame {
+            width: 100%;
+            height: calc(100vh - 140px);
+            border: none;
+        }
+
+        /* Status indicator */
+        .status-bar {
+            margin-top: 24px;
+            padding: 16px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 8px;
+        }
+
+        .status-bar.warning {
+            background: rgba(234, 179, 8, 0.1);
+            border-color: rgba(234, 179, 8, 0.3);
+        }
+
+        .status-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #22c55e;
+            margin-bottom: 4px;
+        }
+
+        .status-bar.warning .status-title {
+            color: #eab308;
+        }
+
+        .status-text {
+            font-size: 12px;
+            color: var(--panel-muted);
+            line-height: 1.5;
+        }
+
+        /* Section navigation */
+        .section-nav {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--panel-border);
+        }
+
+        .section-nav-title {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--panel-muted);
+            margin-bottom: 12px;
+        }
+
+        .section-link {
+            display: block;
+            padding: 8px 0;
+            font-size: 13px;
+            color: var(--panel-muted);
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+
+        .section-link:hover {
+            color: var(--panel-text);
+        }
+
+        .section-link span {
+            color: var(--panel-accent);
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app">
+    <div class="control-panel">
+        <div class="panel-header">
+            <div class="panel-title">Acceler</div>
+            <div class="panel-subtitle">Landing Page Preview</div>
+        </div>
+
+        <div class="control-section">
+            <label class="control-label">Select Proposition</label>
+            <div class="control-options">
+                <label class="control-option active" data-page="deer-in-headlights">
+                    <input type="radio" name="page" value="deer-in-headlights" checked>
+                    <span class="option-indicator"></span>
+                    <div class="option-content">
+                        <div class="option-text">Deer in Headlights</div>
+                        <div class="option-desc">US/ME • Premium • "Get Clarity"</div>
+                    </div>
+                </label>
+                <label class="control-option" data-page="budget-urgency">
+                    <input type="radio" name="page" value="budget-urgency">
+                    <span class="option-indicator"></span>
+                    <div class="option-content">
+                        <div class="option-text">Budget Urgency</div>
+                        <div class="option-desc">India • Fast • March 31 deadline</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div class="status-bar" id="status-bar">
+            <div class="status-title">Ready for Review</div>
+            <div class="status-text">Deer in Headlights page is complete with all 11 sections.</div>
+        </div>
+
+        <div class="section-nav">
+            <div class="section-nav-title">Page Sections</div>
+            <div id="section-links">
+                <a href="#" class="section-link" data-section="hero"><span>1</span> Hero</a>
+                <a href="#" class="section-link" data-section="problem"><span>2</span> Problem</a>
+                <a href="#" class="section-link" data-section="solution"><span>3</span> Solution</a>
+                <a href="#" class="section-link" data-section="sessions"><span>4</span> Two Sessions</a>
+                <a href="#" class="section-link" data-section="how-it-works"><span>5</span> How It Works</a>
+                <a href="#" class="section-link" data-section="instructors"><span>6</span> Instructors</a>
+                <a href="#" class="section-link" data-section="social-proof"><span>7</span> Social Proof</a>
+                <a href="#" class="section-link" data-section="testimonials"><span>8</span> Testimonials</a>
+                <a href="#" class="section-link" data-section="qualification"><span>9</span> Who This Is For</a>
+                <a href="#" class="section-link" data-section="faq"><span>10</span> FAQ</a>
+                <a href="#" class="section-link" data-section="cta"><span>11</span> Final CTA</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="preview-canvas">
+        <div class="browser-frame">
+            <div class="browser-chrome">
+                <div class="browser-dots">
+                    <span class="browser-dot"></span>
+                    <span class="browser-dot"></span>
+                    <span class="browser-dot"></span>
+                </div>
+                <div class="browser-url" id="browser-url">acceler.com</div>
+            </div>
+            <iframe id="landing-frame" class="landing-frame" src="deer-in-headlights.html"></iframe>
+        </div>
+    </div>
+</div>
+
+<script>
+    const frame = document.getElementById('landing-frame');
+    const urlBar = document.getElementById('browser-url');
+    const statusBar = document.getElementById('status-bar');
+    const options = document.querySelectorAll('.control-option');
+
+    const pageInfo = {
+        'deer-in-headlights': {
+            url: 'acceler.com',
+            file: 'deer-in-headlights.html',
+            status: 'Ready for Review',
+            statusText: 'Deer in Headlights page is complete with all 11 sections.',
+            ready: true
+        },
+        'budget-urgency': {
+            url: 'acceler.com/india',
+            file: 'budget-urgency.html',
+            status: 'In Progress',
+            statusText: 'Budget Urgency page is being created.',
+            ready: false
+        }
+    };
+
+    options.forEach(option => {
+        option.addEventListener('click', () => {
+            options.forEach(o => o.classList.remove('active'));
+            option.classList.add('active');
+
+            const page = option.dataset.page;
+            const info = pageInfo[page];
+
+            urlBar.textContent = info.url;
+            frame.src = info.file;
+
+            statusBar.className = info.ready ? 'status-bar' : 'status-bar warning';
+            statusBar.innerHTML = `
+                <div class="status-title">${info.status}</div>
+                <div class="status-text">${info.statusText}</div>
+            `;
+        });
+    });
+
+    // Section navigation
+    document.querySelectorAll('.section-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const section = link.dataset.section;
+            frame.contentWindow.document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+</script>
+
+</body>
+</html>

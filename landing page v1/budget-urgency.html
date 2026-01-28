@@ -1,0 +1,2096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceler | Build AI-Ready Teams Fast</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           DESIGN SYSTEM - CSS VARIABLES
+           ============================================ */
+        :root {
+            /* Warm Theme (Default) */
+            --bg-primary: #fffbf7;
+            --bg-secondary: #fef6ee;
+            --bg-tertiary: #fdf0e3;
+            --bg-card: #ffffff;
+            --text-primary: #1c1917;
+            --text-secondary: #57534e;
+            --text-muted: #a8a29e;
+            --accent: #c2410c;
+            --accent-hover: #9a3412;
+            --border: #fed7aa;
+            --border-light: #ffedd5;
+            --font-display: 'DM Serif Display', Georgia, serif;
+            --font-body: 'DM Sans', -apple-system, sans-serif;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+        }
+
+        /* Modern Theme */
+        .theme-modern {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --font-display: 'Inter', -apple-system, sans-serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+        }
+
+        /* Dark Theme */
+        .theme-dark {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --bg-tertiary: #1a1a1a;
+            --bg-card: #1a1a1a;
+            --text-primary: #fafafa;
+            --text-secondary: #a3a3a3;
+            --text-muted: #525252;
+            --accent: #f97316;
+            --accent-hover: #ea580c;
+            --border: #262626;
+            --border-light: #1f1f1f;
+            --font-display: 'Inter', -apple-system, sans-serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+        }
+
+        /* Corporate Theme */
+        .theme-corporate {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --accent: #0d9488;
+            --accent-hover: #0f766e;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --font-display: 'Inter', -apple-system, sans-serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+        }
+
+        /* ============================================
+           RESET & BASE
+           ============================================ */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        img { max-width: 100%; height: auto; }
+        a { color: inherit; text-decoration: none; }
+
+        /* ============================================
+           LAYOUT
+           ============================================ */
+        .container {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section {
+            padding: 64px 0;
+        }
+
+        .section--alt {
+            background: var(--bg-secondary);
+        }
+
+        .section--accent {
+            background: var(--bg-tertiary);
+        }
+
+        /* ============================================
+           TYPOGRAPHY
+           ============================================ */
+        .eyebrow {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .heading-xl {
+            font-family: var(--font-display);
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+        }
+
+        .heading-lg {
+            font-family: var(--font-display);
+            font-size: clamp(26px, 4vw, 36px);
+            font-weight: 400;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+        }
+
+        .heading-md {
+            font-family: var(--font-display);
+            font-size: clamp(18px, 3vw, 24px);
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--text-primary);
+        }
+
+        .text-lg {
+            font-size: 17px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .text-md {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .text-sm {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-muted);
+        }
+
+        .text-center { text-align: center; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .max-w-xl { max-width: 600px; }
+        .max-w-2xl { max-width: 720px; }
+        .mb-4 { margin-bottom: 16px; }
+        .mb-6 { margin-bottom: 24px; }
+        .mb-8 { margin-bottom: 32px; }
+
+        /* ============================================
+           BUTTONS
+           ============================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 28px;
+            font-family: var(--font-body);
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn--primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn--primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn--white {
+            background: #fff;
+            color: var(--accent);
+        }
+
+        .btn--white:hover {
+            background: rgba(255,255,255,0.9);
+            transform: translateY(-1px);
+        }
+
+        /* ============================================
+           PREVIEW SIDEBAR (Collapsible)
+           ============================================ */
+        .preview-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: #1a1a1a;
+            color: #e5e5e5;
+            z-index: 1000;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .preview-sidebar.open {
+            transform: translateX(0);
+        }
+
+        .preview-toggle {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 1001;
+            width: 44px;
+            height: 44px;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.2s ease;
+        }
+
+        .preview-toggle:hover {
+            background: #2a2a2a;
+        }
+
+        .preview-sidebar.open + .preview-toggle {
+            left: 296px;
+        }
+
+        .sidebar-header {
+            margin-bottom: 32px;
+        }
+
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-subtitle {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .sidebar-section {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .prop-option {
+            display: block;
+            padding: 12px 14px;
+            background: transparent;
+            border: 1px solid #333;
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .prop-option:hover {
+            background: rgba(255,255,255,0.03);
+            border-color: #444;
+        }
+
+        .prop-option.active {
+            background: rgba(194, 65, 12, 0.15);
+            border-color: #c2410c;
+        }
+
+        .prop-option__title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .prop-option__desc {
+            font-size: 11px;
+            color: #888;
+        }
+
+        .status-box {
+            padding: 14px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: var(--radius-sm);
+            margin-bottom: 24px;
+        }
+
+        .status-box__title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #22c55e;
+            margin-bottom: 4px;
+        }
+
+        .status-box__text {
+            font-size: 11px;
+            color: #888;
+        }
+
+        .section-links a {
+            display: block;
+            padding: 8px 0;
+            font-size: 13px;
+            color: #888;
+            transition: color 0.15s ease;
+        }
+
+        .section-links a:hover {
+            color: #fff;
+        }
+
+        .section-links a span {
+            color: #c2410c;
+            margin-right: 8px;
+            font-weight: 600;
+        }
+
+        .theme-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .theme-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .theme-btn:hover { transform: scale(1.1); }
+        .theme-btn.active { border-color: #c2410c; }
+        .theme-btn--warm { background: linear-gradient(135deg, #fef6ee 50%, #c2410c 50%); }
+        .theme-btn--modern { background: linear-gradient(135deg, #f8fafc 50%, #2563eb 50%); }
+        .theme-btn--dark { background: linear-gradient(135deg, #141414 50%, #f97316 50%); }
+        .theme-btn--corporate { background: linear-gradient(135deg, #f8fafc 50%, #0d9488 50%); }
+
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+        .hero {
+            padding: 48px 0 56px;
+            text-align: center;
+        }
+
+        .hero__logo {
+            font-family: var(--font-display);
+            font-size: 22px;
+            color: var(--text-primary);
+            margin-bottom: 40px;
+        }
+
+        .hero__title {
+            max-width: 760px;
+            margin: 0 auto 20px;
+        }
+
+        .hero__subtitle {
+            max-width: 620px;
+            margin: 0 auto 28px;
+        }
+
+        .hero__cta {
+            margin-bottom: 40px;
+        }
+
+        /* Trust Bars */
+        .trust-bar {
+            padding: 20px 0;
+            border-top: 1px solid var(--border-light);
+            margin-bottom: 20px;
+        }
+
+        .trust-bar__label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .trust-bar__logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+
+        .trust-bar__logo {
+            height: 22px;
+            opacity: 0.6;
+            filter: grayscale(100%);
+            transition: all 0.2s ease;
+        }
+
+        .trust-bar__logo:hover {
+            opacity: 1;
+            filter: grayscale(0%);
+        }
+
+        .theme-dark .trust-bar__logo {
+            filter: grayscale(100%) invert(1);
+            opacity: 0.6;
+        }
+
+        .theme-dark .trust-bar__logo:hover {
+            filter: grayscale(0%) invert(0);
+            opacity: 1;
+        }
+
+        /* ============================================
+           PROBLEM SECTION (The Challenge)
+           ============================================ */
+        .challenge-intro {
+            max-width: 680px;
+            margin: 0 auto 32px;
+            text-align: center;
+        }
+
+        .challenge-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .challenge-card {
+            padding: 24px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+        }
+
+        .challenge-card__header {
+            font-family: var(--font-display);
+            font-size: 14px;
+            color: var(--accent);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .challenge-card__title {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .challenge-card__text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* ============================================
+           APPROACH SECTION (Train Less. Build More.)
+           ============================================ */
+        .approach-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto 28px;
+        }
+
+        .approach-card {
+            padding: 20px;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+        }
+
+        .approach-card__label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 10px;
+        }
+
+        .approach-card__label--bad {
+            color: #dc2626;
+        }
+
+        .approach-card__label--good {
+            color: #16a34a;
+        }
+
+        .theme-dark .approach-card__label--bad {
+            color: #fca5a5;
+        }
+
+        .theme-dark .approach-card__label--good {
+            color: #86efac;
+        }
+
+        .approach-card__bad {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-decoration: line-through;
+            margin-bottom: 8px;
+        }
+
+        .approach-card__good {
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .speed-callout {
+            max-width: 620px;
+            margin: 0 auto 28px;
+            padding: 18px 20px;
+            background: var(--bg-card);
+            border: 2px solid var(--accent);
+            border-radius: var(--radius-md);
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .speed-callout__icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .speed-callout__text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .speed-callout__text strong {
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           WHAT WE HELP WITH (Focus Areas)
+           ============================================ */
+        .focus-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto 28px;
+        }
+
+        .focus-card {
+            padding: 24px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+        }
+
+        .focus-card__title {
+            font-family: var(--font-display);
+            font-size: 18px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .focus-card__list {
+            list-style: none;
+            margin-bottom: 16px;
+        }
+
+        .focus-card__list li {
+            font-size: 14px;
+            color: var(--text-secondary);
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .focus-card__list li:last-child {
+            border-bottom: none;
+        }
+
+        .focus-card__best-for {
+            font-size: 12px;
+            color: var(--accent);
+            font-weight: 600;
+            padding-top: 8px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .focus-subhead {
+            max-width: 680px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 15px;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* ============================================
+           THREE-PHASE MODEL
+           ============================================ */
+        .phase-flow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .phase-flow__item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .phase-flow__num {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .phase-flow__label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .phase-flow__arrow {
+            font-size: 18px;
+            color: var(--text-muted);
+        }
+
+        .phase-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto 28px;
+        }
+
+        .phase-card {
+            padding: 24px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+        }
+
+        .phase-card__label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .phase-card__title {
+            font-family: var(--font-display);
+            font-size: 18px;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .phase-card__subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .phase-card__list {
+            list-style: none;
+        }
+
+        .phase-card__list li {
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding: 5px 0;
+            padding-left: 18px;
+            position: relative;
+        }
+
+        .phase-card__list li::before {
+            content: "-";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .budget-callout {
+            max-width: 620px;
+            margin: 0 auto;
+            padding: 18px 20px;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .theme-dark .budget-callout {
+            background: linear-gradient(135deg, #422006 0%, #713f12 100%);
+        }
+
+        .budget-callout__icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .budget-callout__text {
+            font-size: 14px;
+            color: #92400e;
+            line-height: 1.5;
+        }
+
+        .theme-dark .budget-callout__text {
+            color: #fcd34d;
+        }
+
+        /* ============================================
+           INSTRUCTOR CARDS
+           ============================================ */
+        .instructor-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .instructor-card {
+            display: flex;
+            gap: 14px;
+            padding: 18px;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+        }
+
+        .instructor-card__logo {
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            padding: 8px;
+        }
+
+        .instructor-card__logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: grayscale(100%);
+            opacity: 0.7;
+        }
+
+        .theme-dark .instructor-card__logo img {
+            filter: grayscale(100%) brightness(2);
+        }
+
+        .instructor-card__info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .instructor-card__name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .instructor-card__title {
+            font-size: 12px;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .instructor-card__cred {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+
+        .instructor-card__cred strong {
+            color: var(--text-primary);
+        }
+
+        /* Dual Expert Callout */
+        .dual-expert {
+            max-width: 620px;
+            margin: 0 auto;
+            padding: 18px 20px;
+            background: var(--bg-card);
+            border: 2px solid var(--accent);
+            border-radius: var(--radius-md);
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .dual-expert__icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .dual-expert__title {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .dual-expert__text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* ============================================
+           STATS GRID
+           ============================================ */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 20px 14px;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+        }
+
+        .stat-card__value {
+            font-family: var(--font-display);
+            font-size: 28px;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .stat-card__label {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .awards-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .award {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 18px;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-light);
+        }
+
+        .award__icon {
+            font-size: 20px;
+        }
+
+        .award__text {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        /* ============================================
+           CASE STUDY (Condensed)
+           ============================================ */
+        .case-study {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 28px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+        }
+
+        .case-study__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .case-study__company {
+            font-family: var(--font-display);
+            font-size: 28px;
+            color: var(--text-primary);
+        }
+
+        .case-study__vision {
+            font-size: 13px;
+            font-style: italic;
+            color: var(--text-secondary);
+            padding: 8px 14px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+        }
+
+        .case-study__stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .case-study__stat {
+            text-align: center;
+        }
+
+        .case-study__stat-value {
+            font-family: var(--font-display);
+            font-size: 22px;
+            color: var(--accent);
+        }
+
+        .case-study__stat-label {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .case-study__quote {
+            font-size: 16px;
+            font-style: italic;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        /* ============================================
+           QUALIFICATION
+           ============================================ */
+        .qual-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .qual-card {
+            padding: 22px;
+            border-radius: var(--radius-lg);
+        }
+
+        .qual-card--yes {
+            background: #f0fdf4;
+        }
+
+        .qual-card--no {
+            background: #fef2f2;
+        }
+
+        .theme-dark .qual-card--yes {
+            background: #052e16;
+        }
+
+        .theme-dark .qual-card--no {
+            background: #450a0a;
+        }
+
+        .qual-card__header {
+            font-family: var(--font-display);
+            font-size: 15px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .qual-card--yes .qual-card__header { color: #16a34a; }
+        .qual-card--no .qual-card__header { color: #dc2626; }
+
+        .theme-dark .qual-card--yes .qual-card__header { color: #86efac; }
+        .theme-dark .qual-card--no .qual-card__header { color: #fca5a5; }
+
+        .qual-list {
+            list-style: none;
+        }
+
+        .qual-list li {
+            padding: 8px 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .theme-dark .qual-list li {
+            border-bottom-color: rgba(255,255,255,0.05);
+        }
+
+        .qual-list li:last-child { border-bottom: none; }
+
+        .qual-list__icon { flex-shrink: 0; font-size: 13px; }
+
+        /* ============================================
+           FAQ
+           ============================================ */
+        .faq-list {
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .faq-item__question {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            font-family: var(--font-body);
+        }
+
+        .faq-item__question-text {
+            font-family: var(--font-display);
+            font-size: 15px;
+            color: var(--text-primary);
+            padding-right: 14px;
+        }
+
+        .faq-item__icon {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 16px;
+            transition: transform 0.2s ease;
+        }
+
+        .faq-item.open .faq-item__icon { transform: rotate(45deg); }
+
+        .faq-item__answer {
+            display: none;
+            padding-bottom: 18px;
+        }
+
+        .faq-item.open .faq-item__answer { display: block; }
+
+        .faq-item__answer p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        /* ============================================
+           CTA SECTION
+           ============================================ */
+        .cta {
+            background: var(--accent);
+            color: #fff;
+            text-align: center;
+            padding: 64px 0;
+        }
+
+        .cta .heading-lg {
+            color: #fff;
+        }
+
+        .cta__subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 28px;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta__microcopy {
+            margin-top: 14px;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .cta__trust {
+            margin-top: 24px;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            background: var(--text-primary);
+            color: #fff;
+            padding: 48px 0 28px;
+        }
+
+        .theme-dark .footer {
+            background: #000;
+        }
+
+        .footer__grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer__brand-logo {
+            font-family: var(--font-display);
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .footer__brand-text {
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.6;
+            max-width: 240px;
+        }
+
+        .footer__col-title {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 14px;
+        }
+
+        .footer__links {
+            list-style: none;
+        }
+
+        .footer__links li {
+            margin-bottom: 8px;
+        }
+
+        .footer__links a {
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+            transition: color 0.15s ease;
+        }
+
+        .footer__links a:hover {
+            color: #fff;
+        }
+
+        .footer__bottom {
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .footer__copyright {
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .footer__legal {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer__legal a {
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .footer__legal a:hover {
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* ============================================
+           CALENDAR MODAL
+           ============================================ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal__content {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .modal__close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 32px;
+            height: 32px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .modal__close:hover { background: #e5e5e5; }
+
+        .modal__iframe {
+            width: 100%;
+            height: 580px;
+            border: none;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 768px) {
+            .section { padding: 48px 0; }
+            .container { padding: 0 20px; }
+
+            .hero { padding: 40px 0 48px; }
+            .hero__logo { margin-bottom: 32px; }
+            .hero__cta { margin-bottom: 32px; }
+
+            .challenge-grid,
+            .approach-grid,
+            .focus-grid,
+            .phase-grid { grid-template-columns: 1fr; }
+
+            .qual-grid { grid-template-columns: 1fr; }
+
+            .instructor-grid { grid-template-columns: 1fr; }
+
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+
+            .case-study__stats { grid-template-columns: repeat(2, 1fr); }
+
+            .footer__grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 28px;
+            }
+
+            .trust-bar__logos {
+                gap: 20px;
+            }
+
+            .trust-bar__logo {
+                height: 18px;
+            }
+
+            .preview-toggle {
+                top: 12px;
+                left: 12px;
+                width: 40px;
+                height: 40px;
+            }
+
+            .preview-sidebar.open + .preview-toggle {
+                left: 12px;
+                top: 12px;
+            }
+
+            .preview-sidebar {
+                width: 100%;
+            }
+
+            .phase-flow {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .phase-flow__arrow {
+                transform: rotate(90deg);
+            }
+
+            .cta { padding: 48px 0; }
+
+            .awards-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .award {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .speed-callout,
+            .dual-expert,
+            .budget-callout {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0 16px; }
+
+            .footer__grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .footer__bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .stats-grid {
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 14px 10px;
+            }
+
+            .stat-card__value {
+                font-size: 22px;
+            }
+
+            .case-study {
+                padding: 20px;
+            }
+
+            .case-study__header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .btn {
+                padding: 12px 22px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PREVIEW SIDEBAR (Collapsible) -->
+    <aside class="preview-sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title">Acceler</div>
+            <div class="sidebar-subtitle">Landing Page Preview</div>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-label">Select Proposition</div>
+            <a href="deer-in-headlights.html" class="prop-option">
+                <div class="prop-option__title">Deer in Headlights</div>
+                <div class="prop-option__desc">US/ME - Premium - "Get Clarity"</div>
+            </a>
+            <a href="budget-urgency.html" class="prop-option active">
+                <div class="prop-option__title">Budget Urgency</div>
+                <div class="prop-option__desc">India - Fast - March 31 deadline</div>
+            </a>
+        </div>
+
+        <div class="status-box">
+            <div class="status-box__title">Ready for Review</div>
+            <div class="status-box__text">All 11 sections complete.</div>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-label">Page Sections</div>
+            <div class="section-links">
+                <a href="#hero"><span>1</span> Hero</a>
+                <a href="#challenge"><span>2</span> The Challenge</a>
+                <a href="#approach"><span>3</span> Our Approach</a>
+                <a href="#focus-areas"><span>4</span> What We Help With</a>
+                <a href="#phases"><span>5</span> Three-Phase Model</a>
+                <a href="#instructors"><span>6</span> Instructors</a>
+                <a href="#social-proof"><span>7</span> Social Proof</a>
+                <a href="#testimonials"><span>8</span> Testimonials</a>
+                <a href="#qualification"><span>9</span> Who This Is For</a>
+                <a href="#faq"><span>10</span> FAQ</a>
+                <a href="#cta"><span>11</span> Final CTA</a>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-label">Theme</div>
+            <div class="theme-buttons">
+                <button class="theme-btn theme-btn--warm active" onclick="setTheme('')" title="Warm"></button>
+                <button class="theme-btn theme-btn--modern" onclick="setTheme('theme-modern')" title="Modern"></button>
+                <button class="theme-btn theme-btn--dark" onclick="setTheme('theme-dark')" title="Dark"></button>
+                <button class="theme-btn theme-btn--corporate" onclick="setTheme('theme-corporate')" title="Corporate"></button>
+            </div>
+        </div>
+    </aside>
+
+    <button class="preview-toggle" id="sidebarToggle" onclick="toggleSidebar()">&#9776;</button>
+
+    <!-- SECTION 1: HERO -->
+    <section class="hero" id="hero">
+        <div class="container">
+            <div class="hero__logo">Acceler</div>
+
+            <h1 class="heading-xl hero__title">Build AI teams. Fast.</h1>
+
+            <p class="text-lg hero__subtitle">650+ cohorts. 4.8 rating. Your team ships.</p>
+
+            <div class="hero__cta">
+                <button class="btn btn--primary" onclick="openCalendar()">Let's Explore How</button>
+            </div>
+
+            <!-- Trust Bar 1: Clients -->
+            <div class="trust-bar">
+                <div class="trust-bar__label">Trusted by</div>
+                <div class="trust-bar__logos">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/E%26_%28new%29_logo.svg/200px-E%26_%28new%29_logo.svg.png" alt="e&" class="trust-bar__logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Lowe%27s_Companies_Logo.svg/200px-Lowe%27s_Companies_Logo.svg.png" alt="Lowe's" class="trust-bar__logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Bosch-brand.svg/200px-Bosch-brand.svg.png" alt="Bosch" class="trust-bar__logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Cornerstone_OnDemand_logo.svg/200px-Cornerstone_OnDemand_logo.svg.png" alt="Cornerstone" class="trust-bar__logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Sony_logo.svg/200px-Sony_logo.svg.png" alt="Sony" class="trust-bar__logo">
+                </div>
+            </div>
+
+            <!-- Trust Bar 2: Practitioners -->
+            <div class="trust-bar">
+                <div class="trust-bar__label">Practitioners from</div>
+                <div class="trust-bar__logos">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/200px-Google_2015_logo.svg.png" alt="Google" class="trust-bar__logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Meta_Platforms_Inc._logo.svg/200px-Meta_Platforms_Inc._logo.svg.png" alt="Meta" class="trust-bar__logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/200px-Amazon_logo.svg.png" alt="Amazon" class="trust-bar__logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/200px-Microsoft_logo.svg.png" alt="Microsoft" class="trust-bar__logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/OpenAI_Logo.svg/200px-OpenAI_Logo.svg.png" alt="OpenAI" class="trust-bar__logo">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: THE CHALLENGE -->
+    <section class="section section--alt" id="challenge">
+        <div class="container">
+            <div class="text-center mb-8">
+                <span class="eyebrow">The Problem</span>
+                <h2 class="heading-lg mb-4">Your Team Has the Context. They Just Need the Right Guidance.</h2>
+            </div>
+
+            <div class="challenge-intro">
+                <p class="text-md">Most AI initiatives fail not because of technology - but because external consultants don't understand your workflows, your decisions, your constraints.</p>
+            </div>
+
+            <div class="challenge-grid">
+                <div class="challenge-card">
+                    <div class="challenge-card__header">The Gap</div>
+                    <div class="challenge-card__title">AI pilots that never reach production</div>
+                    <p class="challenge-card__text">Generic training doesn't stick. Your team needs something built for their actual work.</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-card__header">Why It Happens</div>
+                    <div class="challenge-card__title">Consultants leave PowerPoints, not capability</div>
+                    <p class="challenge-card__text">They build FOR you. Knowledge walks out the door when they leave.</p>
+                </div>
+                <div class="challenge-card">
+                    <div class="challenge-card__header">The Shift Needed</div>
+                    <div class="challenge-card__title">Build capability WITH your team, not around them</div>
+                    <p class="challenge-card__text">Learn from people who ship AI daily at Google, Meta, Amazon. Your people have the context - they need the right guidance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: OUR APPROACH -->
+    <section class="section" id="approach">
+        <div class="container">
+            <div class="text-center mb-8">
+                <span class="eyebrow">How We're Different</span>
+                <h2 class="heading-lg mb-4">Train Less. Build More.</h2>
+                <p class="text-md max-w-xl mx-auto">We don't do generic AI courses. We work alongside your team to build real AI capability - fast.</p>
+            </div>
+
+            <div class="approach-grid">
+                <div class="approach-card">
+                    <div class="approach-card__label approach-card__label--bad">What others do</div>
+                    <div class="approach-card__bad">Generic courses that don't stick</div>
+                    <div class="approach-card__label approach-card__label--good">What we do</div>
+                    <div class="approach-card__good">Custom to your stack, your use cases, your people</div>
+                </div>
+                <div class="approach-card">
+                    <div class="approach-card__label approach-card__label--bad">What others do</div>
+                    <div class="approach-card__bad">Consultants who build FOR you</div>
+                    <div class="approach-card__label approach-card__label--good">What we do</div>
+                    <div class="approach-card__good">We build WITH you - capability stays in-house</div>
+                </div>
+                <div class="approach-card">
+                    <div class="approach-card__label approach-card__label--bad">What others do</div>
+                    <div class="approach-card__bad">Theory and certifications</div>
+                    <div class="approach-card__label approach-card__label--good">What we do</div>
+                    <div class="approach-card__good">Production-focused - your team ships real AI</div>
+                </div>
+            </div>
+
+            <div class="speed-callout">
+                <div class="speed-callout__icon">&#9889;</div>
+                <p class="speed-callout__text"><strong>We move fast because we've done this 650+ times.</strong> We understand enterprise constraints and we know what works.</p>
+            </div>
+
+            <div class="text-center">
+                <button class="btn btn--primary" onclick="openCalendar()">Let's Discuss Your Situation</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: WHAT WE HELP WITH -->
+    <section class="section section--alt" id="focus-areas">
+        <div class="container">
+            <div class="text-center mb-8">
+                <span class="eyebrow">Areas We Can Help</span>
+                <h2 class="heading-lg">From Leadership Clarity to Team Capability</h2>
+            </div>
+
+            <div class="focus-grid">
+                <div class="focus-card">
+                    <h3 class="focus-card__title">Leadership Enablement</h3>
+                    <ul class="focus-card__list">
+                        <li>Help leaders understand the AI frontier</li>
+                        <li>Build confidence to lead AI transformation</li>
+                        <li>Dual-expert delivery: Business strategist + AI practitioner</li>
+                    </ul>
+                    <div class="focus-card__best-for">Best for: C-suite and senior leaders who need to lead, not do</div>
+                </div>
+                <div class="focus-card">
+                    <h3 class="focus-card__title">Team Capability</h3>
+                    <ul class="focus-card__list">
+                        <li>Hands-on building with your actual use cases</li>
+                        <li>Function-specific paths (Engineering, Product, Business)</li>
+                        <li>Your team ships real AI, not just certificates</li>
+                    </ul>
+                    <div class="focus-card__best-for">Best for: Teams that need to operationalize AI</div>
+                </div>
+                <div class="focus-card">
+                    <h3 class="focus-card__title">Custom Engagements</h3>
+                    <ul class="focus-card__list">
+                        <li>Tailored to your specific challenges and constraints</li>
+                        <li>From discovery to deployment</li>
+                        <li>We work WITH you, not FOR you</li>
+                    </ul>
+                    <div class="focus-card__best-for">Best for: Organizations with unique requirements</div>
+                </div>
+            </div>
+
+            <p class="focus-subhead">Every engagement starts with a conversation to understand your situation. We'll figure out the right approach together.</p>
+        </div>
+    </section>
+
+    <!-- SECTION 5: THREE-PHASE MODEL -->
+    <section class="section" id="phases">
+        <div class="container">
+            <div class="text-center mb-8">
+                <span class="eyebrow">How We Operationalize AI</span>
+                <h2 class="heading-lg">From Blueprint to Production</h2>
+            </div>
+
+            <div class="phase-flow">
+                <div class="phase-flow__item">
+                    <div class="phase-flow__num">1</div>
+                    <div class="phase-flow__label">AI Blueprint</div>
+                </div>
+                <div class="phase-flow__arrow">&#8594;</div>
+                <div class="phase-flow__item">
+                    <div class="phase-flow__num">2</div>
+                    <div class="phase-flow__label">AI Acceleration</div>
+                </div>
+                <div class="phase-flow__arrow">&#8594;</div>
+                <div class="phase-flow__item">
+                    <div class="phase-flow__num">3</div>
+                    <div class="phase-flow__label">Co-Development</div>
+                </div>
+            </div>
+
+            <div class="phase-grid">
+                <div class="phase-card">
+                    <div class="phase-card__label">Phase 1</div>
+                    <h3 class="phase-card__title">AI Blueprint</h3>
+                    <div class="phase-card__subtitle">Discovery & Roadmap Design</div>
+                    <ul class="phase-card__list">
+                        <li>Role-based AI capability map</li>
+                        <li>Function-specific use-cases</li>
+                        <li>AI maturity assessment</li>
+                        <li>Tech stack selection</li>
+                    </ul>
+                </div>
+                <div class="phase-card">
+                    <div class="phase-card__label">Phase 2</div>
+                    <h3 class="phase-card__title">AI Acceleration</h3>
+                    <div class="phase-card__subtitle">Hands-on Capability Build</div>
+                    <ul class="phase-card__list">
+                        <li>Hands-on AI Accelerators</li>
+                        <li>Function-specific learning paths</li>
+                        <li>Top practitioner-led live sessions</li>
+                    </ul>
+                </div>
+                <div class="phase-card">
+                    <div class="phase-card__label">Phase 3</div>
+                    <h3 class="phase-card__title">Co-development</h3>
+                    <div class="phase-card__subtitle">Real Execution</div>
+                    <ul class="phase-card__list">
+                        <li>Real use-case selection</li>
+                        <li>Co-develop AI agent in YOUR environment</li>
+                        <li>Practitioner-guided deploy</li>
+                        <li>Deploy AI solution internally</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="budget-callout">
+                <div class="budget-callout__icon">&#127919;</div>
+                <p class="budget-callout__text">For budget urgency: Start with Phase 1 or 2 now, continue Phase 3 in the new fiscal year. Lock in quality this quarter.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: INSTRUCTORS -->
+    <section class="section section--alt" id="instructors">
+        <div class="container">
+            <div class="text-center mb-8">
+                <span class="eyebrow">Who Delivers</span>
+                <h2 class="heading-lg mb-4">World-Class Practitioners, Not Generic Trainers</h2>
+                <p class="text-md max-w-xl mx-auto">700+ practitioners from the world's best AI companies who specialize in getting AI to production - not academics, not consultants.</p>
+            </div>
+
+            <div class="instructor-grid">
+                <div class="instructor-card">
+                    <div class="instructor-card__logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c4/Snap_Inc._logo.svg/200px-Snap_Inc._logo.svg.png" alt="Snap">
+                    </div>
+                    <div class="instructor-card__info">
+                        <div class="instructor-card__name">Felix Wong</div>
+                        <div class="instructor-card__title">Sr. Director of Engineering, Snap</div>
+                        <p class="instructor-card__cred">Built ML infra powering <strong>$130B ad revenue</strong> at Meta. 3B+ users impacted. 11 US patents.</p>
+                    </div>
+                </div>
+                <div class="instructor-card">
+                    <div class="instructor-card__logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Amazon_Web_Services_Logo.svg/200px-Amazon_Web_Services_Logo.svg.png" alt="AWS">
+                    </div>
+                    <div class="instructor-card__info">
+                        <div class="instructor-card__name">Ashish Desai</div>
+                        <div class="instructor-card__title">Head of Engineering, AWS SageMaker</div>
+                        <p class="instructor-card__cred">Former <strong>Head of Platform Engineering at JPMorgan Chase</strong>. Built enterprise ML platforms at scale.</p>
+                    </div>
+                </div>
+                <div class="instructor-card">
+                    <div class="instructor-card__logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/200px-Google_2015_logo.svg.png" alt="Google">
+                    </div>
+                    <div class="instructor-card__info">
+                        <div class="instructor-card__name">Diman Ghazi</div>
+                        <div class="instructor-card__title">Principal AI/ML Architect, Google</div>
+                        <p class="instructor-card__cred">Former <strong>IBM Watson</strong> architect. PhD in AI. Published researcher in ML systems.</p>
+                    </div>
+                </div>
+                <div class="instructor-card">
+                    <div class="instructor-card__logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a9/TikTok_logo.svg/200px-TikTok_logo.svg.png" alt="TikTok">
+                    </div>
+                    <div class="instructor-card__info">
+                        <div class="instructor-card__name">Reza Madad</div>
+                        <div class="instructor-card__title">Product Leader, TikTok</div>
+                        <p class="instructor-card__cred">Former <strong>AI/ML Product Lead at Prime Video</strong>. Shipped recommendation systems to 200M+ users.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dual-expert">
+                <div class="dual-expert__icon">&#9889;</div>
+                <div>
+                    <div class="dual-expert__title">Dual-Expert Delivery</div>
+                    <p class="dual-expert__text">Senior business strategist + hands-on AI practitioner. Strategic clarity meets real-world execution.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 7: SOCIAL PROOF -->
+    <section class="section" id="social-proof">
+        <div class="container">
+            <div class="text-center mb-8">
+                <span class="eyebrow">Why Trust Us</span>
+                <h2 class="heading-lg">The numbers speak</h2>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card__value">700+</div>
+                    <div class="stat-card__label">Practitioners from FAANG</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__value">650+</div>
+                    <div class="stat-card__label">Cohorts Delivered</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__value">25,000+</div>
+                    <div class="stat-card__label">Learners Transformed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__value">4.8+</div>
+                    <div class="stat-card__label">Rating Average</div>
+                </div>
+            </div>
+
+            <div class="awards-row">
+                <div class="award">
+                    <div class="award__icon">&#127942;</div>
+                    <div class="award__text">Time Magazine Top 100<br>Global EdTech 2025</div>
+                </div>
+                <div class="award">
+                    <div class="award__icon">&#127942;</div>
+                    <div class="award__text">GSV Top 150<br>Global EdTech 2025</div>
+                </div>
+            </div>
+
+            <div class="speed-callout">
+                <div class="speed-callout__icon">&#9889;</div>
+                <p class="speed-callout__text"><strong>We've delivered 650+ cohorts.</strong> We know how to move fast without sacrificing quality. Your March deadline is safe.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 8: TESTIMONIALS -->
+    <section class="section section--alt" id="testimonials">
+        <div class="container">
+            <div class="text-center mb-8">
+                <span class="eyebrow">Results That Matter</span>
+                <h2 class="heading-lg">What happens when teams get the right guidance</h2>
+            </div>
+
+            <div class="case-study">
+                <div class="case-study__header">
+                    <div class="case-study__company">e&</div>
+                    <div class="case-study__vision">"Evolve from a Telco to a TechCo"</div>
+                </div>
+
+                <div class="case-study__stats">
+                    <div class="case-study__stat">
+                        <div class="case-study__stat-value">4.7/5</div>
+                        <div class="case-study__stat-label">Rating</div>
+                    </div>
+                    <div class="case-study__stat">
+                        <div class="case-study__stat-value">100</div>
+                        <div class="case-study__stat-label">NPS</div>
+                    </div>
+                    <div class="case-study__stat">
+                        <div class="case-study__stat-value">6</div>
+                        <div class="case-study__stat-label">Cohorts Approved</div>
+                    </div>
+                    <div class="case-study__stat">
+                        <div class="case-study__stat-value">1.5 days</div>
+                        <div class="case-study__stat-label">To Impact</div>
+                    </div>
+                </div>
+
+                <p class="case-study__quote">"Best course since I joined the industry."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 9: WHO THIS IS FOR -->
+    <section class="section" id="qualification">
+        <div class="container">
+            <div class="text-center mb-8">
+                <span class="eyebrow">Is This For You?</span>
+                <h2 class="heading-lg">We Work Best With Leaders Who...</h2>
+            </div>
+
+            <div class="qual-grid">
+                <div class="qual-card qual-card--yes">
+                    <div class="qual-card__header">&#10003; Right Fit</div>
+                    <ul class="qual-list">
+                        <li><span class="qual-list__icon">&#10003;</span> Want their team to BUILD AI capability, not just learn about it</li>
+                        <li><span class="qual-list__icon">&#10003;</span> Are tired of generic courses that don't translate to real work</li>
+                        <li><span class="qual-list__icon">&#10003;</span> Value practitioner expertise over academic theory</li>
+                        <li><span class="qual-list__icon">&#10003;</span> Want to move fast without sacrificing quality</li>
+                        <li><span class="qual-list__icon">&#10003;</span> Believe their people have the context - they just need the right guidance</li>
+                    </ul>
+                </div>
+                <div class="qual-card qual-card--no">
+                    <div class="qual-card__header">&#10007; Not For You</div>
+                    <ul class="qual-list">
+                        <li><span class="qual-list__icon">&#10007;</span> Looking for the cheapest per-seat training option</li>
+                        <li><span class="qual-list__icon">&#10007;</span> Need pre-recorded videos instead of live practitioners</li>
+                        <li><span class="qual-list__icon">&#10007;</span> Want consultants to do it FOR you, not WITH you</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 10: FAQ -->
+    <section class="section section--alt" id="faq">
+        <div class="container">
+            <div class="text-center mb-8">
+                <span class="eyebrow">Common Questions</span>
+                <h2 class="heading-lg">Questions we hear often</h2>
+            </div>
+
+            <div class="faq-list">
+                <div class="faq-item open">
+                    <button class="faq-item__question">
+                        <span class="faq-item__question-text">How is this different from other AI training?</span>
+                        <span class="faq-item__icon">+</span>
+                    </button>
+                    <div class="faq-item__answer">
+                        <p>We don't do generic courses. Our practitioners from Google, Meta, and Amazon work with your team on YOUR use cases. Your team builds real AI, not just watches videos. Capability stays in-house.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-item__question">
+                        <span class="faq-item__question-text">How quickly can you start working with us?</span>
+                        <span class="faq-item__icon">+</span>
+                    </button>
+                    <div class="faq-item__answer">
+                        <p>We can scope a program within 48 hours of our discovery call. Programs can start within 2-3 weeks of signing. We've done this 650+ times - we know how to move fast.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-item__question">
+                        <span class="faq-item__question-text">What does an engagement typically look like?</span>
+                        <span class="faq-item__icon">+</span>
+                    </button>
+                    <div class="faq-item__answer">
+                        <p>It depends on your needs. Could be a 1.5-day leadership accelerator, a 4-day team program, or a multi-phase engagement. We figure out the right approach together in our discovery call.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-item__question">
+                        <span class="faq-item__question-text">Do you work with teams in India time zones?</span>
+                        <span class="faq-item__icon">+</span>
+                    </button>
+                    <div class="faq-item__answer">
+                        <p>Yes. We have practitioners and team members across time zones. We've delivered programs globally and can accommodate IST scheduling.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-item__question">
+                        <span class="faq-item__question-text">Can we start with a smaller engagement first?</span>
+                        <span class="faq-item__icon">+</span>
+                    </button>
+                    <div class="faq-item__answer">
+                        <p>Absolutely. Many clients start with Phase 1 (AI Blueprint) or a leadership accelerator before committing to larger programs. We design what makes sense for your situation.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-item__question">
+                        <span class="faq-item__question-text">How do you measure success?</span>
+                        <span class="faq-item__icon">+</span>
+                    </button>
+                    <div class="faq-item__answer">
+                        <p>We track participant ratings (our average is 4.8+), but the real measure is what your team ships. We focus on production AI, not certificates. Success is when your team builds real capability that stays.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 11: FINAL CTA -->
+    <section class="cta" id="cta">
+        <div class="container">
+            <h2 class="heading-lg mb-4">Ready to Explore What's Possible?</h2>
+            <p class="cta__subtitle">Let's have a conversation about your AI challenges and how we might help your team get to the next level.</p>
+
+            <button class="btn btn--white" onclick="openCalendar()">Start a Conversation</button>
+
+            <p class="cta__microcopy">30-minute call. No pitch - just an honest discussion about where you are and where you want to be.</p>
+
+            <p class="cta__trust">Time Magazine Top 100 - 700+ FAANG Practitioners - 650+ Cohorts Delivered</p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <div class="footer__brand">
+                    <div class="footer__brand-logo">Acceler</div>
+                    <p class="footer__brand-text">AI enablement for enterprises. Build AI-ready teams guided by practitioners from the world's best AI companies.</p>
+                </div>
+                <div class="footer__col">
+                    <h4 class="footer__col-title">Company</h4>
+                    <ul class="footer__links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Instructors</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="footer__col">
+                    <h4 class="footer__col-title">Programs</h4>
+                    <ul class="footer__links">
+                        <li><a href="#">AI Blueprint</a></li>
+                        <li><a href="#">AI Acceleration</a></li>
+                        <li><a href="#">Team Enablement</a></li>
+                        <li><a href="#">Custom Programs</a></li>
+                    </ul>
+                </div>
+                <div class="footer__col">
+                    <h4 class="footer__col-title">Resources</h4>
+                    <ul class="footer__links">
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <div class="footer__copyright">&copy; 2026 Acceler. All rights reserved.</div>
+                <div class="footer__legal">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CALENDAR MODAL -->
+    <div class="modal" id="calendarModal">
+        <div class="modal__content">
+            <button class="modal__close" onclick="closeCalendar()">&times;</button>
+            <iframe class="modal__iframe" src="https://calendly.com/d/placeholder" title="Schedule a call"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar Toggle
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // Theme Switcher
+        function setTheme(theme) {
+            document.body.className = theme;
+            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+            if (theme === '') {
+                document.querySelector('.theme-btn--warm').classList.add('active');
+            } else if (theme === 'theme-modern') {
+                document.querySelector('.theme-btn--modern').classList.add('active');
+            } else if (theme === 'theme-dark') {
+                document.querySelector('.theme-btn--dark').classList.add('active');
+            } else if (theme === 'theme-corporate') {
+                document.querySelector('.theme-btn--corporate').classList.add('active');
+            }
+        }
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-item__question').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.parentElement;
+                item.classList.toggle('open');
+            });
+        });
+
+        // Calendar Modal
+        function openCalendar() {
+            document.getElementById('calendarModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCalendar() {
+            document.getElementById('calendarModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('calendarModal').addEventListener('click', (e) => {
+            if (e.target.id === 'calendarModal') closeCalendar();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeCalendar();
+                document.getElementById('sidebar').classList.remove('open');
+            }
+        });
+
+        // Close sidebar when clicking section links
+        document.querySelectorAll('.section-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    document.getElementById('sidebar').classList.remove('open');
+                }
+            });
+        });
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,2300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceler | AI Acceleration for Tech Teams</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #fffbf7;
+            --bg-secondary: #fef6ee;
+            --bg-tertiary: #fdf0e3;
+            --bg-card: #ffffff;
+            --text-primary: #1c1917;
+            --text-secondary: #57534e;
+            --text-muted: #a8a29e;
+            --accent: #c2410c;
+            --accent-hover: #9a3412;
+            --accent-light: #fff7ed;
+            --border: #fed7aa;
+            --border-light: #ffedd5;
+            --font-display: 'DM Serif Display', Georgia, serif;
+            --font-body: 'DM Sans', -apple-system, sans-serif;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        img { max-width: 100%; height: auto; }
+        a { color: inherit; text-decoration: none; }
+
+        /* Layout */
+        .container {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section {
+            padding: 80px 0;
+        }
+
+        .section--alt {
+            background: var(--bg-secondary);
+        }
+
+        /* Typography */
+        .eyebrow {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .heading-xl {
+            font-family: var(--font-display);
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+        }
+
+        .heading-lg {
+            font-family: var(--font-display);
+            font-size: clamp(28px, 4vw, 40px);
+            font-weight: 400;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+        }
+
+        .heading-md {
+            font-family: var(--font-display);
+            font-size: clamp(20px, 3vw, 28px);
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--text-primary);
+        }
+
+        .text-lg {
+            font-size: 18px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .text-md {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .text-center { text-align: center; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .max-w-lg { max-width: 540px; }
+        .max-w-xl { max-width: 640px; }
+        .max-w-2xl { max-width: 720px; }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 32px;
+            font-family: var(--font-body);
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn--primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn--primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn--secondary {
+            background: transparent;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+        }
+
+        .btn--secondary:hover {
+            background: var(--accent-light);
+        }
+
+        .btn--white {
+            background: #fff;
+            color: var(--accent);
+        }
+
+        .btn--white:hover {
+            background: rgba(255,255,255,0.9);
+            transform: translateY(-2px);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* ============================================
+           HERO
+           ============================================ */
+        .hero {
+            padding: 60px 0 80px;
+            text-align: center;
+        }
+
+        .hero__logo {
+            font-family: var(--font-display);
+            font-size: 24px;
+            color: var(--text-primary);
+            margin-bottom: 48px;
+        }
+
+        .hero__title {
+            max-width: 800px;
+            margin: 0 auto 24px;
+        }
+
+        .hero__subtitle {
+            max-width: 600px;
+            margin: 0 auto 36px;
+            font-size: 19px;
+        }
+
+        .hero__cta {
+            margin-bottom: 48px;
+        }
+
+        /* Proof Bar */
+        .proof-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .proof-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .proof-item__value {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           PROBLEM
+           ============================================ */
+        .problem-list {
+            max-width: 640px;
+            margin: 0 auto 32px;
+        }
+
+        .problem-item {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 17px;
+            color: var(--text-secondary);
+        }
+
+        .problem-item:last-child {
+            border-bottom: none;
+        }
+
+        .punchline {
+            max-width: 540px;
+            margin: 0 auto;
+            padding: 24px 32px;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        .punchline__text {
+            font-family: var(--font-display);
+            font-size: 20px;
+            color: #92400e;
+        }
+
+        /* ============================================
+           THE FIX - Three Parts
+           ============================================ */
+        .fix-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .fix-card {
+            padding: 28px 24px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            position: relative;
+        }
+
+        .fix-card--highlight {
+            border-color: var(--accent);
+            border-width: 2px;
+        }
+
+        .fix-card__number {
+            position: absolute;
+            top: -12px;
+            left: 24px;
+            background: var(--accent);
+            color: #fff;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .fix-card__label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .fix-card__title {
+            font-family: var(--font-display);
+            font-size: 22px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .fix-card__desc {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .fix-card__tag {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* ============================================
+           WHAT WE ENABLE
+           ============================================ */
+        .enable-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .enable-card {
+            padding: 28px 24px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+        }
+
+        .enable-card__icon {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .enable-card__title {
+            font-family: var(--font-display);
+            font-size: 20px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .enable-card__list {
+            list-style: none;
+        }
+
+        .enable-card__list li {
+            padding: 6px 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .enable-card__list li:last-child {
+            border-bottom: none;
+        }
+
+        .kicker {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 20px 28px;
+            background: var(--bg-card);
+            border-left: 4px solid var(--accent);
+            border-radius: var(--radius-sm);
+        }
+
+        .kicker__text {
+            font-size: 15px;
+            font-style: italic;
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           STICKY PHASE NAV
+           ============================================ */
+        .phase-nav {
+            position: fixed;
+            top: -60px;
+            left: 0;
+            right: 0;
+            background: rgba(255, 251, 247, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-light);
+            z-index: 100;
+            transition: top 0.3s ease;
+            padding: 12px 0;
+        }
+
+        .phase-nav.visible {
+            top: 0;
+        }
+
+        .phase-nav__inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .phase-nav__item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .phase-nav__item:hover {
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+        }
+
+        .phase-nav__item.active {
+            color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .phase-nav__item.completed {
+            color: #16a34a;
+        }
+
+        .phase-nav__num {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+
+        .phase-nav__item.active .phase-nav__num {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .phase-nav__item.completed .phase-nav__num {
+            background: #16a34a;
+            color: #fff;
+        }
+
+        .phase-nav__connector {
+            width: 24px;
+            height: 2px;
+            background: var(--border-light);
+        }
+
+        .phase-nav__item.completed + .phase-nav__connector {
+            background: #16a34a;
+        }
+
+        /* Fix card as link */
+        .fix-card-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s ease;
+        }
+
+        .fix-card-link:hover {
+            transform: translateY(-4px);
+        }
+
+        .fix-card-link:hover .fix-card {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-md);
+        }
+
+        .fix-card--active {
+            border-color: var(--accent) !important;
+            border-width: 2px !important;
+            box-shadow: 0 0 0 4px rgba(194, 65, 12, 0.1);
+        }
+
+        .fix-card--completed {
+            border-color: #16a34a !important;
+        }
+
+        .fix-card--completed .fix-card__number {
+            background: #16a34a;
+        }
+
+        .fix-card--completed .fix-card__label {
+            color: #16a34a;
+        }
+
+        /* ============================================
+           ACCELERATION PROGRAMS (Terminal Style)
+           ============================================ */
+        .programs-terminal {
+            background: #1a1a1a;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .programs-terminal__header {
+            background: #252525;
+            padding: 16px 24px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .programs-terminal__dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .programs-terminal__dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .programs-terminal__dot:nth-child(1) { background: #ff5f57; }
+        .programs-terminal__dot:nth-child(2) { background: #febc2e; }
+        .programs-terminal__dot:nth-child(3) { background: #28c840; }
+
+        .programs-terminal__title {
+            font-size: 13px;
+            color: #888;
+            font-weight: 500;
+        }
+
+        .programs-terminal__body {
+            padding: 24px;
+        }
+
+        .program-track {
+            background: #252525;
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .program-track:last-child {
+            margin-bottom: 0;
+        }
+
+        .program-track__header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .program-track__name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .program-track__duration {
+            font-size: 13px;
+            color: #888;
+            background: #333;
+            padding: 4px 12px;
+            border-radius: 100px;
+        }
+
+        .program-track__content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            padding: 24px;
+        }
+
+        .program-track__modules h4 {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
+        }
+
+        .program-track__module-list {
+            list-style: none;
+        }
+
+        .program-track__module-list li {
+            padding: 8px 0;
+            font-size: 14px;
+            color: #ccc;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .program-track__module-list li:last-child {
+            border-bottom: none;
+        }
+
+        .program-track__module-list li::before {
+            content: "▸";
+            color: var(--accent);
+            font-size: 12px;
+        }
+
+        .program-track__practitioner {
+            background: #1f1f1f;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+        }
+
+        .program-track__practitioner h4 {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+        }
+
+        .practitioner-mini {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .practitioner-mini__logo {
+            width: 40px;
+            height: 40px;
+            background: #333;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            flex-shrink: 0;
+        }
+
+        .practitioner-mini__logo img {
+            max-width: 100%;
+            max-height: 100%;
+            filter: grayscale(100%) brightness(2);
+            opacity: 0.8;
+        }
+
+        .practitioner-mini__name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        .practitioner-mini__title {
+            font-size: 12px;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .practitioner-mini__cred {
+            font-size: 12px;
+            color: #888;
+            line-height: 1.5;
+        }
+
+        .program-track__example {
+            grid-column: 1 / -1;
+            padding: 16px 20px;
+            background: #1f1f1f;
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--accent);
+        }
+
+        .program-track__example-label {
+            font-size: 10px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 6px;
+        }
+
+        .program-track__example-text {
+            font-size: 13px;
+            color: #ccc;
+        }
+
+        .program-track__example-text strong {
+            color: #fff;
+        }
+
+        .programs-terminal__footer {
+            padding: 20px 24px;
+            background: #252525;
+            border-top: 1px solid #333;
+            text-align: center;
+        }
+
+        .programs-terminal__footer-text {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .programs-terminal__footer-text strong {
+            color: #fff;
+        }
+
+        /* ============================================
+           BLUEPRINT SAMPLE
+           ============================================ */
+        .blueprint-sample {
+            background: #1a1a1a;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .blueprint-header {
+            background: #252525;
+            padding: 16px 24px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .blueprint-header__dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .blueprint-header__dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .blueprint-header__dot:nth-child(1) { background: #ff5f57; }
+        .blueprint-header__dot:nth-child(2) { background: #febc2e; }
+        .blueprint-header__dot:nth-child(3) { background: #28c840; }
+
+        .blueprint-header__title {
+            font-size: 13px;
+            color: #888;
+            font-weight: 500;
+        }
+
+        .blueprint-body {
+            padding: 32px;
+        }
+
+        .blueprint-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .profile-card {
+            background: #252525;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+
+        .profile-card__header {
+            padding: 20px;
+            border-bottom: 1px solid #333;
+        }
+
+        .profile-card__name {
+            font-weight: 600;
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .profile-card__role {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .profile-card__readiness {
+            padding: 16px 20px;
+            border-bottom: 1px solid #333;
+        }
+
+        .readiness-label {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .readiness-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .readiness-bar__track {
+            flex: 1;
+            height: 8px;
+            background: #333;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .readiness-bar__fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .readiness-bar__fill--high { background: linear-gradient(90deg, #22c55e, #4ade80); }
+        .readiness-bar__fill--mid { background: linear-gradient(90deg, #eab308, #facc15); }
+        .readiness-bar__fill--low { background: linear-gradient(90deg, #f97316, #fb923c); }
+
+        .readiness-bar__value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            min-width: 40px;
+        }
+
+        .profile-card__skills {
+            padding: 16px 20px;
+            border-bottom: 1px solid #333;
+        }
+
+        .skill-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+            font-size: 13px;
+        }
+
+        .skill-item--has { color: #4ade80; }
+        .skill-item--partial { color: #facc15; }
+        .skill-item--missing { color: #f87171; }
+
+        .skill-item__icon {
+            font-size: 12px;
+            width: 16px;
+        }
+
+        .profile-card__pathway {
+            padding: 20px;
+            background: #1f1f1f;
+        }
+
+        .pathway-label {
+            font-size: 11px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .pathway-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .pathway-step {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .pathway-step__num {
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .pathway-step__content {
+            flex: 1;
+        }
+
+        .pathway-step__title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        .pathway-step__desc {
+            font-size: 11px;
+            color: #888;
+            line-height: 1.4;
+        }
+
+        .pathway-connector {
+            width: 2px;
+            height: 12px;
+            background: #333;
+            margin-left: 11px;
+        }
+
+        .profile-card__footer {
+            padding: 16px 20px;
+            background: #252525;
+            border-top: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .profile-card__duration {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .profile-card__duration strong {
+            color: #fff;
+        }
+
+        .profile-card__format {
+            font-size: 11px;
+            color: #666;
+            background: #333;
+            padding: 4px 10px;
+            border-radius: 100px;
+        }
+
+        .blueprint-footer {
+            padding: 24px 32px;
+            background: #252525;
+            border-top: 1px solid #333;
+            text-align: center;
+        }
+
+        .blueprint-footer__text {
+            font-size: 14px;
+            color: #888;
+            line-height: 1.6;
+        }
+
+        .blueprint-footer__text strong {
+            color: #fff;
+        }
+
+        /* ============================================
+           PRACTITIONERS
+           ============================================ */
+        .instructor-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .instructor-card {
+            padding: 24px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .instructor-card__logo {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            padding: 10px;
+        }
+
+        .instructor-card__logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: grayscale(100%);
+            opacity: 0.7;
+        }
+
+        .instructor-card__name {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .instructor-card__title {
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .instructor-card__cred {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+
+        .practitioner-stat {
+            text-align: center;
+            padding: 20px;
+            background: var(--accent-light);
+            border-radius: var(--radius-md);
+        }
+
+        .practitioner-stat__text {
+            font-size: 15px;
+            color: var(--text-primary);
+        }
+
+        .practitioner-stat__text strong {
+            color: var(--accent);
+        }
+
+        /* ============================================
+           PROOF / STATS
+           ============================================ */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat__value {
+            font-family: var(--font-display);
+            font-size: 48px;
+            color: var(--accent);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat__label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .case-mini {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 28px 32px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .case-mini__company {
+            font-family: var(--font-display);
+            font-size: 32px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .case-mini__desc {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .case-mini__stats {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+        }
+
+        .case-mini__stat {
+            text-align: center;
+        }
+
+        .case-mini__stat-value {
+            font-family: var(--font-display);
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .case-mini__stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* ============================================
+           IS THIS YOU
+           ============================================ */
+        .fit-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 24px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .fit-card {
+            padding: 28px;
+            border-radius: var(--radius-lg);
+        }
+
+        .fit-card--yes {
+            background: #f0fdf4;
+        }
+
+        .fit-card--no {
+            background: #fef2f2;
+        }
+
+        .fit-card__header {
+            font-family: var(--font-display);
+            font-size: 18px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fit-card--yes .fit-card__header { color: #16a34a; }
+        .fit-card--no .fit-card__header { color: #dc2626; }
+
+        .fit-list {
+            list-style: none;
+        }
+
+        .fit-list li {
+            padding: 10px 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .fit-list li:last-child { border-bottom: none; }
+
+        .fit-list__icon {
+            flex-shrink: 0;
+            font-size: 14px;
+            margin-top: 2px;
+        }
+
+        /* ============================================
+           TWO ENTRY POINTS
+           ============================================ */
+        .entry-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .entry-card {
+            padding: 32px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--border-light);
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .entry-card:hover {
+            border-color: var(--accent);
+        }
+
+        .entry-card__question {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .entry-card__title {
+            font-family: var(--font-display);
+            font-size: 22px;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .entry-card__desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        /* ============================================
+           CTA
+           ============================================ */
+        .cta {
+            background: var(--accent);
+            color: #fff;
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        .cta .heading-lg {
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        .cta__subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta__microcopy {
+            margin-top: 16px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            background: var(--text-primary);
+            color: #fff;
+            padding: 48px 0 28px;
+        }
+
+        .footer__content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer__brand {
+            font-family: var(--font-display);
+            font-size: 20px;
+        }
+
+        .footer__links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer__links a {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+            transition: color 0.15s ease;
+        }
+
+        .footer__links a:hover {
+            color: #fff;
+        }
+
+        .footer__copyright {
+            width: 100%;
+            text-align: center;
+            padding-top: 24px;
+            margin-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* ============================================
+           MODAL
+           ============================================ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal__content {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .modal__close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 32px;
+            height: 32px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .modal__close:hover { background: #e5e5e5; }
+
+        .modal__iframe {
+            width: 100%;
+            height: 580px;
+            border: none;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 900px) {
+            .fix-grid,
+            .enable-grid,
+            .instructor-grid,
+            .blueprint-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .entry-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .blueprint-body {
+                padding: 20px;
+            }
+
+            .blueprint-grid {
+                gap: 16px;
+            }
+
+            .program-track__content {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .phase-nav__inner {
+                gap: 4px;
+            }
+
+            .phase-nav__item {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .phase-nav__item span:last-child {
+                display: none;
+            }
+
+            .phase-nav__connector {
+                width: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section { padding: 60px 0; }
+            .container { padding: 0 20px; }
+
+            .hero { padding: 48px 0 60px; }
+
+            .proof-bar {
+                gap: 8px;
+            }
+
+            .proof-item {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .stats-row {
+                gap: 32px;
+            }
+
+            .stat__value {
+                font-size: 36px;
+            }
+
+            .fit-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .case-mini__stats {
+                gap: 20px;
+            }
+
+            .footer__content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer__links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0 16px; }
+
+            .btn {
+                padding: 14px 24px;
+                font-size: 14px;
+                width: 100%;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .case-mini__stats {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .blueprint-sample,
+            .programs-terminal {
+                margin: 0 -16px;
+                border-radius: 0;
+            }
+
+            .blueprint-body,
+            .programs-terminal__body {
+                padding: 16px;
+            }
+
+            .blueprint-header,
+            .blueprint-footer,
+            .programs-terminal__header,
+            .programs-terminal__footer {
+                padding: 16px;
+            }
+
+            .profile-card__header,
+            .profile-card__readiness,
+            .profile-card__skills,
+            .profile-card__pathway,
+            .profile-card__footer {
+                padding: 14px 16px;
+            }
+
+            .program-track__header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .program-track__content {
+                padding: 16px;
+            }
+
+            .practitioner-mini {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .practitioner-mini__logo {
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- STICKY PHASE NAV -->
+    <nav class="phase-nav" id="phaseNav">
+        <div class="phase-nav__inner">
+            <a href="#blueprint-sample" class="phase-nav__item" data-phase="1">
+                <span class="phase-nav__num">1</span>
+                <span>Blueprint</span>
+            </a>
+            <div class="phase-nav__connector"></div>
+            <a href="#acceleration-programs" class="phase-nav__item" data-phase="2">
+                <span class="phase-nav__num">2</span>
+                <span>Acceleration</span>
+            </a>
+            <div class="phase-nav__connector"></div>
+            <a href="#co-development" class="phase-nav__item" data-phase="3">
+                <span class="phase-nav__num">3</span>
+                <span>Co-Development</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+        <div class="container">
+            <div class="hero__logo">Acceler</div>
+
+            <span class="eyebrow">AI Acceleration</span>
+
+            <h1 class="heading-xl hero__title">Make your teams AI-ready. Not AI-aware.</h1>
+
+            <p class="text-lg hero__subtitle">A personalized skilling roadmap for every engineer, PM, and marketer — then practitioners who actually build AI help them get there.</p>
+
+            <div class="hero__cta">
+                <div class="btn-group">
+                    <button class="btn btn--primary" onclick="openCalendar()">Start with a Blueprint →</button>
+                    <button class="btn btn--secondary" onclick="openCalendar()">Talk Acceleration</button>
+                </div>
+            </div>
+
+            <div class="proof-bar">
+                <div class="proof-item">
+                    <span class="proof-item__value">Time 100</span>
+                </div>
+                <div class="proof-item">
+                    <span class="proof-item__value">700+</span> FAANG Practitioners
+                </div>
+                <div class="proof-item">
+                    <span class="proof-item__value">25K</span> Accelerated
+                </div>
+                <div class="proof-item">
+                    <span class="proof-item__value">4.8</span> Rating
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROBLEM -->
+    <section class="section section--alt" id="problem">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 40px;">
+                <span class="eyebrow">The Problem</span>
+                <h2 class="heading-lg">Everyone's talking about AI. No one knows where to start.</h2>
+            </div>
+
+            <div class="problem-list">
+                <p class="text-md text-center" style="margin-bottom: 24px;">Sound familiar?</p>
+
+                <div class="problem-item">Too many tools, frameworks, and "AI strategies" — and they all sound urgent</div>
+                <div class="problem-item">Engineering started experimenting. Product has questions. Leadership wants a plan. Nobody's aligned.</div>
+                <div class="problem-item">Some teams are way ahead. Others haven't touched it. You don't know who's where.</div>
+                <div class="problem-item">You've done a pilot or two. Maybe some training. It's scattered — no coherent path forward.</div>
+            </div>
+
+            <div class="punchline">
+                <p class="punchline__text">You don't need more AI content. You need a plan.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- THE FIX -->
+    <section class="section" id="solution">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 48px;">
+                <span class="eyebrow">How We Work</span>
+                <h2 class="heading-lg">Blueprint first. Then build capability.</h2>
+            </div>
+
+            <div class="fix-grid" id="phase-cards">
+                <a href="#blueprint-sample" class="fix-card-link" data-phase="1">
+                    <div class="fix-card fix-card--highlight">
+                        <span class="fix-card__number">1</span>
+                        <div class="fix-card__label">The Blueprint</div>
+                        <h3 class="fix-card__title">See the gaps</h3>
+                        <p class="fix-card__desc">We assess your org in 2 weeks. You get a skill map — by function, by role, by person. No guesswork.</p>
+                        <span class="fix-card__tag">2 weeks</span>
+                    </div>
+                </a>
+
+                <a href="#acceleration-programs" class="fix-card-link" data-phase="2">
+                    <div class="fix-card">
+                        <span class="fix-card__number">2</span>
+                        <div class="fix-card__label">Acceleration</div>
+                        <h3 class="fix-card__title">Close them</h3>
+                        <p class="fix-card__desc">Practitioners from Google, Meta, and Amazon run hands-on accelerators matched to your roadmap. Engineers go deep. PMs go broad.</p>
+                        <span class="fix-card__tag">4-8 weeks</span>
+                    </div>
+                </a>
+
+                <a href="#co-development" class="fix-card-link" data-phase="3">
+                    <div class="fix-card">
+                        <span class="fix-card__number">3</span>
+                        <div class="fix-card__label">Co-Development</div>
+                        <h3 class="fix-card__title">Ship something real</h3>
+                        <p class="fix-card__desc">Pick a use case. We co-build with your team. You deploy an AI agent — not a slide deck.</p>
+                        <span class="fix-card__tag">Optional</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="text-center">
+                <button class="btn btn--primary" onclick="openCalendar()">Start with a Blueprint →</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- BLUEPRINT SAMPLE -->
+    <section class="section section--alt" id="blueprint-sample">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 48px;">
+                <span class="eyebrow">Sample Output</span>
+                <h2 class="heading-lg">What a blueprint actually shows you</h2>
+                <p class="text-md max-w-xl mx-auto" style="margin-top: 16px;">Three people. Three different starting points. Three personalized pathways.</p>
+            </div>
+
+            <div class="blueprint-sample">
+                <div class="blueprint-header">
+                    <div class="blueprint-header__dots">
+                        <span class="blueprint-header__dot"></span>
+                        <span class="blueprint-header__dot"></span>
+                        <span class="blueprint-header__dot"></span>
+                    </div>
+                    <span class="blueprint-header__title">AI Blueprint — Sample Output</span>
+                </div>
+
+                <div class="blueprint-body">
+                    <div class="blueprint-grid">
+                        <!-- DevOps Engineer -->
+                        <div class="profile-card">
+                            <div class="profile-card__header">
+                                <div class="profile-card__name">Priya Sharma</div>
+                                <div class="profile-card__role">DevOps Engineer, 6 YOE</div>
+                            </div>
+                            <div class="profile-card__readiness">
+                                <div class="readiness-label">AI Readiness</div>
+                                <div class="readiness-bar">
+                                    <div class="readiness-bar__track">
+                                        <div class="readiness-bar__fill readiness-bar__fill--high" style="width: 78%;"></div>
+                                    </div>
+                                    <span class="readiness-bar__value">78%</span>
+                                </div>
+                            </div>
+                            <div class="profile-card__skills">
+                                <div class="skill-item skill-item--has">
+                                    <span class="skill-item__icon">✓</span>
+                                    <span>Python/scripting</span>
+                                </div>
+                                <div class="skill-item skill-item--has">
+                                    <span class="skill-item__icon">✓</span>
+                                    <span>CI/CD pipelines</span>
+                                </div>
+                                <div class="skill-item skill-item--has">
+                                    <span class="skill-item__icon">✓</span>
+                                    <span>Prompt basics</span>
+                                </div>
+                                <div class="skill-item skill-item--missing">
+                                    <span class="skill-item__icon">✗</span>
+                                    <span>LLM-ops & monitoring</span>
+                                </div>
+                                <div class="skill-item skill-item--missing">
+                                    <span class="skill-item__icon">✗</span>
+                                    <span>Agent orchestration</span>
+                                </div>
+                            </div>
+                            <div class="profile-card__pathway">
+                                <div class="pathway-label">Pathway → AI-Enabled DevOps</div>
+                                <div class="pathway-steps">
+                                    <div class="pathway-step">
+                                        <span class="pathway-step__num">1</span>
+                                        <div class="pathway-step__content">
+                                            <div class="pathway-step__title">LLM Ops Fundamentals</div>
+                                            <div class="pathway-step__desc">Evals, monitoring, cost management</div>
+                                        </div>
+                                    </div>
+                                    <div class="pathway-connector"></div>
+                                    <div class="pathway-step">
+                                        <span class="pathway-step__num">2</span>
+                                        <div class="pathway-step__content">
+                                            <div class="pathway-step__title">Agent Deployment</div>
+                                            <div class="pathway-step__desc">Orchestration, infra patterns</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-card__footer">
+                                <div class="profile-card__duration"><strong>3 weeks</strong></div>
+                                <div class="profile-card__format">Live + hands-on</div>
+                            </div>
+                        </div>
+
+                        <!-- Product Manager -->
+                        <div class="profile-card">
+                            <div class="profile-card__header">
+                                <div class="profile-card__name">Marcus Chen</div>
+                                <div class="profile-card__role">Sr. Product Manager, 8 YOE</div>
+                            </div>
+                            <div class="profile-card__readiness">
+                                <div class="readiness-label">AI Readiness</div>
+                                <div class="readiness-bar">
+                                    <div class="readiness-bar__track">
+                                        <div class="readiness-bar__fill readiness-bar__fill--low" style="width: 32%;"></div>
+                                    </div>
+                                    <span class="readiness-bar__value">32%</span>
+                                </div>
+                            </div>
+                            <div class="profile-card__skills">
+                                <div class="skill-item skill-item--has">
+                                    <span class="skill-item__icon">✓</span>
+                                    <span>Product strategy</span>
+                                </div>
+                                <div class="skill-item skill-item--has">
+                                    <span class="skill-item__icon">✓</span>
+                                    <span>User research</span>
+                                </div>
+                                <div class="skill-item skill-item--missing">
+                                    <span class="skill-item__icon">✗</span>
+                                    <span>LLM fundamentals</span>
+                                </div>
+                                <div class="skill-item skill-item--missing">
+                                    <span class="skill-item__icon">✗</span>
+                                    <span>AI product patterns</span>
+                                </div>
+                                <div class="skill-item skill-item--missing">
+                                    <span class="skill-item__icon">✗</span>
+                                    <span>Prompt engineering</span>
+                                </div>
+                            </div>
+                            <div class="profile-card__pathway">
+                                <div class="pathway-label">Pathway → AI-Enabled PM</div>
+                                <div class="pathway-steps">
+                                    <div class="pathway-step">
+                                        <span class="pathway-step__num">1</span>
+                                        <div class="pathway-step__content">
+                                            <div class="pathway-step__title">LLM Fundamentals</div>
+                                            <div class="pathway-step__desc">How models work, capabilities/limits</div>
+                                        </div>
+                                    </div>
+                                    <div class="pathway-connector"></div>
+                                    <div class="pathway-step">
+                                        <span class="pathway-step__num">2</span>
+                                        <div class="pathway-step__content">
+                                            <div class="pathway-step__title">AI Product Patterns</div>
+                                            <div class="pathway-step__desc">Copilots, agents, when to use what</div>
+                                        </div>
+                                    </div>
+                                    <div class="pathway-connector"></div>
+                                    <div class="pathway-step">
+                                        <span class="pathway-step__num">3</span>
+                                        <div class="pathway-step__content">
+                                            <div class="pathway-step__title">Prompt Engineering</div>
+                                            <div class="pathway-step__desc">Specification, eval frameworks</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-card__footer">
+                                <div class="profile-card__duration"><strong>5 weeks</strong></div>
+                                <div class="profile-card__format">Live + project</div>
+                            </div>
+                        </div>
+
+                        <!-- Front-end Engineer -->
+                        <div class="profile-card">
+                            <div class="profile-card__header">
+                                <div class="profile-card__name">Jamie Okonkwo</div>
+                                <div class="profile-card__role">Front-end Engineer, 4 YOE</div>
+                            </div>
+                            <div class="profile-card__readiness">
+                                <div class="readiness-label">AI Readiness</div>
+                                <div class="readiness-bar">
+                                    <div class="readiness-bar__track">
+                                        <div class="readiness-bar__fill readiness-bar__fill--mid" style="width: 52%;"></div>
+                                    </div>
+                                    <span class="readiness-bar__value">52%</span>
+                                </div>
+                            </div>
+                            <div class="profile-card__skills">
+                                <div class="skill-item skill-item--has">
+                                    <span class="skill-item__icon">✓</span>
+                                    <span>React/TypeScript</span>
+                                </div>
+                                <div class="skill-item skill-item--has">
+                                    <span class="skill-item__icon">✓</span>
+                                    <span>API integration</span>
+                                </div>
+                                <div class="skill-item skill-item--partial">
+                                    <span class="skill-item__icon">~</span>
+                                    <span>Basic prompting</span>
+                                </div>
+                                <div class="skill-item skill-item--missing">
+                                    <span class="skill-item__icon">✗</span>
+                                    <span>AI UX patterns</span>
+                                </div>
+                                <div class="skill-item skill-item--missing">
+                                    <span class="skill-item__icon">✗</span>
+                                    <span>Streaming & real-time</span>
+                                </div>
+                            </div>
+                            <div class="profile-card__pathway">
+                                <div class="pathway-label">Pathway → AI-Enabled Front-end</div>
+                                <div class="pathway-steps">
+                                    <div class="pathway-step">
+                                        <span class="pathway-step__num">1</span>
+                                        <div class="pathway-step__content">
+                                            <div class="pathway-step__title">AI UX Patterns</div>
+                                            <div class="pathway-step__desc">Chat, copilots, progressive AI</div>
+                                        </div>
+                                    </div>
+                                    <div class="pathway-connector"></div>
+                                    <div class="pathway-step">
+                                        <span class="pathway-step__num">2</span>
+                                        <div class="pathway-step__content">
+                                            <div class="pathway-step__title">Streaming & State</div>
+                                            <div class="pathway-step__desc">Real-time LLM, optimistic UI</div>
+                                        </div>
+                                    </div>
+                                    <div class="pathway-connector"></div>
+                                    <div class="pathway-step">
+                                        <span class="pathway-step__num">3</span>
+                                        <div class="pathway-step__content">
+                                            <div class="pathway-step__title">AI SDK Integration</div>
+                                            <div class="pathway-step__desc">Vercel AI SDK, LangChain.js</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-card__footer">
+                                <div class="profile-card__duration"><strong>4 weeks</strong></div>
+                                <div class="profile-card__format">Live + build</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blueprint-footer">
+                    <p class="blueprint-footer__text"><strong>This is what a blueprint shows you:</strong> who needs what, in what order.<br>Not everyone starts at zero. Not everyone needs the same path.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ACCELERATION PROGRAMS -->
+    <section class="section" id="acceleration-programs">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 48px;">
+                <span class="eyebrow">Phase 2: Acceleration</span>
+                <h2 class="heading-lg">Role-specific programs. Practitioner-led.</h2>
+                <p class="text-md max-w-xl mx-auto" style="margin-top: 16px;">Each track is matched to your blueprint. Engineers go deep. PMs go broad. Everyone gets what they actually need.</p>
+            </div>
+
+            <div class="programs-terminal">
+                <div class="programs-terminal__header">
+                    <div class="programs-terminal__dots">
+                        <span class="programs-terminal__dot"></span>
+                        <span class="programs-terminal__dot"></span>
+                        <span class="programs-terminal__dot"></span>
+                    </div>
+                    <span class="programs-terminal__title">AI Acceleration Programs</span>
+                </div>
+
+                <div class="programs-terminal__body">
+                    <!-- Engineering Track -->
+                    <div class="program-track">
+                        <div class="program-track__header">
+                            <div class="program-track__name">Engineering Track</div>
+                            <div class="program-track__duration">4-6 weeks</div>
+                        </div>
+                        <div class="program-track__content">
+                            <div class="program-track__modules">
+                                <h4>Modules</h4>
+                                <ul class="program-track__module-list">
+                                    <li>LLM Ops & Monitoring</li>
+                                    <li>Agent Orchestration & Deployment</li>
+                                    <li>RAG Architecture & Evals</li>
+                                    <li>Production ML Infrastructure</li>
+                                </ul>
+                            </div>
+                            <div class="program-track__practitioner">
+                                <h4>Sample Practitioner</h4>
+                                <div class="practitioner-mini">
+                                    <div class="practitioner-mini__logo">
+                                        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c4/Snap_Inc._logo.svg/200px-Snap_Inc._logo.svg.png" alt="Snap">
+                                    </div>
+                                    <div>
+                                        <div class="practitioner-mini__name">Felix Wong</div>
+                                        <div class="practitioner-mini__title">Sr. Director of Engineering, Snap</div>
+                                        <p class="practitioner-mini__cred">Built ML infra powering $130B ad revenue at Meta. 3B+ users impacted.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="program-track__example">
+                                <div class="program-track__example-label">From the Blueprint</div>
+                                <div class="program-track__example-text"><strong>Priya</strong> (DevOps, 78% ready) → LLM Ops + Agent Deployment → <strong>3 weeks</strong></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Track -->
+                    <div class="program-track">
+                        <div class="program-track__header">
+                            <div class="program-track__name">Product Track</div>
+                            <div class="program-track__duration">5-6 weeks</div>
+                        </div>
+                        <div class="program-track__content">
+                            <div class="program-track__modules">
+                                <h4>Modules</h4>
+                                <ul class="program-track__module-list">
+                                    <li>LLM Fundamentals for PMs</li>
+                                    <li>AI Product Patterns</li>
+                                    <li>Prompt Engineering & Eval</li>
+                                    <li>AI-Native Roadmapping</li>
+                                </ul>
+                            </div>
+                            <div class="program-track__practitioner">
+                                <h4>Sample Practitioner</h4>
+                                <div class="practitioner-mini">
+                                    <div class="practitioner-mini__logo">
+                                        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a9/TikTok_logo.svg/200px-TikTok_logo.svg.png" alt="TikTok">
+                                    </div>
+                                    <div>
+                                        <div class="practitioner-mini__name">Reza Madad</div>
+                                        <div class="practitioner-mini__title">Product Leader, TikTok</div>
+                                        <p class="practitioner-mini__cred">Former AI/ML Product Lead at Prime Video. 200M+ users impacted.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="program-track__example">
+                                <div class="program-track__example-label">From the Blueprint</div>
+                                <div class="program-track__example-text"><strong>Marcus</strong> (PM, 32% ready) → Full track: Fundamentals → Patterns → Prompting → <strong>5 weeks</strong></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Front-end Track -->
+                    <div class="program-track">
+                        <div class="program-track__header">
+                            <div class="program-track__name">Front-end / Full-stack Track</div>
+                            <div class="program-track__duration">4-5 weeks</div>
+                        </div>
+                        <div class="program-track__content">
+                            <div class="program-track__modules">
+                                <h4>Modules</h4>
+                                <ul class="program-track__module-list">
+                                    <li>AI UX Patterns</li>
+                                    <li>Streaming & Real-time LLM</li>
+                                    <li>AI SDK Integration</li>
+                                    <li>Building AI-Native Interfaces</li>
+                                </ul>
+                            </div>
+                            <div class="program-track__practitioner">
+                                <h4>Sample Practitioner</h4>
+                                <div class="practitioner-mini">
+                                    <div class="practitioner-mini__logo">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/200px-Google_2015_logo.svg.png" alt="Google">
+                                    </div>
+                                    <div>
+                                        <div class="practitioner-mini__name">Diman Ghazi</div>
+                                        <div class="practitioner-mini__title">Principal AI/ML Architect, Google</div>
+                                        <p class="practitioner-mini__cred">Former IBM Watson architect. PhD in AI. Published researcher.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="program-track__example">
+                                <div class="program-track__example-label">From the Blueprint</div>
+                                <div class="program-track__example-text"><strong>Jamie</strong> (FE, 52% ready) → AI UX + Streaming + SDK Integration → <strong>4 weeks</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="programs-terminal__footer">
+                    <p class="programs-terminal__footer-text"><strong>700+ practitioners</strong> from Google, Meta, Amazon, OpenAI, Microsoft. Matched to your stack and industry.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CO-DEVELOPMENT -->
+    <section class="section section--alt" id="co-development">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 48px;">
+                <span class="eyebrow">Phase 3: Co-Development</span>
+                <h2 class="heading-lg">Ship something real. Together.</h2>
+                <p class="text-md max-w-xl mx-auto" style="margin-top: 16px;">Pick a use case from your backlog. Our practitioners build alongside your team. You deploy an AI agent — not a slide deck.</p>
+            </div>
+
+            <div class="programs-terminal">
+                <div class="programs-terminal__header">
+                    <div class="programs-terminal__dots">
+                        <span class="programs-terminal__dot"></span>
+                        <span class="programs-terminal__dot"></span>
+                        <span class="programs-terminal__dot"></span>
+                    </div>
+                    <span class="programs-terminal__title">Co-Development Engagement</span>
+                </div>
+
+                <div class="programs-terminal__body">
+                    <div class="program-track">
+                        <div class="program-track__header">
+                            <div class="program-track__name">Build With Us</div>
+                            <div class="program-track__duration">4-8 weeks</div>
+                        </div>
+                        <div class="program-track__content">
+                            <div class="program-track__modules">
+                                <h4>What Happens</h4>
+                                <ul class="program-track__module-list">
+                                    <li>Select a real use case from your function</li>
+                                    <li>Design the AI agent architecture together</li>
+                                    <li>Build in your environment, with your data</li>
+                                    <li>Deploy internally — production-ready</li>
+                                </ul>
+                            </div>
+                            <div class="program-track__practitioner">
+                                <h4>How It Works</h4>
+                                <div style="color: #888; font-size: 14px; line-height: 1.6;">
+                                    <p style="margin-bottom: 12px;">Your team does the work. Our practitioners guide, review, and unblock.</p>
+                                    <p>You own the code. You own the capability. We leave you better than we found you.</p>
+                                </div>
+                            </div>
+                            <div class="program-track__example">
+                                <div class="program-track__example-label">Example Outcomes</div>
+                                <div class="program-track__example-text">Internal doc search agent • Customer support copilot • Code review assistant • Data analysis workflows</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="programs-terminal__footer">
+                    <p class="programs-terminal__footer-text">Optional — but this is where learning turns into <strong>delivered capability</strong>.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROOF -->
+    <section class="section section--alt" id="proof">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 48px;">
+                <span class="eyebrow">Results</span>
+                <h2 class="heading-lg">25,000 people accelerated. Here's what that looks like.</h2>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat">
+                    <div class="stat__value">650+</div>
+                    <div class="stat__label">Cohorts</div>
+                </div>
+                <div class="stat">
+                    <div class="stat__value">4.8</div>
+                    <div class="stat__label">Avg Rating</div>
+                </div>
+                <div class="stat">
+                    <div class="stat__value">100</div>
+                    <div class="stat__label">NPS</div>
+                </div>
+            </div>
+
+            <div class="case-mini">
+                <div class="case-mini__company">e&</div>
+                <p class="case-mini__desc">From "AI curious" to deploying internal tools in 8 weeks.</p>
+                <div class="case-mini__stats">
+                    <div class="case-mini__stat">
+                        <div class="case-mini__stat-value">4.7/5</div>
+                        <div class="case-mini__stat-label">Rating</div>
+                    </div>
+                    <div class="case-mini__stat">
+                        <div class="case-mini__stat-value">100</div>
+                        <div class="case-mini__stat-label">NPS</div>
+                    </div>
+                    <div class="case-mini__stat">
+                        <div class="case-mini__stat-value">6</div>
+                        <div class="case-mini__stat-label">More cohorts approved</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IS THIS YOU -->
+    <section class="section" id="fit">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 48px;">
+                <span class="eyebrow">Is This You?</span>
+                <h2 class="heading-lg">Who we work with</h2>
+            </div>
+
+            <div class="fit-grid">
+                <div class="fit-card fit-card--yes">
+                    <div class="fit-card__header">✓ Good fit</div>
+                    <ul class="fit-list">
+                        <li><span class="fit-list__icon">✓</span> 500+ tech employees, pressure to move on AI</li>
+                        <li><span class="fit-list__icon">✓</span> Tried training that didn't land</li>
+                        <li><span class="fit-list__icon">✓</span> Need engineers AND product AND GTM accelerated — not just one group</li>
+                        <li><span class="fit-list__icon">✓</span> Want to show capability, not certificates</li>
+                    </ul>
+                </div>
+                <div class="fit-card fit-card--no">
+                    <div class="fit-card__header">✗ Not for you</div>
+                    <ul class="fit-list">
+                        <li><span class="fit-list__icon">✗</span> Shopping for the cheapest course</li>
+                        <li><span class="fit-list__icon">✗</span> Need a box checked, not a team transformed</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TWO ENTRY POINTS -->
+    <section class="section section--alt" id="start">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 48px;">
+                <span class="eyebrow">Get Started</span>
+                <h2 class="heading-lg">Two ways in</h2>
+            </div>
+
+            <div class="entry-grid">
+                <div class="entry-card">
+                    <p class="entry-card__question">Don't know where to start?</p>
+                    <h3 class="entry-card__title">Get the Blueprint</h3>
+                    <p class="entry-card__desc">2 weeks. You'll see exactly who needs what. Then decide what's next.</p>
+                    <button class="btn btn--primary" onclick="openCalendar()">Get Your Blueprint →</button>
+                </div>
+                <div class="entry-card">
+                    <p class="entry-card__question">Know what you need?</p>
+                    <h3 class="entry-card__title">Talk Acceleration</h3>
+                    <p class="entry-card__desc">Let's scope the right accelerators for your teams.</p>
+                    <button class="btn btn--secondary" onclick="openCalendar()">Start a Conversation →</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" id="cta">
+        <div class="container">
+            <h2 class="heading-lg">Ready to accelerate your teams?</h2>
+            <p class="cta__subtitle">Start with a blueprint. Or jump straight to a conversation. 30 min, no deck, no pitch.</p>
+
+            <button class="btn btn--white" onclick="openCalendar()">Get Your Blueprint →</button>
+
+            <p class="cta__microcopy">Fast, targeted, practitioner-led. Not another course catalog.</p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__brand">Acceler</div>
+                <div class="footer__links">
+                    <a href="#">About</a>
+                    <a href="#">Case Studies</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Contact</a>
+                </div>
+            </div>
+            <div class="footer__copyright">© 2026 Acceler. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <!-- CALENDAR MODAL -->
+    <div class="modal" id="calendarModal">
+        <div class="modal__content">
+            <button class="modal__close" onclick="closeCalendar()">×</button>
+            <iframe class="modal__iframe" src="https://calendly.com/d/placeholder" title="Schedule a call"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Calendar Modal
+        function openCalendar() {
+            document.getElementById('calendarModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCalendar() {
+            document.getElementById('calendarModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('calendarModal').addEventListener('click', (e) => {
+            if (e.target.id === 'calendarModal') closeCalendar();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeCalendar();
+        });
+
+        // Phase Navigation
+        const phaseNav = document.getElementById('phaseNav');
+        const phaseCards = document.getElementById('phase-cards');
+        const sections = {
+            1: document.getElementById('blueprint-sample'),
+            2: document.getElementById('acceleration-programs'),
+            3: document.getElementById('co-development')
+        };
+        const navItems = document.querySelectorAll('.phase-nav__item');
+
+        // Show/hide sticky nav based on scroll
+        function updatePhaseNav() {
+            const phaseCardsRect = phaseCards.getBoundingClientRect();
+            const scrolledPastCards = phaseCardsRect.bottom < 100;
+
+            if (scrolledPastCards) {
+                phaseNav.classList.add('visible');
+            } else {
+                phaseNav.classList.remove('visible');
+            }
+
+            // Determine which section is currently in view
+            let currentPhase = null;
+            const viewportMiddle = window.innerHeight / 3;
+
+            for (const [phase, section] of Object.entries(sections)) {
+                if (section) {
+                    const rect = section.getBoundingClientRect();
+                    if (rect.top <= viewportMiddle && rect.bottom > viewportMiddle) {
+                        currentPhase = parseInt(phase);
+                        break;
+                    }
+                }
+            }
+
+            // Update nav items
+            navItems.forEach(item => {
+                const itemPhase = parseInt(item.dataset.phase);
+                item.classList.remove('active', 'completed');
+
+                if (currentPhase !== null) {
+                    if (itemPhase === currentPhase) {
+                        item.classList.add('active');
+                    } else if (itemPhase < currentPhase) {
+                        item.classList.add('completed');
+                    }
+                }
+            });
+
+            // Also update the main phase cards styling
+            const cardLinks = document.querySelectorAll('.fix-card-link');
+            cardLinks.forEach(link => {
+                const cardPhase = parseInt(link.dataset.phase);
+                const card = link.querySelector('.fix-card');
+                card.classList.remove('fix-card--active', 'fix-card--completed');
+
+                if (currentPhase !== null) {
+                    if (cardPhase === currentPhase) {
+                        card.classList.add('fix-card--active');
+                    } else if (cardPhase < currentPhase) {
+                        card.classList.add('fix-card--completed');
+                    }
+                }
+            });
+        }
+
+        // Throttled scroll handler
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    updatePhaseNav();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // Initial call
+        updatePhaseNav();
+    </script>
+
+</body>
+</html>
