@@ -223,6 +223,54 @@
             color: var(--text-primary);
         }
 
+        /* Logo Bars */
+        .logo-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .logo-bar img {
+            height: 20px;
+            opacity: 0.5;
+            filter: grayscale(100%);
+            transition: all 0.2s ease;
+        }
+
+        .logo-bar img:hover {
+            opacity: 0.8;
+            filter: grayscale(0%);
+        }
+
+        .client-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+            padding: 32px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+        }
+
+        .client-logos img {
+            height: 24px;
+            opacity: 0.4;
+            filter: grayscale(100%);
+            transition: all 0.2s ease;
+        }
+
+        .client-logos img:hover {
+            opacity: 0.7;
+            filter: grayscale(0%);
+        }
+
         /* ============================================
            PROBLEM
            ============================================ */
@@ -1414,6 +1462,16 @@
                 font-size: 12px;
             }
 
+            .logo-bar,
+            .client-logos {
+                gap: 20px;
+            }
+
+            .logo-bar img,
+            .client-logos img {
+                height: 16px;
+            }
+
             .stats-row {
                 gap: 32px;
             }
@@ -1548,17 +1606,26 @@
 
             <div class="proof-bar">
                 <div class="proof-item">
-                    <span class="proof-item__value">Time 100</span>
+                    <span class="proof-item__value">1,700+</span> Organizations
+                </div>
+                <div class="proof-item">
+                    <span class="proof-item__value">90%</span> of Fortune 500
                 </div>
                 <div class="proof-item">
                     <span class="proof-item__value">700+</span> FAANG Practitioners
                 </div>
                 <div class="proof-item">
-                    <span class="proof-item__value">25K</span> Accelerated
-                </div>
-                <div class="proof-item">
                     <span class="proof-item__value">4.8</span> Rating
                 </div>
+            </div>
+
+            <div class="logo-bar">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/200px-Google_2015_logo.svg.png" alt="Google">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/200px-Amazon_logo.svg.png" alt="Amazon">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/200px-Microsoft_logo.svg.png" alt="Microsoft">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Meta_Platforms_Inc._logo.svg/200px-Meta_Platforms_Inc._logo.svg.png" alt="Meta">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/100px-Apple_logo_black.svg.png" alt="Apple">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/200px-IBM_logo.svg.png" alt="IBM">
             </div>
         </div>
     </section>
@@ -2065,13 +2132,17 @@
         <div class="container">
             <div class="text-center" style="margin-bottom: 48px;">
                 <span class="eyebrow">Results</span>
-                <h2 class="heading-lg">25,000 people accelerated. Here's what that looks like.</h2>
+                <h2 class="heading-lg">1,700+ organizations. 90% of the Fortune 500.</h2>
             </div>
 
             <div class="stats-row">
                 <div class="stat">
-                    <div class="stat__value">650+</div>
-                    <div class="stat__label">Cohorts</div>
+                    <div class="stat__value">1,700+</div>
+                    <div class="stat__label">Organizations</div>
+                </div>
+                <div class="stat">
+                    <div class="stat__value">90%</div>
+                    <div class="stat__label">Fortune 500</div>
                 </div>
                 <div class="stat">
                     <div class="stat__value">4.8</div>
@@ -2081,6 +2152,17 @@
                     <div class="stat__value">100</div>
                     <div class="stat__label">NPS</div>
                 </div>
+            </div>
+
+            <div class="client-logos">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/200px-Google_2015_logo.svg.png" alt="Google">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/200px-Amazon_logo.svg.png" alt="Amazon">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/200px-Microsoft_logo.svg.png" alt="Microsoft">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Meta_Platforms_Inc._logo.svg/200px-Meta_Platforms_Inc._logo.svg.png" alt="Meta">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/100px-Apple_logo_black.svg.png" alt="Apple">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/200px-IBM_logo.svg.png" alt="IBM">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Deloitte-logo.png/200px-Deloitte-logo.png" alt="Deloitte">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/PricewaterhouseCoopers_Logo.svg/200px-PricewaterhouseCoopers_Logo.svg.png" alt="PwC">
             </div>
 
             <div class="case-mini">
