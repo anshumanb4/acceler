@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>People Dashboard — Acceler</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+  // Capture the Supabase library immediately before anything can shadow it
+  window.__supabaseLib = window.supabase;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --accent: #5856d6;
+  --accent-hover: #4745b5;
+  --accent-light: #ededfb;
+  --bg: #fafafa;
+  --bg-card: #fff;
+  --text: #1c1917;
+  --text-secondary: #57534e;
+  --text-muted: #a8a29e;
+  --border: #e5e5e5;
+  --row-alt: #f9f9fb;
+  --green: #34a853;
+  --orange: #e67e22;
+  --red: #d93025;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.5;
+}
+
+/* Config Banner */
+.config-banner {
+  background: var(--accent-light);
+  border-bottom: 1px solid var(--accent);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.config-banner.hidden { display: none; }
+.config-banner input {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  flex: 1;
+  min-width: 200px;
+}
+.config-banner input:focus { outline: 2px solid var(--accent); border-color: transparent; }
+.config-banner button {
+  padding: 8px 20px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.config-banner button:hover { background: var(--accent-hover); }
+.config-banner .config-label {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+/* Container */
+.container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+
+/* Header */
+.header { margin-bottom: 20px; }
+.header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.header p { color: var(--text-muted); font-size: 13px; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  font-size: 15px;
+  background: var(--bg-card);
+  transition: border-color 0.15s;
+  margin-bottom: 16px;
+}
+.search-box:focus { outline: none; border-color: var(--accent); }
+
+/* Filters Row */
+.filters-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.pill-group { display: flex; gap: 0; }
+.pill {
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.15s;
+}
+.pill:first-child { border-radius: 6px 0 0 6px; }
+.pill:last-child { border-radius: 0 6px 6px 0; }
+.pill:not(:first-child) { border-left: none; }
+.pill.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+.pill:hover:not(.active) { background: var(--accent-light); }
+
+.status-select {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  background: var(--bg-card);
+  cursor: pointer;
+}
+.status-select:focus { outline: 2px solid var(--accent); border-color: transparent; }
+
+.row-count {
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.reset-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-card);
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+.reset-btn:hover { background: var(--accent-light); color: var(--accent); }
+
+/* Table Wrapper */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-card);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1100px;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  background: var(--bg-card);
+  border-bottom: 2px solid var(--border);
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  z-index: 1;
+}
+thead th:hover { color: var(--accent); }
+thead th .sort-arrow { margin-left: 4px; font-size: 10px; opacity: 0.4; }
+thead th.sorted .sort-arrow { opacity: 1; color: var(--accent); }
+
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:nth-child(even) { background: var(--row-alt); }
+tbody tr:hover { background: var(--accent-light); }
+
+td {
+  padding: 8px 12px;
+  font-size: 13px;
+  vertical-align: top;
+}
+
+/* Column widths */
+td.col-name { font-weight: 600; white-space: nowrap; }
+td.col-title { max-width: 180px; }
+td.col-org { max-width: 160px; }
+td.col-context {
+  max-width: 360px;
+  min-width: 200px;
+  cursor: pointer;
+  white-space: normal;
+  line-height: 1.4;
+}
+td.col-context.expanded { max-width: none; }
+td.col-context.expanded .ctx-short { display: none; }
+td.col-context.expanded .ctx-full { display: inline !important; }
+td.col-source { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Status badges */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge-discovered { background: #e8eaed; color: #5f6368; }
+.badge-enriched { background: #e6f4ea; color: #137333; }
+.badge-outreach_drafted { background: #fef7e0; color: #b45309; }
+.badge-contacted { background: #e0e7ff; color: #3730a3; }
+.badge-replied { background: #dbeafe; color: #1d4ed8; }
+.badge-meeting { background: #d1fae5; color: #065f46; }
+
+/* Tag pills */
+.tag-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.tag-acceler { background: var(--accent-light); color: var(--accent); }
+.tag-terra { background: #fef3c7; color: #92400e; }
+.tag-other { background: #f3f4f6; color: #6b7280; }
+
+/* Loading / Empty */
+.state-msg {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+.state-msg .spinner {
+  display: inline-block;
+  width: 24px; height: 24px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 12px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container { padding: 12px; }
+  .filters-row { gap: 8px; }
+  .row-count { margin-left: 0; width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- Config Banner -->
+<div class="config-banner" id="configBanner">
+  <span class="config-label">Supabase Config</span>
+  <input type="text" id="cfgUrl" placeholder="Supabase URL (https://xxx.supabase.co)">
+  <input type="text" id="cfgKey" placeholder="Anon Key">
+  <button onclick="saveConfig()">Save &amp; Connect</button>
+  <button onclick="clearConfig()" style="background:transparent;color:var(--accent);border:1px solid var(--accent)">Clear</button>
+</div>
+
+<div class="container">
+  <div class="header">
+    <h1>People Dashboard</h1>
+    <p>Browse and search people records</p>
+  </div>
+
+  <input type="text" class="search-box" id="searchInput"
+    placeholder="Search people... (e.g. CXO, AI healthcare, acceler)">
+
+  <div class="filters-row">
+    <div class="pill-group" id="tagPills">
+      <button class="pill active" data-tag="all">All</button>
+      <button class="pill" data-tag="acceler">Acceler</button>
+      <button class="pill" data-tag="terra">Terra</button>
+      <button class="pill" data-tag="other">Other</button>
+    </div>
+    <select class="status-select" id="statusFilter">
+      <option value="all">All Statuses</option>
+      <option value="discovered">Discovered</option>
+      <option value="enriched">Enriched</option>
+      <option value="outreach_drafted">Outreach Drafted</option>
+      <option value="contacted">Contacted</option>
+      <option value="replied">Replied</option>
+      <option value="meeting">Meeting</option>
+    </select>
+    <button class="reset-btn" onclick="resetFilters()">Reset</button>
+    <span class="row-count" id="rowCount"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr id="tableHead"></tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <div class="state-msg" id="stateMsg" style="display:none"></div>
+  </div>
+</div>
+
+<script>
+// ── Column definitions ──
+const COLUMNS = [
+  { key: 'name',         label: 'Name',         sortable: true  },
+  { key: 'title',        label: 'Title',        sortable: true  },
+  { key: 'organization', label: 'Organization', sortable: true  },
+  { key: 'email',        label: 'Email',        sortable: true  },
+  { key: 'linkedin',     label: 'LinkedIn',     sortable: false },
+  { key: 'context',      label: 'Context',      sortable: false },
+  { key: 'source_url',   label: 'Source',       sortable: false },
+  { key: 'for_tag',      label: 'Tag',          sortable: true  },
+  { key: 'status',       label: 'Status',       sortable: true  },
+  { key: 'created_at',   label: 'Created',      sortable: true  },
+];
+
+// ── State ──
+let allPeople = [];
+let fuse = null;
+let sortCol = 'created_at';
+let sortDir = 'desc';
+let activeTag = 'all';
+let activeStatus = 'all';
+let sbClient = null;
+
+// ── DOM refs ──
+const $configBanner = document.getElementById('configBanner');
+const $cfgUrl = document.getElementById('cfgUrl');
+const $cfgKey = document.getElementById('cfgKey');
+const $searchInput = document.getElementById('searchInput');
+const $tagPills = document.getElementById('tagPills');
+const $statusFilter = document.getElementById('statusFilter');
+const $rowCount = document.getElementById('rowCount');
+const $tableHead = document.getElementById('tableHead');
+const $tableBody = document.getElementById('tableBody');
+const $stateMsg = document.getElementById('stateMsg');
+
+// ── Config ──
+function saveConfig() {
+  const url = $cfgUrl.value.trim();
+  const key = $cfgKey.value.trim();
+  if (!url || !key) return;
+  localStorage.setItem('sb_url', url);
+  localStorage.setItem('sb_key', key);
+  initSupabase(url, key);
+}
+
+function clearConfig() {
+  localStorage.removeItem('sb_url');
+  localStorage.removeItem('sb_key');
+  $cfgUrl.value = '';
+  $cfgKey.value = '';
+  $configBanner.classList.remove('hidden');
+  allPeople = [];
+  render();
+}
+
+function initSupabase(url, key) {
+  try {
+    const lib = window.__supabaseLib || window.supabase;
+    if (!lib || !lib.createClient) {
+      showState('<div style="color:var(--red)">Error: Supabase JS library failed to load. Check your internet connection and reload.</div>');
+      return;
+    }
+    sbClient = lib.createClient(url, key);
+    $configBanner.classList.add('hidden');
+    loadPeople();
+  } catch (e) {
+    showState(`<div style="color:var(--red)">Error initializing Supabase: ${e.message}</div>`);
+  }
+}
+
+// ── Data Loading ──
+async function loadPeople() {
+  showState('<div class="spinner"></div><div>Loading people...</div>');
+
+  try {
+    // Supabase caps .select() at 1000 by default; paginate to get all rows
+    let rows = [];
+    let from = 0;
+    const pageSize = 1000;
+    while (true) {
+      const { data, error } = await sbClient
+        .from('people')
+        .select('id,name,title,organization,email,linkedin,context,source_url,for_tag,status,created_at')
+        .order('created_at', { ascending: false })
+        .range(from, from + pageSize - 1);
+
+      if (error) {
+        showState(`<div style="color:var(--red)">Error: ${error.message}</div>`);
+        return;
+      }
+      rows = rows.concat(data);
+      if (data.length < pageSize) break;
+      from += pageSize;
+    }
+
+    allPeople = rows;
+
+    // Build Fuse index
+    fuse = new Fuse(allPeople, {
+      keys: ['name', 'title', 'organization', 'context'],
+      threshold: 0.4,
+      ignoreLocation: true,
+      minMatchCharLength: 2,
+    });
+
+    render();
+  } catch (e) {
+    showState(`<div style="color:var(--red)">Error loading data: ${e.message}</div>`);
+  }
+}
+
+// ── Rendering ──
+function render() {
+  const filtered = getFiltered();
+  renderHead();
+  renderBody(filtered);
+  $rowCount.textContent = `Showing ${filtered.length} of ${allPeople.length}`;
+  $stateMsg.style.display = filtered.length === 0 && allPeople.length > 0 ? 'block' : 'none';
+  if (filtered.length === 0 && allPeople.length > 0) {
+    showState('<div>No matching people found.</div>');
+  }
+  if (allPeople.length === 0 && sbClient) {
+    // still loading or empty
+  }
+}
+
+function getFiltered() {
+  const query = $searchInput.value.trim();
+
+  // Start with search results or all
+  let results = query && fuse
+    ? fuse.search(query).map(r => r.item)
+    : [...allPeople];
+
+  // Tag filter
+  if (activeTag !== 'all') {
+    results = results.filter(p => (p.for_tag || '').toLowerCase() === activeTag);
+  }
+
+  // Status filter
+  if (activeStatus !== 'all') {
+    results = results.filter(p => p.status === activeStatus);
+  }
+
+  // Sort (skip if search query active — Fuse already ranks by relevance)
+  if (!query) {
+    results.sort((a, b) => {
+      let va = a[sortCol] ?? '';
+      let vb = b[sortCol] ?? '';
+      if (sortCol === 'created_at') { va = new Date(va); vb = new Date(vb); }
+      else { va = String(va).toLowerCase(); vb = String(vb).toLowerCase(); }
+      if (va < vb) return sortDir === 'asc' ? -1 : 1;
+      if (va > vb) return sortDir === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }
+
+  return results;
+}
+
+function renderHead() {
+  $tableHead.innerHTML = COLUMNS.map(col => {
+    const sorted = col.key === sortCol;
+    const arrow = sorted ? (sortDir === 'asc' ? '\u25B2' : '\u25BC') : '\u25B4';
+    const cls = sorted ? 'sorted' : '';
+    const click = col.sortable ? `onclick="toggleSort('${col.key}')"` : '';
+    return `<th class="${cls}" ${click}>${col.label}${col.sortable ? `<span class="sort-arrow">${arrow}</span>` : ''}</th>`;
+  }).join('');
+}
+
+function renderBody(rows) {
+  if (rows.length === 0) {
+    $tableBody.innerHTML = '';
+    return;
+  }
+
+  $tableBody.innerHTML = rows.map(p => `<tr>
+    <td class="col-name">${esc(p.name)}</td>
+    <td class="col-title">${esc(p.title)}</td>
+    <td class="col-org">${esc(p.organization)}</td>
+    <td>${p.email ? `<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>` : ''}</td>
+    <td>${p.linkedin ? `<a href="${ensureUrl(p.linkedin)}" target="_blank" rel="noopener">Profile</a>` : ''}</td>
+    <td class="col-context" onclick="this.classList.toggle('expanded')">${contextCell(p.context)}</td>
+    <td class="col-source">${p.source_url ? `<a href="${esc(p.source_url)}" target="_blank" rel="noopener">Link</a>` : ''}</td>
+    <td><span class="tag-pill tag-${(p.for_tag||'other').toLowerCase()}">${esc(p.for_tag)}</span></td>
+    <td><span class="badge badge-${p.status}">${formatStatus(p.status)}</span></td>
+    <td style="white-space:nowrap;color:var(--text-muted);font-size:12px">${formatDate(p.created_at)}</td>
+  </tr>`).join('');
+}
+
+// ── Sorting ──
+function toggleSort(col) {
+  if (sortCol === col) {
+    sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortCol = col;
+    sortDir = 'asc';
+  }
+  render();
+}
+
+// ── Filters ──
+$tagPills.addEventListener('click', e => {
+  const pill = e.target.closest('.pill');
+  if (!pill) return;
+  $tagPills.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  activeTag = pill.dataset.tag;
+  render();
+});
+
+$statusFilter.addEventListener('change', () => {
+  activeStatus = $statusFilter.value;
+  render();
+});
+
+function resetFilters() {
+  $searchInput.value = '';
+  activeTag = 'all';
+  activeStatus = 'all';
+  $statusFilter.value = 'all';
+  $tagPills.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  $tagPills.querySelector('[data-tag="all"]').classList.add('active');
+  sortCol = 'created_at';
+  sortDir = 'desc';
+  render();
+}
+
+// ── Debounced Search ──
+let searchTimer;
+$searchInput.addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(render, 200);
+});
+
+// ── Helpers ──
+function esc(s) {
+  if (!s) return '';
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function ensureUrl(url) {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) return esc(url);
+  return 'https://' + esc(url);
+}
+
+function formatStatus(s) {
+  if (!s) return '';
+  return s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function contextCell(s) {
+  if (!s) return '';
+  const escaped = esc(s);
+  if (s.length <= 200) return escaped;
+  const short = esc(s.slice(0, 200));
+  return `<span class="ctx-short">${short}<span style="color:var(--accent);font-weight:600">\u2026 more</span></span><span class="ctx-full" style="display:none">${escaped}</span>`;
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  const dt = new Date(d);
+  return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function showState(html) {
+  $stateMsg.innerHTML = html;
+  $stateMsg.style.display = 'block';
+  $tableBody.innerHTML = '';
+}
+
+// ── Init ──
+(function init() {
+  renderHead();
+  const url = localStorage.getItem('sb_url');
+  const key = localStorage.getItem('sb_key');
+  if (url && key) {
+    $cfgUrl.value = url;
+    $cfgKey.value = key;
+    initSupabase(url, key);
+  }
+})();
+</script>
+</body>
+</html>
