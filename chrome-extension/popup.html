@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="header">
+    <h1>People Extractor</h1>
+    <button id="settings-btn" title="Settings">&#9881;</button>
+  </div>
+
+  <div id="loading" class="state">
+    <div class="spinner"></div>
+    <p>Extracting people...</p>
+  </div>
+
+  <div id="error" class="state hidden">
+    <p class="error-text"></p>
+    <button id="retry-btn">Retry</button>
+  </div>
+
+  <div id="empty" class="state hidden">
+    <p>No people found on this page.</p>
+  </div>
+
+  <div id="results" class="state hidden">
+    <div id="people-list"></div>
+    <div class="for-selector">
+      <span class="for-label">For</span>
+      <input type="radio" name="for-value" id="for-acceler" value="acceler">
+      <label for="for-acceler">Acceler</label>
+      <input type="radio" name="for-value" id="for-terra" value="terra">
+      <label for="for-terra">Terra</label>
+      <input type="radio" name="for-value" id="for-other" value="other" checked>
+      <label for="for-other">Other</label>
+    </div>
+    <div class="actions">
+      <span id="count"></span>
+      <button id="submit-btn">Submit</button>
+    </div>
+  </div>
+
+  <div id="success" class="state hidden">
+    <p class="success-text"></p>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
