@@ -200,22 +200,28 @@ td {
 
 /* Column widths */
 td.col-name { font-weight: 600; white-space: nowrap; }
-td.col-title { max-width: 180px; }
+td.col-title { min-width: 200px; }
 td.col-org { max-width: 160px; }
 td.col-context {
-  max-width: 360px;
   min-width: 200px;
   cursor: pointer;
   white-space: normal;
   line-height: 1.4;
+  font-size: 12px;
+  color: var(--text-secondary);
 }
 td.col-context.expanded { max-width: none; }
 td.col-context.expanded .ctx-short { display: none; }
 td.col-context.expanded .ctx-full { display: inline !important; }
 td.col-score { text-align: center; white-space: nowrap; width: 50px; }
-td.col-priority { max-width: 220px; font-size: 12px; color: var(--text-secondary); }
+td.col-priority { min-width: 260px; font-size: 12px; color: var(--text-secondary); }
 td.col-org-info { max-width: 200px; font-size: 12px; color: var(--text-secondary); }
-td.col-source { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Resizable columns */
+thead th {
+  resize: horizontal;
+  overflow: hidden;
+}
 
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
@@ -335,7 +341,6 @@ const COLUMNS = [
   { key: 'priority_reasons', label: 'Priority',  sortable: false },
   { key: 'email',        label: 'Email',        sortable: true  },
   { key: 'context',      label: 'Context',      sortable: false },
-  { key: 'source_url',   label: 'Source',       sortable: false },
   { key: 'for_tag',      label: 'Tag',          sortable: true  },
   { key: 'status',       label: 'Status',       sortable: true  },
   { key: 'created_at',   label: 'Created',      sortable: true  },
@@ -521,8 +526,7 @@ function renderBody(rows) {
     <td class="col-org-info">${esc(p._org_summary)}</td>
     <td class="col-priority" title="${esc(p.shared_background || '')}">${priorityCell(p.priority_reasons)}</td>
     <td>${p.email ? `<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>` : ''}</td>
-    <td class="col-context" onclick="this.classList.toggle('expanded')">${contextCell(p.context)}</td>
-    <td class="col-source">${p.source_url ? `<a href="${esc(p.source_url)}" target="_blank" rel="noopener">Link</a>` : ''}</td>
+    <td class="col-context" onclick="this.classList.toggle('expanded')">${contextCell(p.context, p.source_url)}</td>
     <td><span class="tag-pill tag-${(p.for_tag||'other').toLowerCase()}">${esc(p.for_tag)}</span></td>
     <td><span class="badge badge-${p.status}">${formatStatus(p.status)}</span></td>
     <td style="white-space:nowrap;color:var(--text-muted);font-size:12px">${formatDate(p.created_at)}</td>
@@ -594,12 +598,13 @@ function formatStatus(s) {
   return s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
 
-function contextCell(s) {
-  if (!s) return '';
+function contextCell(s, sourceUrl) {
+  const suffix = sourceUrl ? ` <a href="${esc(sourceUrl)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-weight:600">[source]</a>` : '';
+  if (!s) return suffix;
   const escaped = esc(s);
-  if (s.length <= 200) return escaped;
+  if (s.length <= 200) return escaped + suffix;
   const short = esc(s.slice(0, 200));
-  return `<span class="ctx-short">${short}<span style="color:var(--accent);font-weight:600">\u2026 more</span></span><span class="ctx-full" style="display:none">${escaped}</span>`;
+  return `<span class="ctx-short">${short}<span style="color:var(--accent);font-weight:600">\u2026 more</span></span><span class="ctx-full" style="display:none">${escaped}${suffix}</span>`;
 }
 
 function formatDate(d) {
