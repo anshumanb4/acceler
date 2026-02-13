@@ -60,6 +60,22 @@ CREATE TABLE people (
   for_tag          TEXT NOT NULL DEFAULT 'other',
   status           person_status NOT NULL DEFAULT 'discovered',
 
+  -- Enrichment: filterable columns
+  seniority        TEXT DEFAULT '',
+  org_employee_count INTEGER,
+  org_revenue      BIGINT,
+  org_total_funding BIGINT,
+  org_industry     TEXT DEFAULT '',
+
+  -- Enrichment: full Apollo API response
+  apollo_data      JSONB,
+
+  -- Priority scoring
+  priority_score   INTEGER,
+  priority_reasons TEXT DEFAULT '',
+  shared_background TEXT DEFAULT '',
+  scored_at        TIMESTAMPTZ,
+
   -- Generated columns for dedup (works with PostgREST + supabase-py)
   name_normalized  TEXT GENERATED ALWAYS AS (lower(trim(name))) STORED,
   org_normalized   TEXT GENERATED ALWAYS AS (lower(trim(organization))) STORED,

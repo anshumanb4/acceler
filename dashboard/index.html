@@ -164,7 +164,7 @@ body {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1100px;
+  min-width: 1500px;
 }
 
 thead th {
@@ -212,6 +212,9 @@ td.col-context {
 td.col-context.expanded { max-width: none; }
 td.col-context.expanded .ctx-short { display: none; }
 td.col-context.expanded .ctx-full { display: inline !important; }
+td.col-score { text-align: center; white-space: nowrap; width: 50px; }
+td.col-priority { max-width: 220px; font-size: 12px; color: var(--text-secondary); }
+td.col-org-info { max-width: 200px; font-size: 12px; color: var(--text-secondary); }
 td.col-source { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 a { color: var(--accent); text-decoration: none; }
@@ -324,11 +327,13 @@ a:hover { text-decoration: underline; }
 <script>
 // ── Column definitions ──
 const COLUMNS = [
+  { key: 'priority_score', label: 'Score',      sortable: true  },
   { key: 'name',         label: 'Name',         sortable: true  },
   { key: 'title',        label: 'Title',        sortable: true  },
   { key: 'organization', label: 'Organization', sortable: true  },
+  { key: 'org_summary',  label: 'Org Info',     sortable: true  },
+  { key: 'priority_reasons', label: 'Priority',  sortable: false },
   { key: 'email',        label: 'Email',        sortable: true  },
-  { key: 'linkedin',     label: 'LinkedIn',     sortable: false },
   { key: 'context',      label: 'Context',      sortable: false },
   { key: 'source_url',   label: 'Source',       sortable: false },
   { key: 'for_tag',      label: 'Tag',          sortable: true  },
@@ -339,7 +344,7 @@ const COLUMNS = [
 // ── State ──
 let allPeople = [];
 let fuse = null;
-let sortCol = 'created_at';
+let sortCol = 'priority_score';
 let sortDir = 'desc';
 let activeTag = 'all';
 let activeStatus = 'all';
@@ -404,7 +409,7 @@ async function loadPeople() {
     while (true) {
       const { data, error } = await sbClient
         .from('people')
-        .select('id,name,title,organization,email,linkedin,context,source_url,for_tag,status,created_at')
+        .select('id,name,title,organization,email,linkedin,context,source_url,for_tag,status,created_at,seniority,org_employee_count,org_revenue,org_total_funding,org_industry,apollo_data,priority_score,priority_reasons,shared_background')
         .order('created_at', { ascending: false })
         .range(from, from + pageSize - 1);
 
@@ -421,7 +426,7 @@ async function loadPeople() {
 
     // Build Fuse index
     fuse = new Fuse(allPeople, {
-      keys: ['name', 'title', 'organization', 'context'],
+      keys: ['name', 'title', 'organization', 'context', 'org_industry', 'priority_reasons', 'shared_background'],
       threshold: 0.4,
       ignoreLocation: true,
       minMatchCharLength: 2,
@@ -469,9 +474,16 @@ function getFiltered() {
   // Sort (skip if search query active — Fuse already ranks by relevance)
   if (!query) {
     results.sort((a, b) => {
-      let va = a[sortCol] ?? '';
-      let vb = b[sortCol] ?? '';
+      let va, vb;
+      if (sortCol === 'org_summary') {
+        va = a._org_summary || orgSummary(a);
+        vb = b._org_summary || orgSummary(b);
+      } else {
+        va = a[sortCol] ?? '';
+        vb = b[sortCol] ?? '';
+      }
       if (sortCol === 'created_at') { va = new Date(va); vb = new Date(vb); }
+      else if (sortCol === 'priority_score') { va = va || 0; vb = vb || 0; }
       else { va = String(va).toLowerCase(); vb = String(vb).toLowerCase(); }
       if (va < vb) return sortDir === 'asc' ? -1 : 1;
       if (va > vb) return sortDir === 'asc' ? 1 : -1;
@@ -498,18 +510,24 @@ function renderBody(rows) {
     return;
   }
 
-  $tableBody.innerHTML = rows.map(p => `<tr>
-    <td class="col-name">${esc(p.name)}</td>
+  $tableBody.innerHTML = rows.map(p => {
+    // Pre-compute org_summary for sorting
+    if (!p._org_summary) p._org_summary = orgSummary(p);
+    return `<tr>
+    <td class="col-score">${scoreCell(p.priority_score)}</td>
+    <td class="col-name">${p.linkedin ? `<a href="${ensureUrl(p.linkedin)}" target="_blank" rel="noopener">${esc(p.name)}</a>` : esc(p.name)}</td>
     <td class="col-title">${esc(p.title)}</td>
-    <td class="col-org">${esc(p.organization)}</td>
+    <td class="col-org">${orgCell(p)}</td>
+    <td class="col-org-info">${esc(p._org_summary)}</td>
+    <td class="col-priority" title="${esc(p.shared_background || '')}">${priorityCell(p.priority_reasons)}</td>
     <td>${p.email ? `<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>` : ''}</td>
-    <td>${p.linkedin ? `<a href="${ensureUrl(p.linkedin)}" target="_blank" rel="noopener">Profile</a>` : ''}</td>
     <td class="col-context" onclick="this.classList.toggle('expanded')">${contextCell(p.context)}</td>
     <td class="col-source">${p.source_url ? `<a href="${esc(p.source_url)}" target="_blank" rel="noopener">Link</a>` : ''}</td>
     <td><span class="tag-pill tag-${(p.for_tag||'other').toLowerCase()}">${esc(p.for_tag)}</span></td>
     <td><span class="badge badge-${p.status}">${formatStatus(p.status)}</span></td>
     <td style="white-space:nowrap;color:var(--text-muted);font-size:12px">${formatDate(p.created_at)}</td>
-  </tr>`).join('');
+  </tr>`;
+  }).join('');
 }
 
 // ── Sorting ──
@@ -545,7 +563,7 @@ function resetFilters() {
   $statusFilter.value = 'all';
   $tagPills.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
   $tagPills.querySelector('[data-tag="all"]').classList.add('active');
-  sortCol = 'created_at';
+  sortCol = 'priority_score';
   sortDir = 'desc';
   render();
 }
@@ -588,6 +606,57 @@ function formatDate(d) {
   if (!d) return '';
   const dt = new Date(d);
   return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function formatCompact(n) {
+  if (n == null) return '';
+  if (n >= 1e9) return (n / 1e9).toFixed(1).replace(/\.0$/, '') + 'B';
+  if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(0) + 'K';
+  return String(n);
+}
+
+function orgSummary(p) {
+  const parts = [];
+  if (p.org_industry) parts.push(p.org_industry);
+  if (p.org_employee_count) parts.push(formatCompact(p.org_employee_count) + ' emp');
+  if (p.org_revenue) parts.push('$' + formatCompact(p.org_revenue) + ' rev');
+  else if (p.org_total_funding) parts.push('$' + formatCompact(p.org_total_funding) + ' funded');
+  return parts.join(' · ');
+}
+
+function orgWebsite(p) {
+  if (!p.apollo_data) return '';
+  const raw = typeof p.apollo_data === 'string' ? JSON.parse(p.apollo_data) : p.apollo_data;
+  const org = raw && raw.organization;
+  return (org && org.website_url) || '';
+}
+
+function scoreCell(score) {
+  if (score == null) return '<span style="color:var(--text-muted)">—</span>';
+  let color = 'var(--text-muted)';
+  if (score >= 70) color = 'var(--green)';
+  else if (score >= 40) color = 'var(--orange)';
+  else if (score > 0) color = 'var(--text-secondary)';
+  return `<span style="font-weight:700;color:${color}">${score}</span>`;
+}
+
+function priorityCell(reasons) {
+  if (!reasons) return '';
+  // Strip the [x/y/z] prefix for display, show as tooltip
+  const match = reasons.match(/^\[(\d+\/\d+\/\d+)\]\s*(.*)/);
+  if (match) {
+    return `<span title="Proximity/Relevance/Urgency: ${esc(match[1])}">${esc(match[2])}</span>`;
+  }
+  return esc(reasons);
+}
+
+function orgCell(p) {
+  const name = esc(p.organization);
+  if (!name) return '';
+  const url = orgWebsite(p);
+  if (url) return `<a href="${ensureUrl(url)}" target="_blank" rel="noopener">${name}</a>`;
+  return name;
 }
 
 function showState(html) {

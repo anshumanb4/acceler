@@ -1,0 +1,73 @@
+## Anshuman Bapna — Background for connection matching & priority scoring
+
+name: Anshuman Bapna
+location: Palo Alto, CA
+
+schools:
+  - Stanford University, Graduate School of Business (MBA, 2005)
+  - Indian Institute of Technology Bombay (BTech Electrical Engineering, 2000)
+
+companies:
+  - name: Terra.do
+    role: CEO & Founder
+    years: 2020-present
+    industry: Climate / Sustainability / Education
+    notes: World's largest skilling platform for the climate economy. Raised $8.5M VC.
+
+  - name: MakeMyTrip
+    role: Chief Product Officer
+    years: 2015-2019
+    industry: Travel / E-commerce
+    notes: NASDAQ-listed (MMYT). Led product for India's largest travel company. Market cap $700M to $2.8B. Led $1.2B merger with Goibibo.
+    public_company: true
+
+  - name: Mygola
+    role: Founder & CEO
+    years: 2009-2014
+    industry: Travel / Technology
+    notes: Travel planning startup. Apple "Best new app". Sold to MakeMyTrip.
+
+  - name: Google
+    role: Strategic Partner Manager
+    years: 2007-2009
+    industry: Technology
+    notes: Managed ~$800M in revenues. Partners included Amazon, TripAdvisor.
+
+  - name: Deloitte Consulting
+    role: Engagement Manager
+    years: 2005-2007
+    industry: Consulting / Financial Services / Healthcare
+    notes: CXO-level strategy. Citigroup restructuring. PE due diligence.
+
+  - name: Stratify Inc
+    role: Manager, Professional Services
+    years: 2001-2003
+    industry: Enterprise Software / Text Mining
+
+  - name: RightHalf Software
+    role: Founder & Managing Director
+    years: 1999-2000
+    industry: Financial Services / Software
+    notes: India's first campus startup. Sold to Stratify Inc.
+
+industries:
+  - Climate / Sustainability
+  - Travel / Hospitality
+  - Technology / Internet
+  - Consulting
+  - Financial Services
+  - Healthcare (via Deloitte)
+  - E-commerce
+
+traits:
+  - Serial entrepreneur (4 companies founded)
+  - CXO at NASDAQ-listed company
+  - Angel investor in early-stage startups
+  - Climate and sustainability leader
+  - Unreasonable Fellow (2022)
+  - Speaker at Stanford GSB, Harvard, TedX, Environmental Defense Fund
+  - US Patent holder (dynamic travel plan management)
+
+## What the tags mean (for relevance scoring)
+## acceler: BD outreach for Acceler — targets CIOs, CTOs, digital transformation leaders
+## terra: BD outreach for Terra.do — targets sustainability/ESG/climate leaders at large orgs
