@@ -79,7 +79,7 @@ def log_enrichment(person_id: str, source: str, result: Optional[dict], error: O
         print(f"    WARNING: could not log enrichment: {e}")
 
 
-def enrich_person(person: dict, connections: Optional[List[dict]], dry_run: bool) -> dict:
+def enrich_person(person: dict, connections: Optional[List[dict]], dry_run: bool, force: bool = False) -> dict:
     """Enrich a single person. Returns summary dict."""
     pid = person["id"]
     name = person["name"]
@@ -94,18 +94,24 @@ def enrich_person(person: dict, connections: Optional[List[dict]], dry_run: bool
     # 1. Apollo match
     apollo_data = None
     try:
-        apollo_data = match_person(first_name, last_name, org)
+        apollo_data = match_person(
+            first_name, last_name, org,
+            linkedin_url=person.get("linkedin") or "",
+            email=person.get("email") or "",
+        )
         if apollo_data:
             result["apollo"] = True
             print(f"  Apollo match: {apollo_data.get('email', '')} | {apollo_data.get('title', '')}")
-            # Fill blank fields only
-            if apollo_data.get("email") and not person.get("email"):
+            # Print full response for visibility
+            print(f"  Apollo response: {json.dumps({k: v for k, v in apollo_data.items() if k != 'raw'}, indent=2)}")
+            # In force mode, overwrite all fields; otherwise fill blanks only
+            if apollo_data.get("email") and (force or not person.get("email")):
                 updates["email"] = apollo_data["email"]
-            if apollo_data.get("linkedin_url") and not person.get("linkedin"):
+            if apollo_data.get("linkedin_url") and (force or not person.get("linkedin")):
                 updates["linkedin"] = apollo_data["linkedin_url"]
-            if apollo_data.get("title") and not person.get("title"):
+            if apollo_data.get("title") and (force or not person.get("title")):
                 updates["title"] = apollo_data["title"]
-            # Filterable org/person columns
+            # Filterable org/person columns — always update if available
             if apollo_data.get("seniority"):
                 updates["seniority"] = apollo_data["seniority"]
             if apollo_data.get("org_employee_count") is not None:
@@ -195,6 +201,7 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Preview without DB writes")
     parser.add_argument("--connections-csv", help="Path to LinkedIn connections CSV export")
     parser.add_argument("--for-tag", help="Only enrich people with this tag")
+    parser.add_argument("--force", action="store_true", help="Overwrite existing fields with Apollo data")
     args = parser.parse_args()
 
     # Load LinkedIn connections if provided
@@ -213,7 +220,7 @@ def main():
     results = []
     for i, person in enumerate(people):
         print(f"\n--- [{i+1}/{len(people)}] {person['name']} | {person.get('organization', '')}")
-        result = enrich_person(person, connections, args.dry_run)
+        result = enrich_person(person, connections, args.dry_run, args.force)
         results.append(result)
 
         # Rate limit between people (skip after last)

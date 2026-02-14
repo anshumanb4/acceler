@@ -3,13 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>People Dashboard — Acceler</title>
+<title>Warmline</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
   // Capture the Supabase library immediately before anything can shadow it
   window.__supabaseLib = window.supabase;
 </script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -125,15 +128,31 @@ body {
 }
 .pill:hover:not(.active) { background: var(--accent-light); }
 
-.status-select {
-  padding: 6px 12px;
+/* Action buttons in filters row */
+.action-btn {
+  padding: 6px 14px;
   border: 1px solid var(--border);
   border-radius: 6px;
   font-size: 13px;
-  background: var(--bg-card);
+  font-weight: 600;
   cursor: pointer;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  white-space: nowrap;
 }
-.status-select:focus { outline: 2px solid var(--accent); border-color: transparent; }
+.action-btn:hover { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+.action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.action-btn .count-badge {
+  display: inline-block;
+  background: var(--orange);
+  color: #fff;
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  margin-left: 4px;
+}
+.action-btn.running { color: var(--accent); border-color: var(--accent); }
+.action-btn.running .count-badge { background: var(--accent); }
 
 .row-count {
   margin-left: auto;
@@ -217,11 +236,21 @@ td.col-score { text-align: center; white-space: nowrap; width: 50px; }
 td.col-priority { min-width: 260px; font-size: 12px; color: var(--text-secondary); }
 td.col-org-info { max-width: 200px; font-size: 12px; color: var(--text-secondary); }
 
-/* Resizable columns */
-thead th {
-  resize: horizontal;
-  overflow: hidden;
+/* Column resize handle */
+thead th { position: relative; overflow: visible; }
+.col-resize-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 6px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 2;
 }
+.col-resize-handle:hover,
+.col-resize-handle.dragging { background: var(--accent); opacity: 0.4; }
+
+td.col-email { max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
 
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
@@ -271,11 +300,497 @@ a:hover { text-decoration: underline; }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* ── Detail Panel (slide-out) ── */
+.panel-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.25);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.panel-overlay.open { opacity: 1; pointer-events: auto; }
+
+.detail-panel {
+  position: fixed;
+  top: 0; right: 0;
+  width: 520px;
+  max-width: 90vw;
+  height: 100vh;
+  background: var(--bg-card);
+  box-shadow: -4px 0 24px rgba(0,0,0,0.12);
+  z-index: 101;
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.detail-panel.open { transform: translateX(0); }
+
+.panel-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.panel-header .panel-close {
+  float: right;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 0 4px;
+  line-height: 1;
+}
+.panel-header .panel-close:hover { color: var(--text); }
+.panel-header h2 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.panel-header .panel-subtitle { font-size: 13px; color: var(--text-secondary); }
+.panel-header .panel-meta {
+  display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; align-items: center;
+}
+
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+
+.panel-section { margin-bottom: 24px; }
+.panel-section h3 {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.panel-field { margin-bottom: 14px; }
+.panel-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.panel-field input,
+.panel-field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  line-height: 1.5;
+  background: var(--bg);
+  transition: border-color 0.15s;
+}
+.panel-field input:focus,
+.panel-field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #fff;
+}
+.panel-field textarea { min-height: 100px; resize: vertical; }
+
+/* Quill overrides for panel */
+.panel-field .ql-container { font-family: inherit; font-size: 13px; }
+.panel-field .ql-editor {
+  min-height: 200px;
+  max-height: 400px;
+  overflow-y: auto;
+  line-height: 1.6;
+  padding: 10px 12px;
+}
+.panel-field .ql-editor p { margin-bottom: 0.6em; }
+.panel-field .ql-editor a { color: var(--accent); }
+.panel-field .ql-toolbar.ql-snow {
+  border-radius: 8px 8px 0 0;
+  border-color: var(--border);
+  background: var(--bg);
+}
+.panel-field .ql-container.ql-snow {
+  border-radius: 0 0 8px 8px;
+  border-color: var(--border);
+}
+
+.panel-field .field-hint {
+  font-size: 11px; color: var(--text-muted); margin-top: 4px;
+}
+
+.panel-actions {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.panel-actions button {
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-secondary { background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border) !important; }
+.btn-secondary:hover { background: var(--accent-light); color: var(--accent); }
+
+.panel-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+}
+.panel-info-grid .info-item { font-size: 13px; }
+.panel-info-grid .info-label { font-size: 11px; color: var(--text-muted); }
+.panel-info-grid .info-value { color: var(--text); }
+
+/* Revision instruction bar */
+.revise-bar {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  margin-top: 12px;
+}
+.revise-bar textarea {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: inherit;
+  line-height: 1.5;
+  background: var(--bg);
+  resize: none;
+  min-height: 44px;
+  max-height: 120px;
+  transition: border-color 0.15s;
+}
+.revise-bar textarea:focus { outline: none; border-color: var(--accent); background: #fff; }
+.revise-bar button {
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  white-space: nowrap;
+  flex-shrink: 0;
+  height: 44px;
+}
+.revise-bar button:hover { background: var(--accent-hover); }
+.revise-bar button:disabled {
+  background: var(--border);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+.revise-status {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  min-height: 18px;
+}
+.revise-status.error { color: var(--red); }
+.revise-spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+tbody tr { cursor: pointer; }
+
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 0;
+}
+.pagination button {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-card);
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+.pagination button:hover:not(:disabled) { background: var(--accent-light); color: var(--accent); }
+.pagination button:disabled { opacity: 0.4; cursor: default; }
+.pagination .page-info { font-size: 13px; color: var(--text-muted); }
+
+/* Section headers (Processed / Archived) */
+.section-divider {
+  margin-top: 32px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+.section-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px 0;
+  user-select: none;
+}
+.section-toggle h2 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+.section-toggle .section-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.section-toggle .chevron {
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform 0.2s;
+}
+.section-toggle .chevron.open { transform: rotate(90deg); }
+.section-content { display: none; }
+.section-content.open { display: block; }
+.section-content .table-wrap { border-radius: 8px; }
+.section-content table { min-width: auto; }
+
+/* Inline row action buttons */
+.row-action-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.15s;
+  vertical-align: middle;
+}
+tbody tr:hover .row-action-btn { opacity: 1; }
+.row-archive-btn:hover { background: var(--red); color: #fff; opacity: 1; }
+.row-enrich-btn:hover { background: var(--accent); color: #fff; opacity: 1; }
+.row-enrich-btn.running { opacity: 1; color: var(--accent); cursor: wait; }
+
+/* Agent status bar */
+.agent-status {
+  padding: 8px 16px;
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--accent);
+  margin-bottom: 16px;
+  display: none;
+}
+.agent-status.visible { display: flex; align-items: center; gap: 8px; }
+.agent-status .agent-spinner {
+  display: inline-block;
+  width: 12px; height: 12px;
+  border: 2px solid var(--accent-light);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* Agent log (dismissible output box) */
+.agent-log {
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  font-family: 'SF Mono', 'Menlo', 'Monaco', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  display: none;
+  position: relative;
+}
+.agent-log.visible { display: block; }
+.agent-log pre {
+  margin: 0;
+  padding: 14px 16px;
+  max-height: 300px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.agent-log .log-close {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 2px 6px;
+  line-height: 1;
+}
+.agent-log .log-close:hover { color: #fff; }
+
+/* Research & Draft controls */
+.draft-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.tone-select {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+}
+.tone-select:focus { outline: 2px solid var(--accent); border-color: transparent; }
+.btn-research {
+  padding: 6px 14px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--accent);
+  color: #fff;
+  white-space: nowrap;
+}
+.btn-research:hover { background: var(--accent-hover); }
+.btn-research:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-research .btn-spinner {
+  display: inline-block;
+  width: 12px; height: 12px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+/* Panel draft status bar */
+.panel-draft-status {
+  padding: 8px 12px;
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--accent);
+  margin-bottom: 12px;
+  display: none;
+  align-items: center;
+  gap: 6px;
+}
+.panel-draft-status.visible { display: flex; }
+.panel-draft-status .pds-spinner {
+  display: inline-block;
+  width: 12px; height: 12px;
+  border: 2px solid var(--accent-light);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+/* Research findings section */
+.research-section {
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  display: none;
+}
+.research-section.visible { display: block; }
+.research-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--bg);
+  cursor: pointer;
+  user-select: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.research-toggle:hover { background: var(--accent-light); }
+.research-toggle .r-chevron {
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform 0.2s;
+}
+.research-toggle .r-chevron.open { transform: rotate(90deg); }
+.research-quality {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-left: auto;
+}
+.research-quality.high { background: #d1fae5; color: #065f46; }
+.research-quality.medium { background: #fef3c7; color: #92400e; }
+.research-quality.low { background: #fee2e2; color: #991b1b; }
+.research-body {
+  display: none;
+  padding: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-top: 1px solid var(--border);
+}
+.research-body.open { display: block; }
+.research-body h4 {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin: 12px 0 6px;
+}
+.research-body h4:first-child { margin-top: 0; }
+.research-item {
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  background: var(--bg);
+  border-radius: 4px;
+}
+.research-item .ri-headline { font-weight: 600; color: var(--text); }
+.research-item .ri-summary { color: var(--text-secondary); margin-top: 2px; }
+.research-item .ri-meta { color: var(--text-muted); font-size: 11px; margin-top: 2px; }
+.research-item .ri-meta a { color: var(--accent); }
+.research-tp {
+  margin: 4px 0;
+  padding-left: 12px;
+  position: relative;
+  color: var(--text-secondary);
+}
+.research-tp::before {
+  content: '\2022';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .container { padding: 12px; }
   .filters-row { gap: 8px; }
   .row-count { margin-left: 0; width: 100%; }
+  .detail-panel { width: 100vw; }
 }
 </style>
 </head>
@@ -286,14 +801,21 @@ a:hover { text-decoration: underline; }
   <span class="config-label">Supabase Config</span>
   <input type="text" id="cfgUrl" placeholder="Supabase URL (https://xxx.supabase.co)">
   <input type="text" id="cfgKey" placeholder="Anon Key">
+  <span class="config-label" style="margin-left:8px">Claude</span>
+  <input type="password" id="cfgAnthropicKey" placeholder="Anthropic API Key (sk-ant-...)">
+  <span class="config-label" style="margin-left:8px">Gmail</span>
+  <input type="text" id="cfgGoogleClientId" placeholder="Google OAuth Client ID (*.apps.googleusercontent.com)">
   <button onclick="saveConfig()">Save &amp; Connect</button>
   <button onclick="clearConfig()" style="background:transparent;color:var(--accent);border:1px solid var(--accent)">Clear</button>
 </div>
 
 <div class="container">
-  <div class="header">
-    <h1>People Dashboard</h1>
-    <p>Browse and search people records</p>
+  <div class="header" style="display:flex;align-items:baseline;gap:12px">
+    <div style="flex:1">
+      <h1>Warmline</h1>
+      <p>AI-powered warm outreach pipeline</p>
+    </div>
+    <button onclick="$configBanner.classList.toggle('hidden')" style="background:none;border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:12px;color:var(--text-muted);cursor:pointer">Settings</button>
   </div>
 
   <input type="text" class="search-box" id="searchInput"
@@ -306,17 +828,19 @@ a:hover { text-decoration: underline; }
       <button class="pill" data-tag="terra">Terra</button>
       <button class="pill" data-tag="other">Other</button>
     </div>
-    <select class="status-select" id="statusFilter">
-      <option value="all">All Statuses</option>
-      <option value="discovered">Discovered</option>
-      <option value="enriched">Enriched</option>
-      <option value="outreach_drafted">Outreach Drafted</option>
-      <option value="contacted">Contacted</option>
-      <option value="replied">Replied</option>
-      <option value="meeting">Meeting</option>
-    </select>
+    <button class="action-btn" id="enrichBtn" onclick="startEnrich()">Enrich <span class="count-badge" id="enrichCount">0</span></button>
     <button class="reset-btn" onclick="resetFilters()">Reset</button>
     <span class="row-count" id="rowCount"></span>
+  </div>
+
+  <div class="agent-status" id="agentStatus">
+    <span class="agent-spinner"></span>
+    <span id="agentStatusText">Running enrichment...</span>
+  </div>
+
+  <div class="agent-log" id="agentLog">
+    <button class="log-close" onclick="document.getElementById('agentLog').classList.remove('visible')">&times;</button>
+    <pre id="agentLogPre"></pre>
   </div>
 
   <div class="table-wrap">
@@ -327,6 +851,105 @@ a:hover { text-decoration: underline; }
       <tbody id="tableBody"></tbody>
     </table>
     <div class="state-msg" id="stateMsg" style="display:none"></div>
+  </div>
+
+  <div class="pagination" id="pagination" style="display:none">
+    <button onclick="changePage(-1)" id="prevBtn">Prev</button>
+    <span class="page-info" id="pageInfo"></span>
+    <button onclick="changePage(1)" id="nextBtn">Next</button>
+  </div>
+
+  <!-- Processed section -->
+  <div class="section-divider" id="processedSection" style="display:none">
+    <div class="section-toggle" onclick="toggleSection('processed')">
+      <span class="chevron" id="processedChevron">&#9654;</span>
+      <h2>Processed <span class="section-count" id="processedCount"></span></h2>
+    </div>
+    <div class="section-content" id="processedContent">
+      <div class="table-wrap">
+        <table>
+          <thead><tr id="processedHead"></tr></thead>
+          <tbody id="processedBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Archived section -->
+  <div class="section-divider" id="archivedSection" style="display:none">
+    <div class="section-toggle" onclick="toggleSection('archived')">
+      <span class="chevron" id="archivedChevron">&#9654;</span>
+      <h2>Archived <span class="section-count" id="archivedCount"></span></h2>
+    </div>
+    <div class="section-content" id="archivedContent">
+      <div class="table-wrap">
+        <table>
+          <thead><tr id="archivedHead"></tr></thead>
+          <tbody id="archivedBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Panel (slide-out) -->
+<div class="panel-overlay" id="panelOverlay" onclick="closePanel()"></div>
+<div class="detail-panel" id="detailPanel">
+  <div class="panel-header">
+    <button class="panel-close" onclick="closePanel()">&times;</button>
+    <h2 id="panelName"></h2>
+    <div class="panel-subtitle" id="panelSubtitle"></div>
+    <div class="panel-meta" id="panelMeta"></div>
+  </div>
+  <div class="panel-body">
+    <div class="panel-section">
+      <h3 style="display:flex;align-items:center;gap:8px">Person Info <button class="btn-secondary" id="panelEnrichBtn" onclick="enrichFromPanel()" style="font-size:11px;padding:3px 10px;color:var(--accent);border-color:var(--accent) !important">Enrich</button></h3>
+      <div class="panel-info-grid" id="panelInfo"></div>
+    </div>
+    <div class="panel-section">
+      <h3>Email Draft</h3>
+      <div class="draft-controls">
+        <select class="tone-select" id="toneSelect">
+          <option value="warm">Warm</option>
+          <option value="professional">Professional</option>
+        </select>
+        <button class="btn-research" id="researchDraftBtn" onclick="generateResearchDraft()">Research &amp; Draft</button>
+      </div>
+      <div class="panel-draft-status" id="panelDraftStatus">
+        <span class="pds-spinner"></span>
+        <span id="panelDraftStatusText">Researching...</span>
+      </div>
+      <div class="research-section" id="researchSection">
+        <div class="research-toggle" onclick="toggleResearch()">
+          <span class="r-chevron" id="researchChevron">&#9654;</span>
+          <span>Research Findings</span>
+          <span class="research-quality" id="researchQuality"></span>
+        </div>
+        <div class="research-body" id="researchBody"></div>
+      </div>
+      <div class="panel-field">
+        <label for="draftSubject">Subject</label>
+        <input type="text" id="draftSubject" placeholder="Email subject line...">
+        <div class="field-hint">Under 60 characters, personal, no salesy language</div>
+      </div>
+      <div class="panel-field">
+        <label>Body</label>
+        <div id="draftBodyEditor"></div>
+        <div class="field-hint">5-8 sentences, professional but warm</div>
+      </div>
+      <div class="revise-bar">
+        <textarea id="reviseInput" rows="1" placeholder="Revision instructions... (e.g. &quot;make it shorter&quot;, &quot;mention their recent keynote&quot;)"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();reviseDraft()}"
+          oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+        <button id="reviseBtn" onclick="reviseDraft()">Revise</button>
+      </div>
+      <div class="revise-status" id="reviseStatus"></div>
+    </div>
+  </div>
+  <div class="panel-actions">
+    <button class="btn-primary" id="saveBtn" onclick="saveAndSync()">Save Draft</button>
+    <button class="btn-secondary" onclick="archivePerson()" style="color:var(--red);border-color:var(--red) !important">Archive</button>
+    <button class="btn-secondary" onclick="closePanel()">Cancel</button>
   </div>
 </div>
 
@@ -352,8 +975,16 @@ let fuse = null;
 let sortCol = 'priority_score';
 let sortDir = 'desc';
 let activeTag = 'all';
-let activeStatus = 'all';
 let sbClient = null;
+let activePerson = null;  // currently open in panel
+let outreachByPersonId = {};  // person_id → outreach row
+let currentPage = 1;
+const PAGE_SIZE = 100;
+const ACTIONABLE = new Set(['discovered', 'enriched']);
+const PROCESSED = new Set(['outreach_drafted', 'contacted', 'replied', 'meeting']);
+let processedOpen = false;
+let archivedOpen = false;
+let agentPollTimer = null;
 
 // ── DOM refs ──
 const $configBanner = document.getElementById('configBanner');
@@ -361,29 +992,42 @@ const $cfgUrl = document.getElementById('cfgUrl');
 const $cfgKey = document.getElementById('cfgKey');
 const $searchInput = document.getElementById('searchInput');
 const $tagPills = document.getElementById('tagPills');
-const $statusFilter = document.getElementById('statusFilter');
 const $rowCount = document.getElementById('rowCount');
 const $tableHead = document.getElementById('tableHead');
 const $tableBody = document.getElementById('tableBody');
 const $stateMsg = document.getElementById('stateMsg');
 
 // ── Config ──
+const $cfgAnthropicKey = document.getElementById('cfgAnthropicKey');
+const $cfgGoogleClientId = document.getElementById('cfgGoogleClientId');
+
 function saveConfig() {
   const url = $cfgUrl.value.trim();
   const key = $cfgKey.value.trim();
+  const anthropicKey = $cfgAnthropicKey.value.trim();
+  const googleClientId = $cfgGoogleClientId.value.trim();
   if (!url || !key) return;
   localStorage.setItem('sb_url', url);
   localStorage.setItem('sb_key', key);
+  if (anthropicKey) localStorage.setItem('anthropic_key', anthropicKey);
+  if (googleClientId) localStorage.setItem('google_client_id', googleClientId);
+  initGmail();
   initSupabase(url, key);
 }
 
 function clearConfig() {
   localStorage.removeItem('sb_url');
   localStorage.removeItem('sb_key');
+  localStorage.removeItem('anthropic_key');
+  localStorage.removeItem('google_client_id');
   $cfgUrl.value = '';
   $cfgKey.value = '';
+  $cfgAnthropicKey.value = '';
+  $cfgGoogleClientId.value = '';
   $configBanner.classList.remove('hidden');
   allPeople = [];
+  gmailTokenClient = null;
+  gmailAccessToken = null;
   render();
 }
 
@@ -437,48 +1081,125 @@ async function loadPeople() {
       minMatchCharLength: 2,
     });
 
+    // Load outreach drafts
+    await loadOutreach();
+
     render();
   } catch (e) {
     showState(`<div style="color:var(--red)">Error loading data: ${e.message}</div>`);
   }
 }
 
-// ── Rendering ──
-function render() {
-  const filtered = getFiltered();
-  renderHead();
-  renderBody(filtered);
-  $rowCount.textContent = `Showing ${filtered.length} of ${allPeople.length}`;
-  $stateMsg.style.display = filtered.length === 0 && allPeople.length > 0 ? 'block' : 'none';
-  if (filtered.length === 0 && allPeople.length > 0) {
-    showState('<div>No matching people found.</div>');
-  }
-  if (allPeople.length === 0 && sbClient) {
-    // still loading or empty
+async function loadOutreach() {
+  try {
+    let rows = [];
+    let from = 0;
+    const pageSize = 1000;
+    while (true) {
+      const { data, error } = await sbClient
+        .from('outreach')
+        .select('id,person_id,channel,subject,body,status,research_notes,tone')
+        .eq('channel', 'email')
+        .order('created_at', { ascending: false })
+        .range(from, from + pageSize - 1);
+      if (error) { console.error('Outreach load error:', error.message); return; }
+      rows = rows.concat(data);
+      if (data.length < pageSize) break;
+      from += pageSize;
+    }
+    // Keep most recent per person
+    outreachByPersonId = {};
+    for (const row of rows) {
+      if (!outreachByPersonId[row.person_id]) {
+        outreachByPersonId[row.person_id] = row;
+      }
+    }
+  } catch (e) {
+    console.error('Outreach load error:', e);
   }
 }
 
-function getFiltered() {
+// ── Rendering ──
+function render() {
+  const { actionable, processed, archived } = splitPeople();
+  const filtered = applyFilters(actionable);
+
+  // Main table (actionable, paginated)
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  if (currentPage > totalPages) currentPage = totalPages;
+  const pageRows = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
+  renderHead($tableHead);
+  renderRows($tableBody, pageRows, true);
+  $rowCount.textContent = `${filtered.length} actionable`;
+
+  // Pagination
+  const $pag = document.getElementById('pagination');
+  if (filtered.length > PAGE_SIZE) {
+    $pag.style.display = 'flex';
+    document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+    document.getElementById('prevBtn').disabled = currentPage <= 1;
+    document.getElementById('nextBtn').disabled = currentPage >= totalPages;
+  } else {
+    $pag.style.display = 'none';
+  }
+
+  // Empty state
+  $stateMsg.style.display = filtered.length === 0 && allPeople.length > 0 ? 'block' : 'none';
+  if (filtered.length === 0 && allPeople.length > 0) showState('<div>No actionable people found.</div>');
+
+  // Enrich count — count across ALL people, not just current filter
+  const unenriched = allPeople.filter(p => p.status === 'discovered').length;
+  document.getElementById('enrichCount').textContent = unenriched;
+  const $enrichBtn = document.getElementById('enrichBtn');
+  $enrichBtn.disabled = unenriched === 0;
+  $enrichBtn.style.display = '';
+
+  // Processed section
+  const $ps = document.getElementById('processedSection');
+  if (processed.length > 0) {
+    $ps.style.display = '';
+    document.getElementById('processedCount').textContent = `(${processed.length})`;
+    if (processedOpen) {
+      renderHead(document.getElementById('processedHead'));
+      renderRows(document.getElementById('processedBody'), processed, false);
+    }
+  } else {
+    $ps.style.display = 'none';
+  }
+
+  // Archived section
+  const $as = document.getElementById('archivedSection');
+  if (archived.length > 0) {
+    $as.style.display = '';
+    document.getElementById('archivedCount').textContent = `(${archived.length})`;
+    if (archivedOpen) {
+      renderHead(document.getElementById('archivedHead'));
+      renderRows(document.getElementById('archivedBody'), archived, false);
+    }
+  } else {
+    $as.style.display = 'none';
+  }
+}
+
+function splitPeople() {
   const query = $searchInput.value.trim();
+  let base = query && fuse ? fuse.search(query).map(r => r.item) : [...allPeople];
+  if (activeTag !== 'all') base = base.filter(p => (p.for_tag || '').toLowerCase() === activeTag);
 
-  // Start with search results or all
-  let results = query && fuse
-    ? fuse.search(query).map(r => r.item)
-    : [...allPeople];
-
-  // Tag filter
-  if (activeTag !== 'all') {
-    results = results.filter(p => (p.for_tag || '').toLowerCase() === activeTag);
+  const actionable = [], processed = [], archived = [];
+  for (const p of base) {
+    if (p.status === 'archived') archived.push(p);
+    else if (PROCESSED.has(p.status)) processed.push(p);
+    else actionable.push(p);
   }
+  return { actionable, processed, archived };
+}
 
-  // Status filter
-  if (activeStatus !== 'all') {
-    results = results.filter(p => p.status === activeStatus);
-  }
-
-  // Sort (skip if search query active — Fuse already ranks by relevance)
+function applyFilters(rows) {
+  const query = $searchInput.value.trim();
   if (!query) {
-    results.sort((a, b) => {
+    rows.sort((a, b) => {
       let va, vb;
       if (sortCol === 'org_summary') {
         va = a._org_summary || orgSummary(a);
@@ -495,43 +1216,61 @@ function getFiltered() {
       return 0;
     });
   }
-
-  return results;
+  return rows;
 }
 
-function renderHead() {
-  $tableHead.innerHTML = COLUMNS.map(col => {
+function renderHead(thead) {
+  thead.innerHTML = COLUMNS.map(col => {
     const sorted = col.key === sortCol;
     const arrow = sorted ? (sortDir === 'asc' ? '\u25B2' : '\u25BC') : '\u25B4';
     const cls = sorted ? 'sorted' : '';
     const click = col.sortable ? `onclick="toggleSort('${col.key}')"` : '';
-    return `<th class="${cls}" ${click}>${col.label}${col.sortable ? `<span class="sort-arrow">${arrow}</span>` : ''}</th>`;
+    return `<th class="${cls}" ${click}>${col.label}${col.sortable ? `<span class="sort-arrow">${arrow}</span>` : ''}<span class="col-resize-handle" data-col="${col.key}"></span></th>`;
   }).join('');
+  initColResize();
 }
 
-function renderBody(rows) {
-  if (rows.length === 0) {
-    $tableBody.innerHTML = '';
-    return;
-  }
+function renderRows(tbody, rows, showArchiveBtn) {
+  if (rows.length === 0) { tbody.innerHTML = ''; return; }
 
-  $tableBody.innerHTML = rows.map(p => {
-    // Pre-compute org_summary for sorting
+  tbody.innerHTML = rows.map(p => {
     if (!p._org_summary) p._org_summary = orgSummary(p);
-    return `<tr>
-    <td class="col-score">${scoreCell(p.priority_score)}</td>
-    <td class="col-name">${p.linkedin ? `<a href="${ensureUrl(p.linkedin)}" target="_blank" rel="noopener">${esc(p.name)}</a>` : esc(p.name)}</td>
+    const archiveBtn = showArchiveBtn
+      ? `<button class="row-action-btn row-archive-btn" onclick="event.stopPropagation();archivePersonById('${p.id}')" title="Archive">&#x2715;</button>`
+      : '';
+    const enrichBtn = `<button class="row-action-btn row-enrich-btn" id="enrich-${p.id}" onclick="event.stopPropagation();enrichPerson('${p.id}', this)" title="Enrich this contact">&#x21bb;</button>`;
+    return `<tr onclick="openPanel('${p.id}')">
+    <td class="col-score">${scoreCell(p.priority_score)} ${enrichBtn}${archiveBtn}</td>
+    <td class="col-name">${p.linkedin ? `<a href="${ensureUrl(p.linkedin)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${esc(p.name)}</a>` : esc(p.name)}</td>
     <td class="col-title">${esc(p.title)}</td>
     <td class="col-org">${orgCell(p)}</td>
     <td class="col-org-info">${esc(p._org_summary)}</td>
     <td class="col-priority" title="${esc(p.shared_background || '')}">${priorityCell(p.priority_reasons)}</td>
-    <td>${p.email ? `<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>` : ''}</td>
-    <td class="col-context" onclick="this.classList.toggle('expanded')">${contextCell(p.context, p.source_url)}</td>
+    <td class="col-email" title="${esc(p.email || '')}">${p.email ? `<a href="mailto:${esc(p.email)}" onclick="event.stopPropagation()">${esc(p.email)}</a>` : ''}</td>
+    <td class="col-context" onclick="event.stopPropagation();this.classList.toggle('expanded')">${contextCell(p.context, p.source_url)}</td>
     <td><span class="tag-pill tag-${(p.for_tag||'other').toLowerCase()}">${esc(p.for_tag)}</span></td>
     <td><span class="badge badge-${p.status}">${formatStatus(p.status)}</span></td>
     <td style="white-space:nowrap;color:var(--text-muted);font-size:12px">${formatDate(p.created_at)}</td>
   </tr>`;
   }).join('');
+}
+
+function changePage(delta) {
+  currentPage += delta;
+  render();
+}
+
+function toggleSection(name) {
+  if (name === 'processed') {
+    processedOpen = !processedOpen;
+    document.getElementById('processedContent').classList.toggle('open', processedOpen);
+    document.getElementById('processedChevron').classList.toggle('open', processedOpen);
+  } else {
+    archivedOpen = !archivedOpen;
+    document.getElementById('archivedContent').classList.toggle('open', archivedOpen);
+    document.getElementById('archivedChevron').classList.toggle('open', archivedOpen);
+  }
+  render();
 }
 
 // ── Sorting ──
@@ -545,6 +1284,33 @@ function toggleSort(col) {
   render();
 }
 
+// ── Column Resizing ──
+function initColResize() {
+  document.querySelectorAll('.col-resize-handle').forEach(handle => {
+    handle.addEventListener('mousedown', e => {
+      e.stopPropagation();
+      e.preventDefault();
+      const th = handle.parentElement;
+      const startX = e.clientX;
+      const startW = th.offsetWidth;
+      handle.classList.add('dragging');
+
+      function onMove(e2) {
+        const w = Math.max(50, startW + e2.clientX - startX);
+        th.style.width = w + 'px';
+        th.style.minWidth = w + 'px';
+      }
+      function onUp() {
+        handle.classList.remove('dragging');
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  });
+}
+
 // ── Filters ──
 $tagPills.addEventListener('click', e => {
   const pill = e.target.closest('.pill');
@@ -552,19 +1318,14 @@ $tagPills.addEventListener('click', e => {
   $tagPills.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
   pill.classList.add('active');
   activeTag = pill.dataset.tag;
-  render();
-});
-
-$statusFilter.addEventListener('change', () => {
-  activeStatus = $statusFilter.value;
+  currentPage = 1;
   render();
 });
 
 function resetFilters() {
   $searchInput.value = '';
   activeTag = 'all';
-  activeStatus = 'all';
-  $statusFilter.value = 'all';
+  currentPage = 1;
   $tagPills.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
   $tagPills.querySelector('[data-tag="all"]').classList.add('active');
   sortCol = 'priority_score';
@@ -576,7 +1337,7 @@ function resetFilters() {
 let searchTimer;
 $searchInput.addEventListener('input', () => {
   clearTimeout(searchTimer);
-  searchTimer = setTimeout(render, 200);
+  searchTimer = setTimeout(() => { currentPage = 1; render(); }, 200);
 });
 
 // ── Helpers ──
@@ -660,7 +1421,7 @@ function orgCell(p) {
   const name = esc(p.organization);
   if (!name) return '';
   const url = orgWebsite(p);
-  if (url) return `<a href="${ensureUrl(url)}" target="_blank" rel="noopener">${name}</a>`;
+  if (url) return `<a href="${ensureUrl(url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${name}</a>`;
   return name;
 }
 
@@ -670,11 +1431,780 @@ function showState(html) {
   $tableBody.innerHTML = '';
 }
 
+// ── Detail Panel ──
+const $panelOverlay = document.getElementById('panelOverlay');
+const $detailPanel = document.getElementById('detailPanel');
+const $panelName = document.getElementById('panelName');
+const $panelSubtitle = document.getElementById('panelSubtitle');
+const $panelMeta = document.getElementById('panelMeta');
+const $panelInfo = document.getElementById('panelInfo');
+const $draftSubject = document.getElementById('draftSubject');
+
+// Quill rich text editor for email body
+const quill = new Quill('#draftBodyEditor', {
+  theme: 'snow',
+  placeholder: 'Email body...',
+  modules: {
+    toolbar: [
+      ['bold', 'italic', 'underline'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link'],
+      ['clean'],
+    ],
+  },
+});
+
+function setQuillHTML(html) {
+  const delta = quill.clipboard.convert({ html });
+  quill.setContents(delta, 'silent');
+}
+
+function openPanel(personId) {
+  const p = allPeople.find(x => x.id === personId);
+  if (!p) return;
+  activePerson = p;
+
+  // Header
+  if (p.linkedin) {
+    $panelName.innerHTML = `<a href="${ensureUrl(p.linkedin)}" target="_blank" rel="noopener">${esc(p.name)}</a>`;
+  } else {
+    $panelName.textContent = p.name;
+  }
+  $panelSubtitle.textContent = [p.title, p.organization].filter(Boolean).join(' at ');
+  $panelMeta.innerHTML = [
+    p.priority_score != null ? `<span style="font-weight:700">${scoreCell(p.priority_score)}</span>` : '',
+    p.for_tag ? `<span class="tag-pill tag-${(p.for_tag||'other').toLowerCase()}">${esc(p.for_tag)}</span>` : '',
+    `<span class="badge badge-${p.status}">${formatStatus(p.status)}</span>`,
+  ].filter(Boolean).join(' ');
+
+  // Info grid
+  const info = [
+    ['Email', p.email ? `<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>` : '—'],
+    ['Seniority', p.seniority || '—'],
+    ['Industry', p.org_industry || '—'],
+    ['Employees', p.org_employee_count ? formatCompact(p.org_employee_count) : '—'],
+    ['Revenue', p.org_revenue ? '$' + formatCompact(p.org_revenue) : '—'],
+    ['Shared Background', p.shared_background || '—'],
+  ];
+  $panelInfo.innerHTML = info.map(([label, value]) =>
+    `<div class="info-item"><div class="info-label">${label}</div><div class="info-value">${value}</div></div>`
+  ).join('');
+
+  // Email draft — load from DB or show placeholder
+  const existing = outreachByPersonId[p.id];
+  if (existing) {
+    $draftSubject.value = existing.subject || '';
+    setQuillHTML(existing.body || '');
+    // Set tone selector
+    document.getElementById('toneSelect').value = existing.tone || 'warm';
+    // Render research if available
+    if (existing.research_notes) {
+      try {
+        const research = typeof existing.research_notes === 'string'
+          ? JSON.parse(existing.research_notes) : existing.research_notes;
+        renderResearch(research);
+      } catch (e) { console.error('Research parse error:', e); }
+    } else {
+      document.getElementById('researchSection').classList.remove('visible');
+    }
+  } else {
+    const firstName = (p.name || '').split(' ')[0];
+    const org = p.organization || 'your organization';
+    const industry = p.org_industry ? ` in ${esc(p.org_industry)}` : '';
+    $draftSubject.value = `Quick question about ${org}'s sustainability goals`;
+    setQuillHTML(
+      `<p>Hi ${esc(firstName)},</p>` +
+      `<p>I came across your work at ${esc(org)} and was impressed by what your team is doing${industry}.</p>` +
+      `<p>I'm the founder of <a href="https://terra.do">Terra.do</a> — the world's largest platform for professionals to learn climate &amp; sustainability skills. ` +
+      `I'd love to chat to see if there's any way we can help your team upskill on critical sustainability skills.</p>` +
+      `<p>A couple of examples relevant to you:</p>` +
+      `<ul>` +
+      `<li>Helped <a href="https://www.linkedin.com/posts/alfuttaim_cop29-sustainability-activity-7264273298174169088-6po_">Al-Futtaim build a cohort of hundreds of sustainability champions</a></li>` +
+      `<li><a href="https://www.terra.do/climate-change-courses/amazon-climate-pledge-certification-program/">Trained Amazon's Climate Pledge Friendly team</a> on certification strategies</li>` +
+      `</ul>` +
+      `<p>Happy to share more — would any time next week work for a quick call?</p>` +
+      `<p>Best,<br>Anshuman</p>`
+    );
+    document.getElementById('toneSelect').value = 'warm';
+    document.getElementById('researchSection').classList.remove('visible');
+  }
+
+  // Reset panel draft status and revision area
+  document.getElementById('panelDraftStatus').classList.remove('visible');
+  document.getElementById('researchDraftBtn').disabled = false;
+  document.getElementById('researchDraftBtn').innerHTML = 'Research &amp; Draft';
+  $reviseInput.value = '';
+  $reviseInput.style.height = 'auto';
+  $reviseStatus.textContent = '';
+
+  // Open
+  $panelOverlay.classList.add('open');
+  $detailPanel.classList.add('open');
+}
+
+function closePanel() {
+  $panelOverlay.classList.remove('open');
+  $detailPanel.classList.remove('open');
+  activePerson = null;
+  if (panelDraftPollTimer) { clearInterval(panelDraftPollTimer); panelDraftPollTimer = null; }
+}
+
+async function saveDraftToDB(subject, body) {
+  if (!activePerson || !sbClient) return;
+  const personId = activePerson.id;
+
+  const existing = outreachByPersonId[personId];
+  if (existing) {
+    const { error } = await sbClient
+      .from('outreach')
+      .update({ subject, body, status: 'drafted' })
+      .eq('id', existing.id);
+    if (error) throw error;
+    existing.subject = subject;
+    existing.body = body;
+  } else {
+    const { data, error } = await sbClient
+      .from('outreach')
+      .insert({ person_id: personId, channel: 'email', subject, body, status: 'drafted' })
+      .select()
+      .single();
+    if (error) throw error;
+    outreachByPersonId[personId] = data;
+  }
+
+  // Update person status
+  const { error: statusErr } = await sbClient
+    .from('people')
+    .update({ status: 'outreach_drafted' })
+    .eq('id', personId);
+  if (statusErr) console.error('Status update warning:', statusErr.message);
+
+  // Update local state
+  const localPerson = allPeople.find(x => x.id === personId);
+  if (localPerson) localPerson.status = 'outreach_drafted';
+  if (activePerson) activePerson.status = 'outreach_drafted';
+
+  $panelMeta.innerHTML = [
+    activePerson.priority_score != null ? `<span style="font-weight:700">${scoreCell(activePerson.priority_score)}</span>` : '',
+    activePerson.for_tag ? `<span class="tag-pill tag-${(activePerson.for_tag||'other').toLowerCase()}">${esc(activePerson.for_tag)}</span>` : '',
+    `<span class="badge badge-outreach_drafted">${formatStatus('outreach_drafted')}</span>`,
+  ].filter(Boolean).join(' ');
+
+  render();
+}
+
+async function saveAndSync() {
+  if (!activePerson) return;
+  const $btn = document.getElementById('saveBtn');
+  const subject = $draftSubject.value.trim();
+  const body = quill.root.innerHTML;
+  const email = activePerson.email;
+  const hasGmail = !!localStorage.getItem('google_client_id');
+
+  $btn.disabled = true;
+
+  try {
+    // 1. Save to Supabase
+    $btn.textContent = 'Saving to DB...';
+    await saveDraftToDB(subject, body);
+
+    // 2. Push to Gmail if configured and person has email
+    if (hasGmail && email) {
+      $btn.textContent = 'Pushing to Gmail...';
+      const token = await getGmailToken();
+      const raw = buildRfc2822(email, subject, body);
+      const encoded = base64UrlEncode(raw);
+
+      let resp = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/drafts', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: { raw: encoded } }),
+      });
+
+      if (resp.status === 401) {
+        gmailAccessToken = null;
+        const newToken = await getGmailToken();
+        resp = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/drafts', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${newToken}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: { raw: encoded } }),
+        });
+      }
+      if (!resp.ok) throw new Error('Gmail API error: ' + (await resp.text()));
+      $btn.textContent = 'Saved + in Gmail!';
+    } else {
+      $btn.textContent = email ? 'Saved!' : 'Saved! (no email for Gmail)';
+    }
+
+    setTimeout(() => { $btn.textContent = 'Save Draft'; $btn.disabled = false; }, 2000);
+  } catch (e) {
+    console.error('Save error:', e);
+    $btn.textContent = 'Save Draft';
+    $btn.disabled = false;
+    alert('Error: ' + (e.message || e));
+  }
+}
+
+// ── Archive ──
+async function archivePersonById(personId) {
+  if (!sbClient) return;
+  try {
+    const { error } = await sbClient.from('people').update({ status: 'archived' }).eq('id', personId);
+    if (error) throw error;
+    const p = allPeople.find(x => x.id === personId);
+    if (p) p.status = 'archived';
+    render();
+  } catch (e) {
+    console.error('Archive error:', e);
+    alert('Archive error: ' + (e.message || e) + '\n\nYou may need to run this SQL in the Supabase SQL Editor:\nALTER TYPE person_status ADD VALUE \'archived\';');
+  }
+}
+
+async function archivePerson() {
+  if (!activePerson) return;
+  await archivePersonById(activePerson.id);
+  closePanel();
+}
+
+async function enrichFromPanel() {
+  if (!activePerson) return;
+  const $btn = document.getElementById('panelEnrichBtn');
+  $btn.disabled = true;
+  $btn.textContent = 'Enriching...';
+  // Use a dummy button element for the inline handler
+  const dummy = document.createElement('button');
+  await enrichPerson(activePerson.id, dummy);
+  // Button state will be updated when pollAgentStatus completes and reloads data
+}
+
+// ── Enrich via Agent Server ──
+const AGENT_SERVER = 'http://localhost:8788';
+
+async function startEnrich() {
+  const $btn = document.getElementById('enrichBtn');
+  const $status = document.getElementById('agentStatus');
+  const $text = document.getElementById('agentStatusText');
+
+  // Build args from active tag filter
+  const args = [];
+  if (activeTag !== 'all') args.push('--for-tag', activeTag);
+
+  try {
+    $btn.disabled = true;
+    $btn.classList.add('running');
+
+    const resp = await fetch(AGENT_SERVER + '/run', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ agent: 'enrich', args }),
+    });
+
+    if (!resp.ok) {
+      const data = await resp.json().catch(() => ({}));
+      if (resp.status === 409) {
+        alert('An agent is already running. Wait for it to finish.');
+      } else {
+        throw new Error(data.error || 'Server error');
+      }
+      $btn.disabled = false;
+      $btn.classList.remove('running');
+      return;
+    }
+
+    // Start polling
+    $status.classList.add('visible');
+    $text.textContent = 'Running enrichment...';
+    pollAgentStatus();
+  } catch (e) {
+    console.error('Enrich error:', e);
+    $btn.disabled = false;
+    $btn.classList.remove('running');
+    alert('Could not connect to agent server.\n\nStart it with:\n  cd agents && python3 server.py');
+  }
+}
+
+async function enrichPerson(personId, btn) {
+  const $status = document.getElementById('agentStatus');
+  const $text = document.getElementById('agentStatusText');
+
+  btn.classList.add('running');
+  btn.disabled = true;
+  btn.textContent = '⟳';
+
+  try {
+    const resp = await fetch(AGENT_SERVER + '/run', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ agent: 'enrich', args: ['--person-id', personId, '--force'] }),
+    });
+
+    if (!resp.ok) {
+      const data = await resp.json().catch(() => ({}));
+      if (resp.status === 409) {
+        alert('An agent is already running. Wait for it to finish.');
+        btn.classList.remove('running');
+        btn.disabled = false;
+        btn.innerHTML = '&#x21bb;';
+        return;
+      }
+      throw new Error(data.error || 'Server error');
+    }
+
+    // Show status bar and poll
+    $status.classList.add('visible');
+    const p = allPeople.find(x => x.id === personId);
+    $text.textContent = `Enriching ${p ? p.name : 'contact'}...`;
+    pollAgentStatus();
+  } catch (e) {
+    console.error('Enrich person error:', e);
+    btn.classList.remove('running');
+    btn.disabled = false;
+    btn.innerHTML = '&#x21bb;';
+    alert('Could not connect to agent server.\n\nStart it with:\n  cd agents && python3 server.py');
+  }
+}
+
+function pollAgentStatus() {
+  if (agentPollTimer) clearInterval(agentPollTimer);
+  agentPollTimer = setInterval(async () => {
+    try {
+      const resp = await fetch(AGENT_SERVER + '/status');
+      const data = await resp.json();
+      const $text = document.getElementById('agentStatusText');
+      const lastLine = data.output.length > 0 ? data.output[data.output.length - 1] : '';
+      $text.textContent = lastLine || 'Running...';
+
+      if (!data.running) {
+        clearInterval(agentPollTimer);
+        agentPollTimer = null;
+        const $btn = document.getElementById('enrichBtn');
+        const $status = document.getElementById('agentStatus');
+        $btn.disabled = false;
+        $btn.classList.remove('running');
+
+        // Show full output log
+        const $log = document.getElementById('agentLog');
+        const $logPre = document.getElementById('agentLogPre');
+        $logPre.textContent = data.output.join('\n');
+        $log.classList.add('visible');
+        // Auto-scroll to bottom
+        $logPre.scrollTop = $logPre.scrollHeight;
+
+        if (data.exit_code === 0) {
+          $text.textContent = 'Enrichment complete! Reloading...';
+          setTimeout(() => { $status.classList.remove('visible'); }, 3000);
+          await loadPeople();
+        } else {
+          $text.textContent = 'Enrichment finished with errors. See log below.';
+          setTimeout(() => { $status.classList.remove('visible'); }, 10000);
+        }
+      }
+    } catch (e) {
+      // Server disconnected
+      clearInterval(agentPollTimer);
+      agentPollTimer = null;
+      document.getElementById('agentStatus').classList.remove('visible');
+      document.getElementById('enrichBtn').disabled = false;
+      document.getElementById('enrichBtn').classList.remove('running');
+    }
+  }, 2000);
+}
+
+// ── Research & Draft (panel) ──
+let panelDraftPollTimer = null;
+
+async function generateResearchDraft() {
+  if (!activePerson) return;
+  const $btn = document.getElementById('researchDraftBtn');
+  const $status = document.getElementById('panelDraftStatus');
+  const $statusText = document.getElementById('panelDraftStatusText');
+  const tone = document.getElementById('toneSelect').value;
+  const personId = activePerson.id;
+  const tag = activePerson.for_tag || '';
+
+  const args = ['--person-id', personId, '--tone', tone, '--force'];
+  if (tag) args.push('--for-tag', tag);
+
+  $btn.disabled = true;
+  $btn.innerHTML = '<span class="btn-spinner"></span>Running...';
+  $status.classList.add('visible');
+  $statusText.textContent = 'Starting research agent...';
+
+  try {
+    const resp = await fetch(AGENT_SERVER + '/run', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ agent: 'research_draft', args }),
+    });
+
+    if (!resp.ok) {
+      const data = await resp.json().catch(() => ({}));
+      if (resp.status === 409) {
+        alert('An agent is already running. Wait for it to finish.');
+      } else {
+        throw new Error(data.error || 'Server error');
+      }
+      $btn.disabled = false;
+      $btn.innerHTML = 'Research &amp; Draft';
+      $status.classList.remove('visible');
+      return;
+    }
+
+    pollPanelDraftStatus(personId);
+  } catch (e) {
+    console.error('Research draft error:', e);
+    $btn.disabled = false;
+    $btn.innerHTML = 'Research &amp; Draft';
+    $status.classList.remove('visible');
+    alert('Could not connect to agent server.\n\nStart it with:\n  cd agents && python3 server.py');
+  }
+}
+
+function pollPanelDraftStatus(personId) {
+  if (panelDraftPollTimer) clearInterval(panelDraftPollTimer);
+  panelDraftPollTimer = setInterval(async () => {
+    try {
+      const resp = await fetch(AGENT_SERVER + '/status');
+      const data = await resp.json();
+      const $statusText = document.getElementById('panelDraftStatusText');
+      const lastLine = data.output.length > 0 ? data.output[data.output.length - 1] : '';
+      $statusText.textContent = lastLine || 'Running...';
+
+      if (!data.running) {
+        clearInterval(panelDraftPollTimer);
+        panelDraftPollTimer = null;
+        const $btn = document.getElementById('researchDraftBtn');
+        const $status = document.getElementById('panelDraftStatus');
+
+        if (data.exit_code === 0) {
+          $statusText.textContent = 'Done! Loading results...';
+          await reloadOutreachForPerson(personId);
+          $btn.disabled = false;
+          $btn.innerHTML = 'Research &amp; Draft';
+          setTimeout(() => { $status.classList.remove('visible'); }, 2000);
+        } else {
+          $statusText.textContent = 'Agent finished with errors.';
+          $btn.disabled = false;
+          $btn.innerHTML = 'Research &amp; Draft';
+          setTimeout(() => { $status.classList.remove('visible'); }, 5000);
+        }
+      }
+    } catch (e) {
+      clearInterval(panelDraftPollTimer);
+      panelDraftPollTimer = null;
+      document.getElementById('panelDraftStatus').classList.remove('visible');
+      document.getElementById('researchDraftBtn').disabled = false;
+      document.getElementById('researchDraftBtn').innerHTML = 'Research &amp; Draft';
+    }
+  }, 2000);
+}
+
+async function reloadOutreachForPerson(personId) {
+  if (!sbClient) return;
+  try {
+    const { data, error } = await sbClient
+      .from('outreach')
+      .select('id,person_id,channel,subject,body,status,research_notes,tone')
+      .eq('person_id', personId)
+      .eq('channel', 'email')
+      .order('created_at', { ascending: false })
+      .limit(1);
+    if (error) { console.error('Reload outreach error:', error.message); return; }
+    if (data && data.length > 0) {
+      const row = data[0];
+      outreachByPersonId[personId] = row;
+      // Update panel if still open for this person
+      if (activePerson && activePerson.id === personId) {
+        $draftSubject.value = row.subject || '';
+        setQuillHTML(row.body || '');
+        document.getElementById('toneSelect').value = row.tone || 'warm';
+        if (row.research_notes) {
+          try {
+            const research = typeof row.research_notes === 'string'
+              ? JSON.parse(row.research_notes) : row.research_notes;
+            renderResearch(research);
+          } catch (e) { console.error('Research parse error:', e); }
+        }
+      }
+    }
+    // Also update person status locally
+    const localPerson = allPeople.find(x => x.id === personId);
+    if (localPerson) localPerson.status = 'outreach_drafted';
+    if (activePerson && activePerson.id === personId) activePerson.status = 'outreach_drafted';
+    render();
+  } catch (e) {
+    console.error('Reload outreach error:', e);
+  }
+}
+
+function renderResearch(research) {
+  const $section = document.getElementById('researchSection');
+  const $body = document.getElementById('researchBody');
+  const $quality = document.getElementById('researchQuality');
+
+  if (!research || (!research.org_news?.length && !research.person_news?.length && !research.talking_points?.length)) {
+    $section.classList.remove('visible');
+    return;
+  }
+
+  // Quality badge
+  const q = research.search_quality || 'low';
+  $quality.className = 'research-quality ' + q;
+  $quality.textContent = q;
+
+  let html = '';
+
+  if (research.org_news && research.org_news.length > 0) {
+    html += '<h4>Organization News</h4>';
+    for (const item of research.org_news) {
+      html += `<div class="research-item">
+        <div class="ri-headline">${esc(item.headline || '')}</div>
+        <div class="ri-summary">${esc(item.summary || '')}</div>
+        <div class="ri-meta">${esc(item.date || '')}${item.url ? ` &middot; <a href="${esc(item.url)}" target="_blank" rel="noopener">source</a>` : ''}</div>
+      </div>`;
+    }
+  }
+
+  if (research.person_news && research.person_news.length > 0) {
+    html += '<h4>Person News</h4>';
+    for (const item of research.person_news) {
+      html += `<div class="research-item">
+        <div class="ri-headline">${esc(item.headline || '')}</div>
+        <div class="ri-summary">${esc(item.summary || '')}</div>
+        <div class="ri-meta">${esc(item.date || '')}${item.url ? ` &middot; <a href="${esc(item.url)}" target="_blank" rel="noopener">source</a>` : ''}</div>
+      </div>`;
+    }
+  }
+
+  if (research.talking_points && research.talking_points.length > 0) {
+    html += '<h4>Talking Points</h4>';
+    for (const tp of research.talking_points) {
+      html += `<div class="research-tp">${esc(tp)}</div>`;
+    }
+  }
+
+  $body.innerHTML = html;
+  $section.classList.add('visible');
+  // Collapse by default
+  $body.classList.remove('open');
+  document.getElementById('researchChevron').classList.remove('open');
+}
+
+function toggleResearch() {
+  const $body = document.getElementById('researchBody');
+  const $chevron = document.getElementById('researchChevron');
+  $body.classList.toggle('open');
+  $chevron.classList.toggle('open');
+}
+
+// ── Revision via Claude ──
+const $reviseInput = document.getElementById('reviseInput');
+const $reviseBtn = document.getElementById('reviseBtn');
+const $reviseStatus = document.getElementById('reviseStatus');
+
+async function reviseDraft() {
+  const instructions = $reviseInput.value.trim();
+  if (!instructions) { $reviseInput.focus(); return; }
+  if (!activePerson) return;
+
+  const apiKey = localStorage.getItem('anthropic_key');
+  if (!apiKey) {
+    $reviseStatus.className = 'revise-status error';
+    $reviseStatus.textContent = 'Add your Anthropic API key — click Settings above.';
+    return;
+  }
+
+  const currentSubject = $draftSubject.value;
+  const currentBody = quill.root.innerHTML;
+  const p = activePerson;
+
+  // Disable UI
+  $reviseBtn.disabled = true;
+  $reviseInput.disabled = true;
+  $reviseStatus.className = 'revise-status';
+  $reviseStatus.innerHTML = '<span class="revise-spinner"></span>Revising with Claude...';
+
+  const prompt = `You are revising a cold outreach email draft. Apply the user's revision instructions to the current draft.
+
+## Recipient Context
+Name: ${p.name}
+Title: ${p.title || 'Unknown'}
+Organization: ${p.organization || 'Unknown'}
+Industry: ${p.org_industry || 'Unknown'}
+Seniority: ${p.seniority || 'Unknown'}
+Context: ${p.context || 'None'}
+Shared Background: ${p.shared_background || 'None'}
+Priority Reasons: ${p.priority_reasons || 'None'}
+
+## Current Draft (HTML)
+Subject: ${currentSubject}
+
+Body:
+${currentBody}
+
+## Revision Instructions
+${instructions}
+
+## Rules
+- Apply the requested changes while keeping the email coherent and well-written.
+- Maintain a professional but warm, founder-to-executive tone unless told otherwise.
+- Keep the subject under 60 characters.
+- Keep the body concise (5-8 sentences, excluding bullet points) unless told otherwise.
+- Preserve all hyperlinks (<a> tags with href) from the original draft.
+- If a mutual connection / person's name is mentioned in the revision instructions, weave it into the first paragraph naturally — but do NOT open the email with it. NEVER say or imply that the connection asked you to reach out, referred you, or suggested you contact them. Just mention knowing them in passing.
+- The "body" value MUST be valid HTML using only: <p>, <br>, <strong>, <em>, <u>, <a href="...">, <ul>, <ol>, <li>. No <div>, <span>, or inline styles.
+- Return ONLY valid JSON with keys "subject" (plain text) and "body" (HTML string). No other text.
+
+{"subject": "...", "body": "<p>...</p>"}`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5-20250929',
+        max_tokens: 2048,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.error?.message || `API error ${resp.status}`);
+    }
+
+    const data = await resp.json();
+    let text = data.content[0].text.trim();
+
+    // Strip code fences if present
+    if (text.startsWith('```')) {
+      text = text.includes('\n') ? text.split('\n').slice(1).join('\n') : text.slice(3);
+    }
+    text = text.replace(/`+$/, '').trim();
+
+    const result = JSON.parse(text);
+    $draftSubject.value = result.subject;
+    setQuillHTML(result.body);
+
+    $reviseStatus.className = 'revise-status';
+    $reviseStatus.textContent = 'Draft revised.';
+    $reviseInput.value = '';
+    $reviseInput.style.height = 'auto';
+  } catch (e) {
+    console.error('Revise error:', e);
+    $reviseStatus.className = 'revise-status error';
+    $reviseStatus.textContent = 'Error: ' + e.message;
+  } finally {
+    $reviseBtn.disabled = false;
+    $reviseInput.disabled = false;
+    $reviseInput.focus();
+  }
+}
+
+// ── Gmail Integration ──
+let gmailTokenClient = null;
+let gmailAccessToken = null;
+
+function initGmail() {
+  const clientId = localStorage.getItem('google_client_id');
+  if (!clientId || typeof google === 'undefined') return;
+  gmailTokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: clientId,
+    scope: 'https://www.googleapis.com/auth/gmail.compose',
+    callback: () => {},  // overridden per-call
+  });
+}
+
+function getGmailToken() {
+  return new Promise((resolve, reject) => {
+    if (!gmailTokenClient) {
+      reject(new Error('Add your Google OAuth Client ID in Settings.'));
+      return;
+    }
+    gmailTokenClient.callback = (resp) => {
+      if (resp.error) { reject(new Error(resp.error)); return; }
+      gmailAccessToken = resp.access_token;
+      resolve(resp.access_token);
+    };
+    if (gmailAccessToken) {
+      resolve(gmailAccessToken);
+    } else {
+      gmailTokenClient.requestAccessToken({ prompt: 'consent' });
+    }
+  });
+}
+
+function buildRfc2822(to, subject, htmlBody) {
+  const boundary = 'boundary_' + Date.now();
+  const lines = [
+    `To: ${to}`,
+    `Subject: ${subject}`,
+    'MIME-Version: 1.0',
+    `Content-Type: multipart/alternative; boundary="${boundary}"`,
+    '',
+    `--${boundary}`,
+    'Content-Type: text/plain; charset="UTF-8"',
+    '',
+    htmlToPlainText(htmlBody),
+    '',
+    `--${boundary}`,
+    'Content-Type: text/html; charset="UTF-8"',
+    '',
+    htmlBody,
+    '',
+    `--${boundary}--`,
+  ];
+  return lines.join('\r\n');
+}
+
+function htmlToPlainText(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  // Convert links to "text (url)" format
+  tmp.querySelectorAll('a').forEach(a => {
+    const href = a.getAttribute('href');
+    if (href && a.textContent !== href) {
+      a.replaceWith(`${a.textContent} (${href})`);
+    }
+  });
+  // Convert list items to "- text"
+  tmp.querySelectorAll('li').forEach(li => {
+    li.replaceWith(`- ${li.textContent}\n`);
+  });
+  return tmp.textContent.replace(/\n{3,}/g, '\n\n').trim();
+}
+
+function base64UrlEncode(str) {
+  return btoa(unescape(encodeURIComponent(str)))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
+}
+
+// Close on Escape key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && $detailPanel.classList.contains('open')) closePanel();
+});
+
 // ── Init ──
 (function init() {
-  renderHead();
+  renderHead($tableHead);
   const url = localStorage.getItem('sb_url');
   const key = localStorage.getItem('sb_key');
+  const anthropicKey = localStorage.getItem('anthropic_key');
+  const googleClientId = localStorage.getItem('google_client_id');
+  if (anthropicKey) $cfgAnthropicKey.value = anthropicKey;
+  if (googleClientId) $cfgGoogleClientId.value = googleClientId;
+  // Init Gmail once GIS library loads
+  if (googleClientId) {
+    if (typeof google !== 'undefined') { initGmail(); }
+    else { window.addEventListener('load', initGmail); }
+  }
   if (url && key) {
     $cfgUrl.value = url;
     $cfgKey.value = key;
