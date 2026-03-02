@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Leadership Accelerator — v2 — Yettel</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f5f5f5;
+    color: #1a1a1a;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header {
+    background: #0a0a0a;
+    padding: 40px 48px 0;
+  }
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .header-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #60a5fa;
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.15;
+    color: #fff;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+  .header-sub {
+    font-size: 15px;
+    color: #999;
+    margin-bottom: 32px;
+  }
+
+  .tab-bar {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid #222;
+  }
+  .tab-btn {
+    padding: 12px 24px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: #888;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: #ccc; }
+  .tab-btn.active { color: #fff; }
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #2563eb;
+  }
+
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 48px 80px;
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #0a0a0a;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+  }
+  h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0a0a0a;
+    margin-bottom: 10px;
+    letter-spacing: -0.3px;
+  }
+  p {
+    font-size: 15px;
+    color: #444;
+    margin-bottom: 16px;
+    line-height: 1.75;
+  }
+  strong { color: #0a0a0a; font-weight: 600; }
+
+  .card {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 16px;
+  }
+  .card-accent { border-left: 3px solid #2563eb; }
+  .card h3 { margin-bottom: 12px; }
+  .card p:last-child { margin-bottom: 0; }
+
+  .insight {
+    background: #f0f4ff;
+    border: 1px solid #d4e0ff;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .insight-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #2563eb;
+    margin-bottom: 8px;
+  }
+  .insight p { color: #333; margin-bottom: 0; }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .stat-card {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+  }
+  .stat-number {
+    font-size: 32px;
+    font-weight: 800;
+    color: #2563eb;
+    letter-spacing: -1px;
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.4;
+  }
+
+  .section { margin-bottom: 48px; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #2563eb;
+    margin-bottom: 20px;
+  }
+  .divider {
+    height: 1px;
+    background: #e5e5e5;
+    margin: 48px 0;
+  }
+
+  .day-header {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #2563eb;
+    margin-top: 40px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #2563eb;
+  }
+  .session-card {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .session-card::before {
+    content: attr(data-session);
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #bbb;
+  }
+  .session-meta {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .session-meta-item {
+    font-size: 12px;
+    color: #888;
+    font-weight: 500;
+  }
+  .session-meta-item span {
+    color: #333;
+    font-weight: 600;
+  }
+  .session-detail {
+    background: #f8f9fb;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+  .session-detail-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #2563eb;
+    margin-bottom: 8px;
+  }
+  .session-detail p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 8px;
+    line-height: 1.7;
+  }
+  .session-detail p:last-child { margin-bottom: 0; }
+
+  .emotion-tag {
+    display: inline-block;
+    background: #0a0a0a;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-top: 8px;
+  }
+
+  .checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .checklist li {
+    font-size: 15px;
+    color: #444;
+    padding: 10px 0 10px 28px;
+    position: relative;
+    line-height: 1.6;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    background: #2563eb;
+    border-radius: 50%;
+  }
+
+  .numbered-list {
+    list-style: none;
+    padding: 0;
+    counter-reset: item;
+  }
+  .numbered-list li {
+    font-size: 15px;
+    color: #444;
+    padding: 12px 0 12px 40px;
+    position: relative;
+    line-height: 1.6;
+    border-bottom: 1px solid #f0f0f0;
+    counter-increment: item;
+  }
+  .numbered-list li:last-child { border-bottom: none; }
+  .numbered-list li::before {
+    content: counter(item);
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 24px;
+    height: 24px;
+    background: #2563eb;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .wedge-block {
+    background: #0a0a0a;
+    border-radius: 12px;
+    padding: 32px;
+    margin: 20px 0;
+  }
+  .wedge-block h3 { color: #fff; margin-bottom: 12px; }
+  .wedge-block p { color: #aaa; }
+  .wedge-block strong { color: #fff; }
+
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: #e5e5e5;
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 28px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -32px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border: 3px solid #2563eb;
+    border-radius: 50%;
+    z-index: 1;
+  }
+  .timeline-item h3 { font-size: 16px; margin-bottom: 6px; }
+  .timeline-item p { font-size: 14px; margin-bottom: 0; }
+  .timeline-time {
+    font-size: 12px;
+    font-weight: 600;
+    color: #2563eb;
+    margin-bottom: 4px;
+  }
+
+  /* AIQ Spider Chart Visual */
+  .aiq-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .aiq-axis {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .aiq-axis-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #2563eb;
+    margin-bottom: 6px;
+  }
+  .aiq-axis-desc {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+  }
+
+  /* Canvas visual */
+  .canvas-frame {
+    background: #fff;
+    border: 2px solid #0a0a0a;
+    border-radius: 16px;
+    overflow: hidden;
+    margin: 24px 0;
+  }
+  .canvas-title-bar {
+    background: #0a0a0a;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .canvas-title-bar h3 {
+    color: #fff;
+    font-size: 16px;
+    margin: 0;
+    letter-spacing: -0.3px;
+  }
+  .canvas-title-bar span {
+    color: #666;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .canvas-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+  .canvas-cell {
+    padding: 20px 24px;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    min-height: 100px;
+  }
+  .canvas-cell:nth-child(2n) { border-right: none; }
+  .canvas-cell.full-width {
+    grid-column: 1 / -1;
+    border-right: none;
+  }
+  .canvas-cell.no-bottom { border-bottom: none; }
+  .canvas-cell-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #2563eb;
+    margin-bottom: 8px;
+  }
+  .canvas-cell-prompt {
+    font-size: 13px;
+    color: #999;
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .canvas-cell-example {
+    font-size: 13px;
+    color: #333;
+    line-height: 1.6;
+    margin-top: 6px;
+  }
+  .canvas-footer {
+    background: #f8f9fb;
+    padding: 16px 24px;
+    border-top: 2px solid #0a0a0a;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+  .canvas-footer-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #0a0a0a;
+    margin-bottom: 4px;
+  }
+  .canvas-footer-prompt {
+    font-size: 12px;
+    color: #999;
+    font-style: italic;
+  }
+
+  /* Change markers */
+  .change-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .change-new {
+    background: #dcfce7;
+    color: #166534;
+  }
+  .change-revised {
+    background: #fef3c7;
+    color: #92400e;
+  }
+  .change-removed {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  @media (max-width: 700px) {
+    .header { padding: 24px 20px 0; }
+    .header h1 { font-size: 28px; }
+    .page { padding: 32px 20px; }
+    .stat-grid { grid-template-columns: 1fr; }
+    .aiq-grid { grid-template-columns: 1fr; }
+    .tab-btn { padding: 10px 14px; font-size: 12px; }
+    .canvas-grid { grid-template-columns: 1fr; }
+    .canvas-cell { border-right: none; }
+    .canvas-footer { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    body { background: #fff; }
+    .header { background: #fff; }
+    .header h1 { color: #0a0a0a; }
+    .header-sub { color: #666; }
+    .tab-bar { display: none; }
+    .tab-content { display: block !important; page-break-before: always; }
+    .tab-content:first-of-type { page-break-before: auto; }
+    .session-card, .card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-label">Internal Design Document &mdash; v2 &mdash; March 2026 &mdash; Yettel / Nevena</div>
+    <h1>AI Leadership Accelerator</h1>
+    <p class="header-sub">1-day program design for Nevena's leadership cohort (BU CEOs + senior leaders)</p>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="context">Context</button>
+      <button class="tab-btn" data-tab="changes">v1 &rarr; v2 Changes</button>
+      <button class="tab-btn" data-tab="curriculum">Curriculum (1 day)</button>
+      <button class="tab-btn" data-tab="canvas">AI Leadership Canvas</button>
+      <button class="tab-btn" data-tab="open">Open Questions</button>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- ============================================ -->
+<!-- TAB 1: CONTEXT -->
+<!-- ============================================ -->
+<div class="tab-content active" id="context">
+
+  <div class="section">
+    <h2>What we're designing and why</h2>
+    <p>A <strong>1-day, high-impact AI workshop</strong> for Nevena's leadership cohort at Yettel (Etisalat group). The audience is business-unit CEOs and senior leaders &mdash; people who know AI matters, have seen the demos, and need to get unstuck.</p>
+    <p>This is a compressed version of our <a href="/leaders" style="color: #2563eb; text-decoration: underline; text-underline-offset: 2px;">1.5-day program (v1)</a>, redesigned based on feedback from Madan and Aashish on what will land best with this specific group.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <h2>Three objectives for the day</h2>
+    <div class="card card-accent">
+      <h3>1. The Mirror</h3>
+      <p>Create a clear, data-driven picture of <strong>where they are vs where they could be</strong> on AI. Not by showing them the frontier and hoping they feel the gap &mdash; by using a structured diagnostic (AIQ) that makes the gap specific, measurable, and actionable.</p>
+    </div>
+    <div class="card card-accent">
+      <h3>2. The Pattern</h3>
+      <p>Get them to <strong>actually work through one real workflow</strong> and see what AI-native process transformation looks like. Not building agents &mdash; the harder, more valuable skill: deciding where AI goes in a process, what humans keep, and how to measure the change.</p>
+    </div>
+    <div class="card card-accent">
+      <h3>3. The Commitment</h3>
+      <p>End with an <strong>explicit, public commitment + artifact</strong> (AI Leadership Canvas) that can be used for follow-ups, accountability, and ongoing work (including accelerator/consulting engagements).</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <h2>Why this audience is different</h2>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-number">~10</div>
+        <div class="stat-label">BU CEOs + senior leaders in the room</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">1 day</div>
+        <div class="stat-label">Must be high-impact but not overloaded</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">CHRO</div>
+        <div class="stat-label">Nevena is the sponsor and champion</div>
+      </div>
+    </div>
+    <div class="insight">
+      <div class="insight-label">Key constraint</div>
+      <p><strong>These leaders don't need to be wowed by AI demos &mdash; they've seen them.</strong> They need a structured way to assess where they are, a repeatable pattern for transforming processes, and enough accountability to actually follow through. The old "mind-blowing frontier" opener is unnecessary for this audience. Start with the mirror, not the magic show.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <h2>The two-layer framework</h2>
+    <p>Before leaders can do useful AI work, two preconditions must exist. This is the foundation the entire day builds on.</p>
+
+    <div class="card" style="background: #fafafa;">
+      <h3>Layer 1: Operational Readiness (preconditions)</h3>
+      <p>Two basic requirements, without which AI work makes no sense:</p>
+      <ul class="checklist">
+        <li><strong>Process:</strong> Do they have clearly defined, mapped processes?</li>
+        <li><strong>Data:</strong> Do they have usable data associated with those processes?</li>
+      </ul>
+    </div>
+
+    <div class="card card-accent">
+      <h3>Layer 2: AIQ &mdash; AI Readiness Diagnostic <span class="change-tag change-new">New</span></h3>
+      <p>A proprietary six-axis assessment that produces a spider chart visualizing gaps. This becomes <strong>the shared language and lens</strong> we use with them throughout the day and in all future interactions.</p>
+
+      <div class="aiq-grid">
+        <div class="aiq-axis">
+          <div class="aiq-axis-label">Process</div>
+          <div class="aiq-axis-desc">Are key workflows mapped and measurable?</div>
+        </div>
+        <div class="aiq-axis">
+          <div class="aiq-axis-label">Data</div>
+          <div class="aiq-axis-desc">Quality, accessibility, and relevance for these workflows</div>
+        </div>
+        <div class="aiq-axis">
+          <div class="aiq-axis-label">Awareness</div>
+          <div class="aiq-axis-desc">Leadership understanding of AI capabilities and limitations</div>
+        </div>
+        <div class="aiq-axis">
+          <div class="aiq-axis-label">Strategy</div>
+          <div class="aiq-axis-desc">Clear view of where AI will drive P&L impact</div>
+        </div>
+        <div class="aiq-axis">
+          <div class="aiq-axis-label">Organization</div>
+          <div class="aiq-axis-desc">Structures, ownership, and roles to implement AI</div>
+        </div>
+        <div class="aiq-axis">
+          <div class="aiq-axis-label">Execution</div>
+          <div class="aiq-axis-desc">Ability to ship, iterate, and maintain AI-enabled workflows</div>
+        </div>
+      </div>
+
+      <p>Leaders answer structured questions across six axes &rarr; produces a spider chart &rarr; visually highlights where the gaps are. Doubles as a "mirror" for current state and a reusable tool for tracking progress over time.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================================ -->
+<!-- TAB 2: v1 → v2 CHANGES -->
+<!-- ============================================ -->
+<div class="tab-content" id="changes">
+
+  <div class="section">
+    <h2>What changed from v1 and why</h2>
+    <p>v2 is a purpose-built compression of the v1 1.5-day design for Nevena's Yettel cohort. Here are the key changes, each driven by feedback from the Madan/Aashish design session.</p>
+  </div>
+
+  <div class="card card-accent">
+    <h3><span class="change-tag change-revised">Revised</span> Opening: AIQ Mirror replaces frontier demos</h3>
+    <p><strong>v1:</strong> Beat 1 (2.5h) opened with pre-survey data, then 3-4 live AI demos to create "productive discomfort," then a peer exercise on barriers.</p>
+    <p><strong>v2:</strong> Block 1 (~1.5h) opens with a brief frontier anchor (enough to set the bar), then introduces AIQ as the diagnostic mirror. Leaders score themselves, see the spider chart, visualize their gaps. Much shorter, more diagnostic, less performative.</p>
+    <p><strong>Why:</strong> This audience has seen demos. They don't need to be impressed &mdash; they need to be diagnosed. AIQ gives them a proprietary, reusable lens they'll keep using with us, rather than a one-time wow moment.</p>
+  </div>
+
+  <div class="card card-accent">
+    <h3><span class="change-tag change-revised">Revised</span> "Build" becomes "Process Engineering"</h3>
+    <p><strong>v1:</strong> Beat 3 (2.5h) had a practitioner live-build an agent in 20 min, then every leader built their own version in Zapier/n8n. Designed for 100% success rate.</p>
+    <p><strong>v2:</strong> Block 2 (~3h) focuses on <strong>process transformation design</strong>. Instructor-led case study of a real before/after, then groups of 2-3 redesign a workflow themselves &mdash; mapping steps, deciding what AI does vs humans, identifying metrics. Expert reviews each group's design. No coding, no Zapier.</p>
+    <p><strong>Why:</strong> For a 1-day leadership audience, the real struggle isn't "can I build an agent?" It's "where do I put AI in my process?" Process engineering is the right level of granularity for BU CEOs. The actual building is positioned as the natural next engagement (Build+).</p>
+  </div>
+
+  <div class="card card-accent">
+    <h3><span class="change-tag change-removed">Removed</span> Beat 2: "The Rewiring" (standalone org barriers session)</h3>
+    <p><strong>v1:</strong> A separate 2.5h session with external guest facilitator, war stories, the "5 barriers" framework, and initial canvas workshop.</p>
+    <p><strong>v2:</strong> Org barriers and the "why things fail" lens are woven into the process engineering case study and expert review, rather than a standalone session. The external guest facilitator is no longer needed for the 1-day format.</p>
+    <p><strong>Why:</strong> Compressing to 1 day means we can't have four separate beats. The org transformation content is most powerful when it's embedded in the process engineering work, not delivered as a separate lecture.</p>
+  </div>
+
+  <div class="card card-accent">
+    <h3><span class="change-tag change-new">New</span> People & Org closing discussion</h3>
+    <p><strong>v1:</strong> Day ended with canvas presentations + CEO keynote.</p>
+    <p><strong>v2:</strong> After process engineering, a closing discussion: "Now that you've redesigned a process, what kind of team and leader do you need to actually run it?" Frames people & skills as the bottleneck, not technology.</p>
+    <p><strong>Why:</strong> Redesigning processes alone isn't enough. This closes the loop by connecting back to AIQ's Strategy + Organization axes, and sets up the accelerator as the answer to a gap they can now articulate.</p>
+  </div>
+
+  <div class="card card-accent">
+    <h3><span class="change-tag change-revised">Revised</span> Canvas: same day, stronger accountability</h3>
+    <p><strong>v1:</strong> Canvas filled in Beat 2, refined overnight, presented Day 2 morning. CEO closing keynote.</p>
+    <p><strong>v2:</strong> Canvas done in pairs during Block 3, presented same afternoon (~2 min each). <strong>Follow-up call scheduled before they leave the room.</strong> Physical copies collected. Nevena hears all public commitments.</p>
+    <p><strong>Why:</strong> No overnight = accountability must be front-loaded. Scheduling the 2-week follow-up in the room (not via email after) is the critical difference. Public commitment in front of Nevena + a booked follow-up = real accountability.</p>
+  </div>
+
+  <div class="card card-accent">
+    <h3><span class="change-tag change-new">New</span> AIQ as the persistent proprietary tool</h3>
+    <p><strong>v1:</strong> Pre-survey data and Canvas were the core tools. No ongoing diagnostic framework.</p>
+    <p><strong>v2:</strong> AIQ is introduced as the diagnostic lens that carries across all future interactions. "This is the language we'll keep using with you and your teams." Spider chart becomes the persistent tracking mechanism.</p>
+    <p><strong>Why:</strong> Creates stickiness and a reason to re-engage. Every follow-up can start with "let's re-run your AIQ and see what moved."</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <h2>What didn't change</h2>
+    <div class="card">
+      <ul class="checklist">
+        <li><strong>Practitioner-led, not professor-led.</strong> Still delivered by people who've built and shipped AI at top companies.</li>
+        <li><strong>Start with their reality.</strong> Still mirror-first, not frontier-first.</li>
+        <li><strong>Peer learning is the product.</strong> Pair exercises, group work, structured feedback throughout.</li>
+        <li><strong>Canvas as the core artifact.</strong> Still the tangible commitment mechanism and wedge into next engagement.</li>
+        <li><strong>This is the beginning.</strong> Every element still opens a gap that Blueprint / Acceleration / Co-Dev fills.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================================ -->
+<!-- TAB 3: CURRICULUM -->
+<!-- ============================================ -->
+<div class="tab-content" id="curriculum">
+
+  <div class="section">
+    <h2>1-Day Program: Three Blocks</h2>
+    <p>Compressed from the v1 four-beat / 1.5-day structure into three blocks that form a complete arc in a single day. Each block builds on the previous one.</p>
+    <p><strong>Total time: ~7 hours</strong> (9:00 AM &ndash; 5:00 PM with breaks)</p>
+  </div>
+
+  <!-- BLOCK 1 -->
+  <div class="day-header">Block 1 &mdash; Morning</div>
+
+  <div class="session-card" data-session="Block 1">
+    <h3>The Mirror: "This is where you are &mdash; this is where you could be" <span class="change-tag change-revised">Revised</span></h3>
+    <div class="session-meta">
+      <div class="session-meta-item">Duration: <span>~1.5 hours</span></div>
+      <div class="session-meta-item">Format: <span>Brief frontier anchor + AIQ diagnostic + gap visualization</span></div>
+      <div class="session-meta-item">Led by: <span>Senior practitioner</span></div>
+    </div>
+
+    <p>Don't open with "AI is amazing" &mdash; they already know. Open with: "This is where you are; this is where you could be." The AIQ framework is the proprietary mirror that makes the gap concrete and measurable.</p>
+
+    <div class="session-detail">
+      <div class="session-detail-label">Flow</div>
+      <p><strong>0:00&ndash;0:20</strong> &mdash; Brief Frontier Anchor. Just enough to set the bar for what "good" looks like. Not a demo marathon &mdash; a crisp framing of the AI-native operating model. "This is what the frontier organizations look like. Now let's talk about you."</p>
+      <p><strong>0:20&ndash;0:50</strong> &mdash; AIQ Introduction. Walk through the six components (Process, Data, Awareness, Strategy, Organization, Execution). Position this as the proprietary diagnostic we'll use today and in every future interaction. "This is the language and lens we'll keep using with you and your teams."</p>
+      <p><strong>0:50&ndash;1:15</strong> &mdash; Self-Assessment. Leaders (or a representative subset) score themselves across the six axes. Can be done individually or in functional pairs. Quick, structured, honest.</p>
+      <p><strong>1:15&ndash;1:30</strong> &mdash; Spider Chart & Gap Discussion. Show the aggregated spider chart. The room sees where the gaps cluster. Facilitator draws out: "This is your mirror. The areas where you score lowest are where today's work will focus."</p>
+    </div>
+
+    <div class="session-detail">
+      <div class="session-detail-label">What changed from v1</div>
+      <p>v1 spent 2.5h here with 3-4 live frontier demos, survey data mirroring, a "why 95% fail" framing, and a peer exercise. v2 compresses to ~1.5h by replacing the demo-heavy approach with AIQ as the diagnostic tool. The frontier is anchored briefly (not performed at length), and the AIQ spider chart replaces the peer-exercise-on-barriers as the visualization of where they're stuck.</p>
+    </div>
+
+    <div class="emotion-tag">Recognition &rarr; "Now I can see the gaps"</div>
+  </div>
+
+  <!-- BLOCK 2 -->
+  <div class="day-header">Block 2 &mdash; Late Morning / Afternoon</div>
+
+  <div class="session-card" data-session="Block 2">
+    <h3>Process Engineering: "Take a real workflow and redesign it" <span class="change-tag change-new">New</span></h3>
+    <div class="session-meta">
+      <div class="session-meta-item">Duration: <span>~3 hours</span></div>
+      <div class="session-meta-item">Format: <span>Case study + group exercise + expert review</span></div>
+      <div class="session-meta-item">Led by: <span>Senior practitioner + SME reviewer</span></div>
+    </div>
+
+    <p>This is the bulk of the day. Leaders don't code or build agents &mdash; they do the harder, more valuable work: take a real workflow, break it into steps, decide where AI goes vs where humans stay, and define before/after metrics. This is the skill they actually need.</p>
+
+    <div class="session-detail">
+      <div class="session-detail-label">1. Instructor-led case study ("movie watching") &mdash; ~45 min</div>
+      <p>Facilitator presents a real process transformation story-first:</p>
+      <p>&bull; A real process "before AI" &mdash; likely <strong>recruiting</strong> as the default (every leader hires, Nevena is pushing this, aligns with HR pilots elsewhere)</p>
+      <p>&bull; How it was broken into steps</p>
+      <p>&bull; Which steps were handed to AI vs kept with humans (human-in-the-loop design)</p>
+      <p>&bull; Pre &rarr; post performance: cost, time, error rate</p>
+      <p>This is <strong>story-first</strong>: "I had this problem; this was the 'before'; we redesigned; now it looks like this." Don't over-index on tools or tech stacks. The point is the pattern, not the plumbing.</p>
+    </div>
+
+    <div class="session-detail">
+      <div class="session-detail-label">2. Group-based transformation exercise &mdash; ~1.5 hours</div>
+      <p>10 people &rarr; groups of 2-3. Each group:</p>
+      <p>&bull; Picks a process (likely recruiting, or one other common workflow if needed to avoid HR-only focus)</p>
+      <p>&bull; Defines current state and target state</p>
+      <p>&bull; Breaks the process into smaller steps</p>
+      <p>&bull; Decides where / how AI would be inserted</p>
+      <p>&bull; Notes where humans remain critical</p>
+      <p><strong>Output per group:</strong> A simple "before vs after" process map + a list of candidate agents or automations that emerge from the redesign.</p>
+    </div>
+
+    <div class="session-detail">
+      <div class="session-detail-label">3. Expert review &mdash; ~45 min</div>
+      <p>SME goes group-by-group and provides honest feedback:</p>
+      <p>&bull; "This is where AI is strong / weak today"</p>
+      <p>&bull; "This step is feasible now; this one is not"</p>
+      <p>&bull; Quick ROI sanity check</p>
+      <p>They do <strong>not</strong> finalize decisions. The goal is exposure + pattern-building, not signed-off roadmaps.</p>
+    </div>
+
+    <div class="session-detail">
+      <div class="session-detail-label">Process choice &mdash; risk & mitigation</div>
+      <p><strong>Recruiting is the default example</strong> because every leader hires, it's concrete enough for stepwise breakdown, and Nevena (CHRO) is pushing hard on this.</p>
+      <p><strong>Risk:</strong> If the session feels too HR-centric, business-unit heads may see it as "Nevena's agenda." <strong>Mitigation:</strong> Frame explicitly: "All of you experience this process. And this is the pattern we'll use for any process &mdash; CS, finance, ops. The method transfers."</p>
+    </div>
+
+    <div class="session-detail">
+      <div class="session-detail-label">What changed from v1</div>
+      <p>v1 had leaders literally building an agent in Zapier/n8n (Beat 3, 2.5h). The practitioner live-coded, then everyone built their own. v2 replaces this with process transformation design at the right level of granularity for BU CEOs: mapping steps, deciding human vs AI, identifying metrics. Not API calls or model selection. The actual building (Build+) is positioned as the natural follow-on engagement.</p>
+    </div>
+
+    <div class="emotion-tag">Understanding &rarr; "I can see how to redesign my processes"</div>
+  </div>
+
+  <!-- BLOCK 3 -->
+  <div class="day-header">Block 3 &mdash; Afternoon</div>
+
+  <div class="session-card" data-session="Block 3">
+    <h3>Canvas & Commitment: "Tell the room what you're going to do" <span class="change-tag change-revised">Revised</span></h3>
+    <div class="session-meta">
+      <div class="session-meta-item">Duration: <span>~2 hours</span></div>
+      <div class="session-meta-item">Format: <span>Canvas workshop (pairs) + presentations + closing discussion + follow-up scheduling</span></div>
+      <div class="session-meta-item">Led by: <span>Lead facilitator</span></div>
+    </div>
+
+    <p>The canvas prevents "great workshop, nothing changes." Each leader fills in their AI Leadership Canvas, presents it publicly, and schedules a follow-up &mdash; all before leaving the room.</p>
+
+    <div class="session-detail">
+      <div class="session-detail-label">Flow</div>
+      <p><strong>0:00&ndash;0:15</strong> &mdash; Canvas Introduction. Facilitator explains the canvas structure and walks through an example fill-in. Sets the bar for what a good canvas looks like.</p>
+      <p><strong>0:15&ndash;0:50</strong> &mdash; Pairs Fill Canvases. They work in pairs, not solo. Each person explains their chosen process/problem to their partner. Each fills their own canvas but with peer feedback and challenge. The pair structure forces articulation and prevents hand-waving.</p>
+      <p><strong>0:50&ndash;1:20</strong> &mdash; Canvas Presentations. Each leader gets ~2 minutes to present to the room: "This is the process I'm picking. Here's what will change." Nevena (and ideally a more senior leader) hears every commitment. Facilitator captures themes in real-time.</p>
+      <p><strong>1:20&ndash;1:40</strong> &mdash; People & Org Closing. <span class="change-tag change-new">New</span> Short, facilitated discussion: "Now that you've redesigned a process, what kind of team and leader do you need to actually run it? What does leadership in the age of AI look like?" Not a full workshop &mdash; a framing device that leaves them with a clear sense that <strong>people & skills are the bottleneck</strong>, and connects back to AIQ's Strategy + Organization axes.</p>
+      <p><strong>1:40&ndash;2:00</strong> &mdash; Accountability Lock-in. Collect all canvases (Nevena + facilitators retain copies). <strong>Before anyone leaves the room, schedule a follow-up call ~2 weeks later</strong> to check progress on the canvas. This is the critical accountability mechanism and the natural segue into offering deeper help.</p>
+    </div>
+
+    <div class="session-detail">
+      <div class="session-detail-label">Accountability design</div>
+      <p>The canvas only works if leadership cares about the output. Three mechanisms:</p>
+      <p><strong>1. Public commitment:</strong> Presenting in front of Nevena and peers.</p>
+      <p><strong>2. Physical artifact:</strong> Nicely printed single-page canvas (possibly laminated). They take one, we keep one.</p>
+      <p><strong>3. Booked follow-up:</strong> The 2-week call is scheduled in the room, not promised via email later. This is non-negotiable for the design to work.</p>
+    </div>
+
+    <div class="emotion-tag">Agency &rarr; Public commitment</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SCHEDULE AT A GLANCE -->
+  <div class="section">
+    <h2>Schedule at a glance</h2>
+    <div class="card">
+      <table style="width:100%; border-collapse:collapse; font-size:14px;">
+        <thead>
+          <tr style="border-bottom:2px solid #e5e5e5;">
+            <th style="text-align:left; padding:12px 16px; font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:#888;">Time</th>
+            <th style="text-align:left; padding:12px 16px; font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:#888;">Session</th>
+            <th style="text-align:left; padding:12px 16px; font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:#888;">Emotion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:12px 16px; color:#666; white-space:nowrap;">9:00&ndash;10:30</td>
+            <td style="padding:12px 16px;"><strong>Block 1: The Mirror</strong> &mdash; Frontier anchor, AIQ diagnostic, spider chart</td>
+            <td style="padding:12px 16px; color:#666;">Recognition</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee; background:#fafafa;">
+            <td style="padding:12px 16px; color:#666;">10:30&ndash;10:45</td>
+            <td style="padding:12px 16px; color:#888;">Break</td>
+            <td style="padding:12px 16px;"></td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:12px 16px; color:#666; white-space:nowrap;">10:45&ndash;12:15</td>
+            <td style="padding:12px 16px;"><strong>Block 2a:</strong> Case study + group exercise begins</td>
+            <td style="padding:12px 16px; color:#666;">Understanding</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee; background:#fafafa;">
+            <td style="padding:12px 16px; color:#666;">12:15&ndash;13:00</td>
+            <td style="padding:12px 16px; color:#888;">Lunch</td>
+            <td style="padding:12px 16px;"></td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:12px 16px; color:#666; white-space:nowrap;">13:00&ndash;14:30</td>
+            <td style="padding:12px 16px;"><strong>Block 2b:</strong> Group exercise continues + expert review</td>
+            <td style="padding:12px 16px; color:#666;">Pattern-building</td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee; background:#fafafa;">
+            <td style="padding:12px 16px; color:#666;">14:30&ndash;14:45</td>
+            <td style="padding:12px 16px; color:#888;">Break</td>
+            <td style="padding:12px 16px;"></td>
+          </tr>
+          <tr style="border-bottom:1px solid #eee;">
+            <td style="padding:12px 16px; color:#666; white-space:nowrap;">14:45&ndash;16:45</td>
+            <td style="padding:12px 16px;"><strong>Block 3: Canvas & Commitment</strong> &mdash; Pairs, presentations, people/org close, follow-up scheduling</td>
+            <td style="padding:12px 16px; color:#666;">Agency &rarr; Commitment</td>
+          </tr>
+          <tr>
+            <td style="padding:12px 16px; color:#666; white-space:nowrap;">16:45&ndash;17:00</td>
+            <td style="padding:12px 16px; color:#888;">Close &mdash; confirm 2-week follow-up dates</td>
+            <td style="padding:12px 16px;"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- POSITIONING -->
+  <div class="section">
+    <h2>Positioning: this day vs the full program</h2>
+    <div class="card">
+      <p>This 1-day workshop compresses pieces of the full 1.5&ndash;2 day program:</p>
+      <ul class="checklist">
+        <li><strong>Day 1's mirror and APR</strong> &rarr; compressed into Block 1 (Mirror) + Block 2 (Process Engineering)</li>
+        <li><strong>Day 2's commitment</strong> &rarr; compressed into Block 3 (Canvas & Commitment)</li>
+      </ul>
+      <p style="margin-top: 16px;">What is <strong>explicitly flagged as "next steps"</strong>, not objectives for this day:</p>
+      <ul class="checklist">
+        <li><strong>Full AI Process Re-engineering (APR)</strong> &mdash; the comprehensive end-to-end process mapping with P&L linkage</li>
+        <li><strong>Build+</strong> &mdash; actually wiring redesigned workflows into tools (Zapier, agents, internal systems)</li>
+        <li><strong>Deep AIQ assessment</strong> &mdash; full organizational diagnostic beyond the in-room self-assessment</li>
+      </ul>
+    </div>
+    <div class="insight">
+      <div class="insight-label">Framing for Nevena</div>
+      <p>This is explicitly a <strong>"1-day foundation, followed by deeper APR + Build in later sessions."</strong> The day is designed to surface the problems and build the shared language. The solving comes next.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================================ -->
+<!-- TAB 4: AI LEADERSHIP CANVAS -->
+<!-- ============================================ -->
+<div class="tab-content" id="canvas">
+
+  <div class="section">
+    <h2>The AI Leadership Canvas</h2>
+    <p>A single-page artifact each leader fills in during Block 3 (in pairs), then presents to the room in ~2 minutes. Designed to be simple enough to complete in 35 minutes, rich enough to drive real follow-through, and structured enough to aggregate across leaders for strategic insight.</p>
+
+    <div class="canvas-frame">
+      <div class="canvas-title-bar">
+        <h3>AI Leadership Canvas</h3>
+        <span>Name &bull; Function &bull; Date</span>
+      </div>
+
+      <div class="canvas-grid">
+
+        <div class="canvas-cell">
+          <div class="canvas-cell-label">1. The Process</div>
+          <div class="canvas-cell-prompt">What is the single highest-value process in your function that AI could transform?</div>
+          <div class="canvas-cell-example">e.g., "Recruiting pipeline: sourcing to offer &mdash; takes 45 days, 6 handoffs, 3 teams involved"</div>
+        </div>
+
+        <div class="canvas-cell">
+          <div class="canvas-cell-label">2. The Prize</div>
+          <div class="canvas-cell-prompt">What does this process look like reimagined? What's the business impact?</div>
+          <div class="canvas-cell-example">e.g., "18-day cycle, 2 human decision points, 40% cost reduction in sourcing"</div>
+        </div>
+
+        <div class="canvas-cell">
+          <div class="canvas-cell-label">3. Current vs Target (AIQ lens)</div>
+          <div class="canvas-cell-prompt">Where does this process sit on the AIQ axes today? Where does it need to be? Which axis is the biggest gap?</div>
+          <div class="canvas-cell-example">e.g., "Process: 3/5 (mapped but not measured). Data: 2/5 (siloed in 3 systems). Organization: 1/5 (no AI owner)."</div>
+        </div>
+
+        <div class="canvas-cell">
+          <div class="canvas-cell-label">4. The 90-Day Play</div>
+          <div class="canvas-cell-prompt">What are 3 concrete actions you'll take in the next 90 days?</div>
+          <div class="canvas-cell-example">e.g., "1) Week 1: Map the full sourcing workflow with HR ops. 2) Month 1: Pilot AI screening on one role. 3) Month 2: Present results to Nevena with business case for rollout."</div>
+        </div>
+
+        <div class="canvas-cell full-width no-bottom">
+          <div class="canvas-cell-label">5. The Honest Ask</div>
+          <div class="canvas-cell-prompt">What can't you do alone? What help, expertise, or resources would you need to actually make this happen?</div>
+          <div class="canvas-cell-example">e.g., "Need help designing the AI-native workflow. Need someone who's done recruiting transformation before. Need data integration support from IT."</div>
+        </div>
+
+      </div>
+
+      <div class="canvas-footer">
+        <div class="canvas-footer-cell">
+          <div class="canvas-footer-label">Monday action</div>
+          <div class="canvas-footer-prompt">The one thing I'll do this Monday</div>
+        </div>
+        <div class="canvas-footer-cell">
+          <div class="canvas-footer-label">Key conversation</div>
+          <div class="canvas-footer-prompt">The one person I need to talk to first</div>
+        </div>
+        <div class="canvas-footer-cell">
+          <div class="canvas-footer-label">2-week check-in date</div>
+          <div class="canvas-footer-prompt">Scheduled before leaving the room</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="session-detail">
+      <div class="session-detail-label">Changes from v1 canvas</div>
+      <p><strong>Box 3 now uses AIQ language</strong> instead of "Top 3 Barriers." Leaders assess their chosen process against AIQ axes, which reinforces the diagnostic framework and creates continuity with the mirror session. The barriers are still surfaced, but through the structured AIQ lens rather than freeform.</p>
+      <p><strong>Footer field 3 changed from "Success metric" to "2-week check-in date."</strong> The accountability mechanism is now structural (a booked date) rather than aspirational (a metric they may or may not track).</p>
+    </div>
+
+    <div class="insight">
+      <div class="insight-label">The wedge mechanic (unchanged)</div>
+      <p>Every canvas has a box 5. When the facilitator synthesizes across all canvases during the closing, the "Honest Ask" patterns become visible: "6 of you said you need help designing AI-native workflows. 4 said you need organizational change support." <strong>That synthesis IS the proposal for the next engagement.</strong> We don't pitch. We read back what they asked for.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <h2>After the day: the 2-week follow-up</h2>
+    <div class="wedge-block">
+      <h3>60-minute follow-up call &mdash; booked before they leave the room</h3>
+      <p>Every leader reports: What did you do with your canvas? What worked? What did you hit? This is <strong>free and positioned as part of the original program.</strong></p>
+      <p><strong>1. Accountability:</strong> Leaders who committed publicly now report on progress. This alone doubles the day's impact.</p>
+      <p><strong>2. Re-run the mirror:</strong> "Has anything moved on your AIQ spider chart?" Reinforces the framework as an ongoing tool.</p>
+      <p><strong>3. Diagnosis &rarr; conversion:</strong> The blockers they hit in 2 weeks are the exact problems the accelerator solves. End with: "Some of you have hit barriers that a 1-day workshop can't solve. Here's what the next step looks like."</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================================ -->
+<!-- TAB 5: OPEN QUESTIONS -->
+<!-- ============================================ -->
+<div class="tab-content" id="open">
+
+  <div class="section">
+    <h2>Open questions to clarify with Nevena</h2>
+    <p>These need answers before we finalize the design. Flagged for the Wednesday call.</p>
+  </div>
+
+  <div class="card card-accent">
+    <h3>Participants & Power</h3>
+    <ul class="checklist">
+      <li><strong>Who exactly will be in the room?</strong> Are these group-level CEOs or BU-level CEOs? Exact list and level matters for calibrating the content.</li>
+      <li><strong>Will anyone more senior than Nevena be present?</strong> A group CEO or portfolio-level leader in the room transforms the accountability dynamic. Without senior presence, risk is "tick the box and forget."</li>
+      <li><strong>How strong is the mandate?</strong> Is the framing "we are in deep trouble and need help" or "just a workshop"? The canvas mechanism works well but only if there's clear signal that leadership cares about the output.</li>
+    </ul>
+  </div>
+
+  <div class="card card-accent">
+    <h3>Process choice</h3>
+    <ul class="checklist">
+      <li><strong>Is recruiting acceptable as the anchor example?</strong> It's the natural choice (every leader hires, Nevena is pushing it), but we need Nevena's read on whether BU heads will feel it's "her agenda."</li>
+      <li><strong>Do we need a second process?</strong> E.g., customer support, finance classification, or another cross-functional workflow? Having a second option lets groups choose, which reduces the HR-only perception.</li>
+    </ul>
+  </div>
+
+  <div class="card card-accent">
+    <h3>Intensity vs duration</h3>
+    <ul class="checklist">
+      <li><strong>Can we realistically fit all three blocks into a single day without overload?</strong> The schedule above is tight but doable. Need to validate with Nevena that the group has appetite for a full-day intensive.</li>
+      <li><strong>Can we frame this explicitly as:</strong> "1-day foundation, followed by deeper APR + Build in later sessions"? Or does Nevena want this positioned as self-contained?</li>
+    </ul>
+  </div>
+
+  <div class="card card-accent">
+    <h3>Longer-term arc</h3>
+    <ul class="checklist">
+      <li><strong>How do we position AIQ as their ongoing assessment method?</strong> Does Nevena want this to be the standard framework across the org, or just for this cohort?</li>
+      <li><strong>How do we position the accelerator / consulting function</strong> as the natural answer to the problems we surface, without overselling? What's Nevena's comfort level with the "wedge" approach?</li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <h2>Immediate next steps</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-time">Now</div>
+        <h3>Share this v2 draft with Madan & Aashish</h3>
+        <p>Get their feedback on the 3-block structure, AIQ integration, and process engineering approach before Wednesday.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">After Ryan's input</div>
+        <h3>One more iteration</h3>
+        <p>Incorporate Ryan's perspective, especially on the process engineering case study and expert review format.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">Wednesday</div>
+        <h3>Call with Nevena</h3>
+        <p>Present the design using slides (not this raw doc). Answer the open questions above. Use her answers to finalize the structure.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">Within 24h of Wednesday</div>
+        <h3>Finalize v2.1</h3>
+        <p>Refactor incorporating Nevena's answers &mdash; especially who's in the room, the mandate strength, and her expectations on outcomes and follow-up.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</div><!-- end .page -->
+
+<script>
+  const tabs = document.querySelectorAll('.tab-btn');
+  const contents = document.querySelectorAll('.tab-content');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.tab).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>
