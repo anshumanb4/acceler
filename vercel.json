@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/landing-page-v2/index.html" }
+    { "source": "/", "destination": "/landing-page-v2/index.html" },
+    { "source": "/leaders", "destination": "/leadership_course/docs/leadership-program-v1.html" }
   ]
 }
