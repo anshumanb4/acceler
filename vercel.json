@@ -3,6 +3,7 @@
     { "source": "/", "destination": "/landing-page-v2/index.html" },
     { "source": "/leaders", "destination": "/leadership_course/docs/leadership-program-v1.html" },
     { "source": "/leaders/yettel", "destination": "/leadership_course/docs/leadership-program-v2-yettel.html" },
-    { "source": "/deck", "destination": "/slides/index.html" }
+    { "source": "/deck/lightyear", "destination": "/slides/lightyear/index.html" },
+    { "source": "/prep/lightyear", "destination": "/resources/meetings/lightyear-meeting-prep.html" }
   ]
 }

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meeting Prep: Lightyear Capital &mdash; March 3, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fffbf7;
+    --text: #1c1917;
+    --text-sec: #57534e;
+    --text-muted: #a8a29e;
+    --accent: #c2410c;
+    --border: #ffedd5;
+    --card: #ffffff;
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-body: 'DM Sans', -apple-system, sans-serif;
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+    line-height: 1.6;
+  }
+
+  .header {
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 24px;
+    margin-bottom: 40px;
+  }
+  .header__eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .header__title {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+  .header__meta {
+    font-size: 15px;
+    color: var(--text-muted);
+  }
+  .header__meta strong { color: var(--text-sec); }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 400;
+    margin: 40px 0 16px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 24px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  p { margin-bottom: 12px; font-size: 16px; color: var(--text-sec); }
+
+  ul, ol { margin: 8px 0 16px 20px; }
+  li { margin-bottom: 6px; font-size: 16px; color: var(--text-sec); }
+  li strong { color: var(--text); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 16px 0;
+  }
+
+  .card__name {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .card__role {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .card p { margin-bottom: 8px; }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-right: 4px;
+  }
+  .tag--green { background: #ecfdf5; color: #065f46; }
+  .tag--amber { background: #fffbeb; color: #92400e; }
+  .tag--red { background: #fef2f2; color: #991b1b; }
+  .tag--blue { background: #eff6ff; color: #1e40af; }
+
+  .timeline {
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    gap: 4px 16px;
+    margin: 16px 0;
+  }
+  .timeline__time {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    text-align: right;
+    padding-top: 2px;
+  }
+  .timeline__block {
+    border-left: 2px solid var(--border);
+    padding: 0 0 20px 16px;
+  }
+  .timeline__block-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .timeline__block-desc {
+    font-size: 15px;
+    color: var(--text-sec);
+  }
+
+  .callout {
+    background: #fef6ee;
+    border-left: 4px solid var(--accent);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+  }
+  .callout p { margin-bottom: 4px; color: var(--text); }
+  .callout strong { color: var(--accent); }
+
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .portfolio-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .portfolio-item__name {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .portfolio-item__fund {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .portfolio-item__desc {
+    font-size: 14px;
+    color: var(--text-sec);
+    line-height: 1.5;
+  }
+
+  @media print {
+    body { padding: 24px; }
+    .card, .portfolio-item { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header__eyebrow">Meeting Prep &mdash; Confidential</div>
+  <div class="header__title">Lightyear Capital</div>
+  <div class="header__meta">
+    <strong>Date:</strong> March 3, 2026 &nbsp;|&nbsp;
+    <strong>Duration:</strong> 30 minutes &nbsp;|&nbsp;
+    <strong>Type:</strong> Follow-up from Michal intro &nbsp;|&nbsp;
+    <strong>Format:</strong> Virtual
+  </div>
+</div>
+
+<!-- ============================================ -->
+<h2>People in the Room</h2>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card__name">John Sander</div>
+    <div class="card__role">Principal, Portfolio Solutions</div>
+    <p><strong>Key person.</strong> He's the operating/value-creation lead who works directly with portfolio company boards and CEOs.</p>
+    <p><strong>Background:</strong> CS degree from Pomona College, <strong>Fulbright in machine learning</strong>, MBA from Chicago Booth. Was Engagement Manager at <strong>McKinsey</strong>, then Executive Director at <strong>Vista Equity Partners</strong> (Value Creation). At Lightyear since 2022.</p>
+    <p><strong>What this means:</strong> He has deep technical credibility (ML Fulbright), knows consulting (McKinsey), and knows PE operational excellence (Vista). He will evaluate critically. He's seen what "good" looks like.</p>
+    <p><strong>Approach:</strong> Peer-to-peer. Substantive. Don't simplify for him &mdash; he understands the technology. Speak to execution and results, not concepts.</p>
+  </div>
+  <div class="card">
+    <div class="card__name">Doug Chiciak</div>
+    <div class="card__role">Managing Director & Chief Compliance Officer</div>
+    <p>At Lightyear since 2018. Previously Deputy CCO at New Mountain Capital, CCO at Saba Capital, started at D.E. Shaw. 17+ years in PE/hedge fund compliance.</p>
+    <p><strong>Why he's here:</strong> Likely the governance/compliance angle. Lightyear's portfolio is heavy in <strong>financial services and healthcare</strong> &mdash; both heavily regulated. AI deployment in these sectors has real compliance implications.</p>
+    <p><strong>Approach:</strong> Mention human-in-the-loop, responsible AI, governance frameworks. Show that compliance is a feature of your approach, not an afterthought.</p>
+    <p><strong>Education:</strong> Hamilton College (Government & Creative Writing).</p>
+  </div>
+</div>
+
+<div class="callout">
+  <p><strong>Connection:</strong> This meeting comes from <strong>Michal</strong> (partner at Lightyear, classmate). Michal suggested connecting with the person responsible for AI inside Lightyear and the person responsible for AI across the portfolio. John Sander fits the portfolio role. Doug may be here because Michal asked him, or because of the compliance dimension.</p>
+</div>
+
+<!-- ============================================ -->
+<h2>About Lightyear Capital</h2>
+
+<ul>
+  <li><strong>$7.2B AUM</strong> ($4.9B invested capital + $3B co-investment). 6 funds over 25 years.</li>
+  <li><strong>60 platform investments</strong>, 300+ add-on acquisitions. 50+ professionals.</li>
+  <li><strong>Focus:</strong> Financial services, fintech, healthcare, tech-enabled business services.</li>
+  <li><strong>Target profile:</strong> $200M&ndash;$2B enterprise value, $10M+ EBITDA. Technology-driven competitive advantages.</li>
+  <li><strong>"One-Team Approach to Value Creation"</strong> &mdash; they have a dedicated Portfolio Solutions team (John's team) that works with management across the portfolio.</li>
+  <li><strong>AI maturity:</strong> Per Michal &mdash; "still early innings." One person on AI internally, another as AI "figurehead" for portfolio. Held one AI conference. More about awareness than execution.</li>
+</ul>
+
+<!-- ============================================ -->
+<h2>Portfolio Companies to Reference</h2>
+
+<p>These are the most AI-relevant companies in their portfolio. Use these as conversation anchors &mdash; don't prescribe, suggest patterns and ask if they resonate.</p>
+
+<div class="portfolio-grid">
+  <div class="portfolio-item">
+    <div class="portfolio-item__name">PracticeTek</div>
+    <div class="portfolio-item__fund">Fund V &mdash; Knoxville, TN</div>
+    <div class="portfolio-item__desc">
+      Practice management + patient engagement software for retail healthcare. <strong>This is nearly identical to the chiropractic case Michal described</strong> (AI for intake, scribing, billing, scheduling across SMB clients). Same challenges: change management, monetization, scale.
+    </div>
+    <span class="tag tag--green">HIGHEST FIT</span>
+  </div>
+  <div class="portfolio-item">
+    <div class="portfolio-item__name">Engage PEO</div>
+    <div class="portfolio-item__fund">Fund IV &mdash; Ft. Lauderdale, FL</div>
+    <div class="portfolio-item__desc">
+      Professional employer organization &mdash; HR outsourcing. HR is a prime target for AI process automation (onboarding, payroll processing, compliance, benefits administration).
+    </div>
+    <span class="tag tag--green">HIGH FIT</span>
+  </div>
+  <div class="portfolio-item">
+    <div class="portfolio-item__name">Lighthouse</div>
+    <div class="portfolio-item__fund">Fund IV &mdash; Seattle, WA</div>
+    <div class="portfolio-item__desc">
+      eDiscovery, governance, risk, compliance solutions. AI is transforming legal discovery and compliance review. Already tech-enabled; AI could be a major differentiator.
+    </div>
+    <span class="tag tag--green">HIGH FIT</span>
+  </div>
+  <div class="portfolio-item">
+    <div class="portfolio-item__name">CuraLinc Healthcare</div>
+    <div class="portfolio-item__fund">Fund V &mdash; Chicago, IL</div>
+    <div class="portfolio-item__desc">
+      Workforce mental health: counseling, crisis support, digital therapy. AI opportunities in triage, intake, care matching, and clinical documentation.
+    </div>
+    <span class="tag tag--amber">MEDIUM FIT</span>
+  </div>
+  <div class="portfolio-item">
+    <div class="portfolio-item__name">ProfitSolv</div>
+    <div class="portfolio-item__fund">Fund VI &mdash; West Palm Beach, FL</div>
+    <div class="portfolio-item__desc">
+      Billing, payments, software for professional services (legal, accounting). Workflow automation, AI-assisted invoicing, time tracking.
+    </div>
+    <span class="tag tag--amber">MEDIUM FIT</span>
+  </div>
+  <div class="portfolio-item">
+    <div class="portfolio-item__name">Vehlo</div>
+    <div class="portfolio-item__fund">Fund V &mdash; Knoxville, TN</div>
+    <div class="portfolio-item__desc">
+      Software + payments for auto repair shops and dealerships. SMB SaaS pattern similar to PracticeTek. AI for scheduling, estimating, inventory.
+    </div>
+    <span class="tag tag--amber">MEDIUM FIT</span>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<h2>Meeting Flow (30 min)</h2>
+
+<div class="timeline">
+  <div class="timeline__time">0&ndash;3 min</div>
+  <div class="timeline__block">
+    <div class="timeline__block-title">Open & Align</div>
+    <div class="timeline__block-desc">Thank Michal for the intro. "He shared some of the thinking around AI across the portfolio &mdash; excited to dig in. What are you hoping to get out of this conversation?"</div>
+  </div>
+
+  <div class="timeline__time">3&ndash;8 min</div>
+  <div class="timeline__block">
+    <div class="timeline__block-title">Their World (Listen)</div>
+    <div class="timeline__block-desc">Ask: "Where are your portfolio companies on the AI spectrum right now? Which are furthest ahead, which are stuck?" Let John talk &mdash; he'll have a nuanced view from working with management teams across the portfolio. Pick up on specific companies and pain points.</div>
+  </div>
+
+  <div class="timeline__time">8&ndash;16 min</div>
+  <div class="timeline__block">
+    <div class="timeline__block-title">How Acceler Works (Deck)</div>
+    <div class="timeline__block-desc">Walk through slides 2&ndash;5. Key beats: (1) the 95% gap &mdash; it's people and process, not tech; (2) two engines; (3) the PE-specific model &mdash; diagnostic &rarr; accelerator &rarr; co-build; (4) practitioners not consultants. Tie examples to what they shared in min 3&ndash;8.</div>
+  </div>
+
+  <div class="timeline__time">16&ndash;22 min</div>
+  <div class="timeline__block">
+    <div class="timeline__block-title">Portfolio Fit</div>
+    <div class="timeline__block-desc">Reference PracticeTek specifically (mirrors the chiropractic case Michal described &mdash; they'll recognize it). Mention Engage PEO (HR), Lighthouse (eDiscovery). Don't prescribe &mdash; "we see patterns like X, does that resonate?"</div>
+  </div>
+
+  <div class="timeline__time">22&ndash;28 min</div>
+  <div class="timeline__block">
+    <div class="timeline__block-title">Next Steps</div>
+    <div class="timeline__block-desc">Propose: (1) free half-day workshop for 2&ndash;3 portfolio company leadership teams; (2) AI readiness scan across selected companies; (3) optionally, a session for the Lightyear partnership. Get a concrete next step with a date.</div>
+  </div>
+
+  <div class="timeline__time">28&ndash;30 min</div>
+  <div class="timeline__block">
+    <div class="timeline__block-title">Close</div>
+    <div class="timeline__block-desc">Confirm who takes the action, by when. "Should we get PracticeTek's CEO on a call next week?"</div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<h2>Key Talking Points</h2>
+
+<h3>For John (PE value creation + technical credibility)</h3>
+<ul>
+  <li><strong>Speak his language:</strong> He came from Vista &mdash; the gold standard for PE operational excellence. Frame Acceler as the AI-era equivalent of Vista's operational playbook, but delivered as a service rather than built in-house.</li>
+  <li><strong>Don't trash McKinsey, but differentiate:</strong> "Consulting firms are great at identifying what to do. The gap is in who actually does it. We embed practitioners who build and ship." He'll agree from personal experience.</li>
+  <li><strong>Cross-portfolio leverage:</strong> "The patterns we see in PracticeTek &mdash; AI for intake, scribing, billing &mdash; are the same patterns in Vehlo's auto repair shops and CuraLinc's mental health intake. Once we crack it for one, it compounds across the portfolio."</li>
+  <li><strong>He understands ML:</strong> You can be specific. Don't hand-wave about "AI." Talk about agent design, workflow orchestration, human-in-the-loop evaluation, fine-tuning where appropriate.</li>
+</ul>
+
+<h3>For Doug (Compliance & governance)</h3>
+<ul>
+  <li><strong>Regulated industries:</strong> Their portfolio is heavy financial services and healthcare. AI in these sectors touches PII, PHI, SOC 2, HIPAA, SEC requirements. Mention that your approach includes governance and compliance frameworks.</li>
+  <li><strong>Human-in-the-loop:</strong> Emphasize that AI-native workflows include human oversight, especially in regulated contexts. Not about replacing people, but augmenting them with guardrails.</li>
+  <li><strong>Risk framing:</strong> AI deployment without governance is a risk. But NOT deploying AI while competitors do is also a risk. Position Acceler as reducing both risks simultaneously.</li>
+</ul>
+
+<h3>General</h3>
+<ul>
+  <li><strong>The GSD positioning:</strong> Michal specifically said the gap is "GSD people" who own execution end-to-end. This is your differentiator. Reinforce it: "We're not here to write reports. We embed practitioners who ship real systems."</li>
+  <li><strong>Low friction:</strong> The free workshop is the key ask. Don't try to close a big deal. The goal is to get in front of 2&ndash;3 portfolio company CEOs and demonstrate value.</li>
+  <li><strong>They're early innings:</strong> Michal said they're in awareness mode, not deployment mode. Meet them where they are &mdash; the diagnostic and workshop are the right entry points, not co-build.</li>
+</ul>
+
+<!-- ============================================ -->
+<h2>Questions to Ask</h2>
+
+<ol>
+  <li>"Where are your portfolio companies on the AI spectrum? Who's furthest ahead and who's struggling?"</li>
+  <li>"When you think about AI across the portfolio, is the bigger concern <em>competitive disruption risk</em> or <em>operational efficiency opportunity</em>?"</li>
+  <li>"How does your Portfolio Solutions team currently engage with companies on technology and process improvement?"</li>
+  <li>"Have you done any AI readiness assessments across the portfolio? If so, what did you find?"</li>
+  <li>"What would a successful pilot look like from your perspective &mdash; what would need to be true for you to expand it?"</li>
+  <li>"Which 2&ndash;3 portfolio companies would be the best candidates to start with? Who are the CEOs most receptive to this?"</li>
+</ol>
+
+<!-- ============================================ -->
+<h2>Objections to Prepare For</h2>
+
+<div class="card" style="margin-bottom: 12px;">
+  <p><strong>"We're already working with McKinsey/BCG on AI."</strong></p>
+  <p>Response: "That's great for the diagnostic and strategy layer. What we've seen is the gap is in execution &mdash; the people who actually build and deploy the AI-native workflows. We're complementary, not competitive. We're the team that takes the McKinsey recommendation and makes it real."</p>
+</div>
+
+<div class="card" style="margin-bottom: 12px;">
+  <p><strong>"Our portfolio companies don't have budget for this."</strong></p>
+  <p>Response: "That's exactly why we start with a free workshop. Zero cost, zero commitment. If the leadership team doesn't find it valuable, no harm done. If they do, we structure the engagement to be outcome-aligned &mdash; we get paid when the company sees results."</p>
+</div>
+
+<div class="card" style="margin-bottom: 12px;">
+  <p><strong>"We tried bringing in AI consultants before and it didn't work."</strong></p>
+  <p>Response: "That's the most common thing we hear. Most AI consultants deliver decks, not systems. Our practitioners come from Meta, Google, Amazon &mdash; they've built the AI systems at scale. They embed with your teams and ship working solutions, not PowerPoints."</p>
+</div>
+
+<div class="card" style="margin-bottom: 12px;">
+  <p><strong>"How is this different from what we could build internally?"</strong></p>
+  <p>Response: "You could, but the math is hard: hiring even 2&ndash;3 top AI practitioners is $2M+/year. We give you access to 700+ practitioners on-demand, deployed against specific portfolio company needs. It's the Vista model &mdash; specialist capability as a service, not a fixed cost."</p>
+</div>
+
+<div class="card" style="margin-bottom: 12px;">
+  <p><strong>"AI moves so fast, how do we know what you teach today is relevant tomorrow?"</strong></p>
+  <p>Response: "That's exactly why we use active practitioners, not academics. Our people are building with the latest tools at the frontier companies right now. When the models change, our practitioners already know how to use them because they helped build them."</p>
+</div>
+
+<!-- ============================================ -->
+<h2>Success Criteria</h2>
+
+<p>The meeting is a success if you walk away with:</p>
+<ol>
+  <li><strong>Agreement on 2&ndash;3 target portfolio companies</strong> to explore (ideally PracticeTek + one other)</li>
+  <li><strong>A concrete next step with a date</strong> &mdash; either a follow-up call with a portfolio company CEO, or scheduling the free workshop</li>
+  <li><strong>Clarity on John's role</strong> &mdash; is he the person who would sponsor this across the portfolio? Does he need to bring it to an investment committee?</li>
+</ol>
+
+<div class="callout">
+  <p><strong>Remember:</strong> You cannot rely on PE alone to drive adoption. Even if John and Doug love this, you still need to sell to and prove value for the portfolio company exec teams. The goal of this meeting is to get in front of those teams.</p>
+</div>
+
+</body>
+</html>
