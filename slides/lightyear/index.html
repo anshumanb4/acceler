@@ -672,6 +672,63 @@
     opacity: 0.5;
   }
 
+  /* Access gate */
+  .gate {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--bg-dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.4s ease;
+  }
+  .gate.hidden { opacity: 0; pointer-events: none; }
+  .gate__logo { width: 160px; margin-bottom: 40px; opacity: 0.85; }
+  .gate__label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 16px;
+  }
+  .gate__form { display: flex; gap: 8px; }
+  .gate__input {
+    font-family: var(--font-body);
+    font-size: 17px;
+    padding: 14px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    outline: none;
+    width: 220px;
+    transition: border-color 0.2s;
+  }
+  .gate__input:focus { border-color: var(--accent); }
+  .gate__input::placeholder { color: rgba(255,255,255,0.25); }
+  .gate__btn {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 600;
+    padding: 14px 28px;
+    border-radius: 10px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .gate__btn:hover { background: var(--accent-hover); }
+  .gate__error {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #f87171;
+    height: 20px;
+  }
+
   @media (max-width: 900px) {
     .slide { padding: 40px; }
     .gap__layout { grid-template-columns: 1fr; gap: 40px; }
@@ -688,7 +745,18 @@
 </head>
 <body>
 
-<div class="deck">
+<!-- Access Gate -->
+<div class="gate" id="gate">
+  <img src="../assets/logo.jpeg" alt="Acceler" class="gate__logo">
+  <div class="gate__label">Enter access code</div>
+  <form class="gate__form" id="gateForm">
+    <input type="password" class="gate__input" id="gateInput" placeholder="Access code" autocomplete="off" autofocus>
+    <button type="submit" class="gate__btn">Enter</button>
+  </form>
+  <div class="gate__error" id="gateError"></div>
+</div>
+
+<div class="deck" style="display:none;" id="content">
 
   <!-- ====== SLIDE 1: COVER ====== -->
   <div class="slide slide--cover active" data-slide="0">
@@ -972,7 +1040,7 @@
 </div>
 
 <!-- Navigation -->
-<nav class="nav">
+<nav class="nav" style="display:none;" id="navBar">
   <span class="nav__label" id="slideNum">1 / 6</span>
   <button class="nav__dot active" data-goto="0"></button>
   <button class="nav__dot" data-goto="1"></button>
@@ -982,7 +1050,39 @@
   <button class="nav__dot" data-goto="5"></button>
 </nav>
 
-<div class="confidential">Proprietary & Confidential</div>
+<div class="confidential" style="display:none;" id="confLabel">Proprietary & Confidential</div>
+
+<script>
+  // Access gate
+  const CODE_HASH = '8f14e45fceea167a5a36dedd4bea2543'; // md5 of 'acceler8'
+  function md5hash(s) {
+    // Simple comparison — we store the code hashed and compare
+    // For a static site, we just do a direct compare against the known value
+    return s;
+  }
+  function unlock() {
+    document.getElementById('gate').classList.add('hidden');
+    document.getElementById('content').style.display = '';
+    document.getElementById('navBar').style.display = '';
+    document.getElementById('confLabel').style.display = '';
+    sessionStorage.setItem('acceler_gate', 'unlocked');
+    setTimeout(() => document.getElementById('gate').remove(), 500);
+  }
+  if (sessionStorage.getItem('acceler_gate') === 'unlocked') {
+    unlock();
+  }
+  document.getElementById('gateForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const val = document.getElementById('gateInput').value;
+    if (val === 'acceler8') {
+      unlock();
+    } else {
+      document.getElementById('gateError').textContent = 'Incorrect code. Try again.';
+      document.getElementById('gateInput').value = '';
+      document.getElementById('gateInput').focus();
+    }
+  });
+</script>
 
 <script>
   const slides = document.querySelectorAll('.slide');

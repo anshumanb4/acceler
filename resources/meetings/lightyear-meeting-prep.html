@@ -194,13 +194,84 @@
     line-height: 1.5;
   }
 
+  /* Access gate */
+  .gate {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #1c1917;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.4s ease;
+  }
+  .gate.hidden { opacity: 0; pointer-events: none; }
+  .gate__logo { width: 160px; margin-bottom: 40px; opacity: 0.85; }
+  .gate__label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 16px;
+  }
+  .gate__form { display: flex; gap: 8px; }
+  .gate__input {
+    font-family: var(--font-body);
+    font-size: 17px;
+    padding: 14px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    outline: none;
+    width: 220px;
+    transition: border-color 0.2s;
+  }
+  .gate__input:focus { border-color: var(--accent); }
+  .gate__input::placeholder { color: rgba(255,255,255,0.25); }
+  .gate__btn {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 600;
+    padding: 14px 28px;
+    border-radius: 10px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .gate__btn:hover { background: #9a3412; }
+  .gate__error {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #f87171;
+    height: 20px;
+  }
+
   @media print {
     body { padding: 24px; }
     .card, .portfolio-item { break-inside: avoid; }
+    .gate { display: none; }
   }
 </style>
 </head>
 <body>
+
+<!-- Access Gate -->
+<div class="gate" id="gate">
+  <img src="../../slides/assets/logo.jpeg" alt="Acceler" class="gate__logo">
+  <div class="gate__label">Enter access code</div>
+  <form class="gate__form" id="gateForm">
+    <input type="password" class="gate__input" id="gateInput" placeholder="Access code" autocomplete="off" autofocus>
+    <button type="submit" class="gate__btn">Enter</button>
+  </form>
+  <div class="gate__error" id="gateError"></div>
+</div>
+
+<div id="content" style="display:none;">
 
 <div class="header">
   <div class="header__eyebrow">Meeting Prep &mdash; Confidential</div>
@@ -426,6 +497,31 @@
 <div class="callout">
   <p><strong>Remember:</strong> You cannot rely on PE alone to drive adoption. Even if John and Doug love this, you still need to sell to and prove value for the portfolio company exec teams. The goal of this meeting is to get in front of those teams.</p>
 </div>
+
+</div><!-- /content -->
+
+<script>
+  function unlock() {
+    document.getElementById('gate').classList.add('hidden');
+    document.getElementById('content').style.display = '';
+    sessionStorage.setItem('acceler_gate', 'unlocked');
+    setTimeout(() => document.getElementById('gate').remove(), 500);
+  }
+  if (sessionStorage.getItem('acceler_gate') === 'unlocked') {
+    unlock();
+  }
+  document.getElementById('gateForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const val = document.getElementById('gateInput').value;
+    if (val === 'acceler8') {
+      unlock();
+    } else {
+      document.getElementById('gateError').textContent = 'Incorrect code. Try again.';
+      document.getElementById('gateInput').value = '';
+      document.getElementById('gateInput').focus();
+    }
+  });
+</script>
 
 </body>
 </html>
