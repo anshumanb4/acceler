@@ -757,8 +757,28 @@
 
 <div class="deck" style="display:none;" id="content">
 
-  <!-- ====== SLIDE 1: WHO WE ARE ====== -->
-  <div class="slide slide--prac active" data-slide="0">
+  <!-- ====== SLIDE 1: COVER ====== -->
+  <div class="slide slide--cover active" data-slide="0">
+    <div class="slide__inner" style="text-align: center;">
+      <img src="/slides/assets/logo.svg" alt="Acceler" class="cover__logo">
+      <div class="cover__title heading-xl">
+        AI Acceleration for the<br><span class="accent">Lightyear Portfolio</span>
+      </div>
+      <p class="cover__sub">
+        The world's top AI practitioners — teaching your leaders, re-engineering your processes, and shipping real systems.
+      </p>
+      <div class="cover__context">
+        Prepared for <strong>Doug Chiciak</strong> &amp; <strong>John Sander</strong> &mdash; March 2026
+      </div>
+      <div class="cover__badges">
+        <img src="/slides/assets/time-badge.png" alt="TIME Top 100 EdTech 2025" class="cover__badge">
+        <img src="/slides/assets/gsv-badge.png" alt="GSV 150 2025" class="cover__badge cover__badge--gsv">
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 2: WHO WE ARE ====== -->
+  <div class="slide slide--prac" data-slide="1">
     <div class="slide__inner">
       <div class="prac__header">
         <img src="/slides/assets/logo.svg" alt="Acceler" style="width: 180px; margin-bottom: 24px;">
@@ -813,16 +833,11 @@
       <div class="prac__footer">
         They teach your leaders. They re-engineer your processes. <strong style="color: var(--text-primary);">They ship real systems.</strong>
       </div>
-      <div style="display: flex; align-items: center; justify-content: center; gap: 24px; margin-top: 24px; opacity: 0.6;">
-        <img src="/slides/assets/time-badge.png" alt="TIME Top 100 EdTech 2025" style="height: 36px;">
-        <img src="/slides/assets/gsv-badge.png" alt="GSV 150 2025" style="height: 44px;">
-        <span style="font-size: 13px; color: var(--text-muted); font-weight: 500;">Prepared for Doug Chiciak &amp; John Sander &mdash; March 2026</span>
-      </div>
     </div>
   </div>
 
-  <!-- ====== SLIDE 2: THE AI GAP ====== -->
-  <div class="slide slide--gap" data-slide="1">
+  <!-- ====== SLIDE 3: THE AI GAP ====== -->
+  <div class="slide slide--gap" data-slide="2">
     <div class="slide__inner">
       <div class="eyebrow">The Gap</div>
       <div class="gap__layout">
@@ -871,8 +886,8 @@
     </div>
   </div>
 
-  <!-- ====== SLIDE 3: TWO ENGINES ====== -->
-  <div class="slide slide--engines" data-slide="2">
+  <!-- ====== SLIDE 4: TWO ENGINES ====== -->
+  <div class="slide slide--engines" data-slide="3">
     <div class="slide__inner">
       <div class="engines__header">
         <div class="eyebrow">How We Solve It</div>
@@ -916,8 +931,8 @@
     </div>
   </div>
 
-  <!-- ====== SLIDE 4: PE MODEL ====== -->
-  <div class="slide slide--model" data-slide="3">
+  <!-- ====== SLIDE 5: PE MODEL ====== -->
+  <div class="slide slide--model" data-slide="4">
     <div class="slide__inner">
       <div class="model__header">
         <div class="eyebrow">For Private Equity</div>
@@ -969,8 +984,8 @@
     </div>
   </div>
 
-  <!-- ====== SLIDE 5: NEXT STEPS ====== -->
-  <div class="slide slide--next" data-slide="4">
+  <!-- ====== SLIDE 6: NEXT STEPS ====== -->
+  <div class="slide slide--next" data-slide="5">
     <div class="slide__inner" style="text-align: center;">
       <img src="/slides/assets/logo-white.svg" alt="Acceler" class="next__logo">
       <div class="heading-lg" style="color: #fff;">
@@ -1021,12 +1036,13 @@
 
 <!-- Navigation -->
 <nav class="nav" style="display:none;" id="navBar">
-  <span class="nav__label" id="slideNum">1 / 5</span>
+  <span class="nav__label" id="slideNum">1 / 6</span>
   <button class="nav__dot active" data-goto="0"></button>
   <button class="nav__dot" data-goto="1"></button>
   <button class="nav__dot" data-goto="2"></button>
   <button class="nav__dot" data-goto="3"></button>
   <button class="nav__dot" data-goto="4"></button>
+  <button class="nav__dot" data-goto="5"></button>
 </nav>
 
 <div class="confidential" style="display:none;" id="confLabel">Proprietary & Confidential</div>
