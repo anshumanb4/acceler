@@ -1,0 +1,1864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acceler | AI Leadership Accelerator — 1-Day Workshop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-primary: #fffbf7;
+    --bg-secondary: #fef6ee;
+    --bg-tertiary: #fdf0e3;
+    --bg-card: #ffffff;
+    --bg-dark: #1c1917;
+    --text-primary: #1c1917;
+    --text-secondary: #57534e;
+    --text-muted: #a8a29e;
+    --accent: #c2410c;
+    --accent-hover: #9a3412;
+    --accent-light: #fff7ed;
+    --border: #fed7aa;
+    --border-light: #ffedd5;
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-body: 'DM Sans', -apple-system, sans-serif;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-font-smoothing: antialiased; }
+
+  body {
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .deck { width: 100vw; height: 100vh; position: relative; }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    background: var(--bg-primary);
+    overflow: hidden;
+  }
+
+  .slide.active { opacity: 1; pointer-events: auto; }
+  .slide__inner { max-width: 1100px; width: 100%; }
+
+  /* Typography */
+  .eyebrow {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .heading-xl {
+    font-family: var(--font-display);
+    font-size: clamp(44px, 5.5vw, 76px);
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+
+  .heading-lg {
+    font-family: var(--font-display);
+    font-size: clamp(34px, 4vw, 52px);
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+  }
+
+  .heading-md {
+    font-family: var(--font-display);
+    font-size: clamp(24px, 3vw, 34px);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--text-primary);
+  }
+
+  .text-lg {
+    font-size: 22px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .text-md {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .accent { color: var(--accent); }
+
+  /* Navigation */
+  .nav {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 100;
+    background: rgba(28, 25, 23, 0.9);
+    backdrop-filter: blur(12px);
+    padding: 10px 20px;
+    border-radius: 100px;
+  }
+
+  .nav__dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    padding: 0;
+  }
+
+  .nav__dot.active {
+    background: var(--accent);
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  .nav__dot.appendix-dot {
+    background: rgba(255,255,255,0.12);
+  }
+  .nav__dot.appendix-dot.active {
+    background: var(--accent);
+  }
+
+  .nav__label {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    min-width: 24px;
+    text-align: center;
+  }
+
+  .nav__sep {
+    width: 1px;
+    height: 16px;
+    background: rgba(255,255,255,0.15);
+    margin: 0 4px;
+  }
+
+  /* ============================================
+     SLIDE 1: COVER
+     ============================================ */
+  .slide--cover { background: var(--bg-primary); text-align: center; }
+
+  .cover__logo {
+    width: 200px;
+    margin-bottom: 48px;
+    opacity: 0.9;
+  }
+
+  .cover__title { max-width: 800px; margin: 0 auto 24px; }
+
+  .cover__sub {
+    max-width: 640px;
+    margin: 0 auto 40px;
+    font-size: 22px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .cover__context {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-dark);
+    color: rgba(255,255,255,0.7);
+    padding: 12px 28px;
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 16px;
+  }
+
+  .cover__context strong { color: #fff; font-weight: 600; }
+
+  .cover__badges {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 40px;
+    opacity: 0.7;
+  }
+
+  .cover__badge { height: 48px; width: auto; }
+  .cover__badge--gsv { height: 56px; }
+
+  /* ============================================
+     SLIDE 2: THE OUTCOME
+     ============================================ */
+  .slide--outcome { background: var(--bg-primary); }
+
+  .outcome__layout {
+    text-align: center;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+
+  .outcome__promise {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 3.5vw, 42px);
+    font-weight: 400;
+    line-height: 1.25;
+    color: var(--text-primary);
+    margin-bottom: 48px;
+    font-style: italic;
+  }
+
+  .outcome__pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    text-align: left;
+  }
+
+  .outcome__pillar {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+  }
+
+  .outcome__pillar-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px; height: 36px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  .outcome__pillar-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .outcome__pillar-desc {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .outcome__followup {
+    margin-top: 36px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 28px;
+    font-size: 17px;
+    color: var(--text-primary);
+    line-height: 1.6;
+  }
+
+  .outcome__followup strong { font-weight: 600; }
+
+  /* ============================================
+     SLIDE 3: THREE BLOCKS OVERVIEW
+     ============================================ */
+  .slide--arc { background: var(--bg-primary); }
+
+  .arc__header { text-align: center; margin-bottom: 48px; }
+
+  .arc__header .text-lg {
+    max-width: 680px;
+    margin: 16px auto 0;
+  }
+
+  .arc__timeline {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .arc__block {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 32px 28px;
+    text-align: center;
+    position: relative;
+  }
+
+  .arc__block-time {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .arc__block-title {
+    font-family: var(--font-display);
+    font-size: 26px;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .arc__block-subtitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .arc__block-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .arc__block-emotion {
+    margin-top: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .arc__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: var(--text-muted);
+  }
+
+  .arc__footer {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .arc__result {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--bg-dark);
+    color: #fff;
+    padding: 16px 36px;
+    border-radius: 100px;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .arc__result-accent {
+    color: #fb923c;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  /* ============================================
+     SLIDE 4: THE MIRROR
+     ============================================ */
+  .slide--mirror { background: var(--bg-primary); }
+
+  .mirror__layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 56px;
+    align-items: start;
+  }
+
+  .mirror__flow { display: flex; flex-direction: column; gap: 16px; }
+
+  .mirror__step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+
+  .mirror__step-time {
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--accent-light);
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-top: 2px;
+    white-space: nowrap;
+  }
+
+  .mirror__step-text {
+    font-size: 15px;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+
+  .mirror__step-text span {
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  .mirror__right {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+
+  .mirror__aiq-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .mirror__aiq-axes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .mirror__aiq-axis {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+
+  .mirror__aiq-axis-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+  }
+
+  .mirror__aiq-axis-type {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .mirror__aiq-axis-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin-top: 4px;
+  }
+
+  .mirror__aiq-divider {
+    grid-column: span 2;
+    height: 1px;
+    background: var(--border);
+    margin: 4px 0;
+  }
+
+  .mirror__aiq-section-label {
+    grid-column: span 2;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .mirror__outcome {
+    margin-top: 16px;
+    background: var(--bg-dark);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .mirror__outcome strong {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* ============================================
+     SLIDE 5: RE-ENGINEER / BUILD
+     ============================================ */
+  .slide--build { background: var(--bg-primary); }
+
+  .build__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .build__left { }
+
+  .build__flow-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    margin-top: 24px;
+  }
+
+  .build__flow-title:first-of-type { margin-top: 0; }
+
+  .build__flow-items {
+    list-style: none;
+    padding: 0;
+  }
+
+  .build__flow-items li {
+    font-size: 16px;
+    color: var(--text-secondary);
+    padding: 10px 0 10px 20px;
+    position: relative;
+    border-bottom: 1px solid var(--border-light);
+    line-height: 1.5;
+  }
+
+  .build__flow-items li:last-child { border-bottom: none; }
+
+  .build__flow-items li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 16px;
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  .build__right { }
+
+  .build__example {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+
+  .build__example-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .build__example-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+
+  .build__before-after {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .build__ba-col { }
+
+  .build__ba-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .build__ba-label--after { color: var(--accent); }
+
+  .build__ba-items {
+    list-style: none;
+    padding: 0;
+  }
+
+  .build__ba-items li {
+    font-size: 14px;
+    color: var(--text-secondary);
+    padding: 4px 0;
+    line-height: 1.5;
+  }
+
+  .build__hands-on {
+    background: var(--bg-dark);
+    border-radius: 16px;
+    padding: 28px;
+  }
+
+  .build__hands-on-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fb923c;
+    margin-bottom: 10px;
+  }
+
+  .build__hands-on-text {
+    font-size: 16px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.6;
+  }
+
+  .build__hands-on-text strong {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .build__outcome {
+    margin-top: 20px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 15px;
+    color: var(--text-primary);
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  /* ============================================
+     SLIDE 6: COMMITMENT
+     ============================================ */
+  .slide--commit { background: var(--bg-primary); }
+
+  .commit__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .commit__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .commit__step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .commit__step-num {
+    flex-shrink: 0;
+    width: 32px; height: 32px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  .commit__step-content { }
+
+  .commit__step-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .commit__step-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .commit__canvas-preview {
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+  }
+
+  .commit__canvas-title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .commit__canvas-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--text-primary);
+  }
+
+  .commit__canvas-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .commit__canvas-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .commit__canvas-cell {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+
+  .commit__canvas-cell--full {
+    grid-column: span 2;
+  }
+
+  .commit__canvas-cell-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .commit__canvas-cell-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+    font-style: italic;
+  }
+
+  .commit__canvas-footer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    background: var(--bg-dark);
+    border-radius: 8px;
+    padding: 12px;
+  }
+
+  .commit__canvas-footer-cell {
+    text-align: center;
+  }
+
+  .commit__canvas-footer-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #fb923c;
+    margin-bottom: 2px;
+  }
+
+  .commit__canvas-footer-text {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .commit__outcome {
+    margin-top: 20px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 15px;
+    color: var(--text-primary);
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  /* ============================================
+     SLIDE 7: AFTER THE DAY
+     ============================================ */
+  .slide--after { background: var(--bg-dark); text-align: center; }
+
+  .slide--after .heading-lg { color: #fff; margin-bottom: 16px; }
+
+  .after__sub {
+    font-size: 20px;
+    color: rgba(255,255,255,0.55);
+    max-width: 640px;
+    margin: 0 auto 48px;
+    line-height: 1.6;
+  }
+
+  .after__items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 900px;
+    margin: 0 auto 56px;
+  }
+
+  .after__item {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-align: center;
+  }
+
+  .after__item-timing {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fb923c;
+    margin-bottom: 12px;
+  }
+
+  .after__item-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: #fff;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .after__item-desc {
+    font-size: 15px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+  }
+
+  .after__contacts {
+    display: flex;
+    justify-content: center;
+    gap: 64px;
+  }
+
+  .after__contact { text-align: center; }
+
+  .after__contact-name {
+    font-size: 19px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .after__contact-role {
+    font-size: 15px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 8px;
+  }
+
+  .after__contact-email {
+    font-size: 16px;
+    color: #fb923c;
+    font-weight: 500;
+  }
+
+  .after__logo {
+    width: 140px;
+    margin-bottom: 40px;
+    opacity: 0.9;
+  }
+
+  /* ============================================
+     APPENDIX: AIQ FRAMEWORK
+     ============================================ */
+  .slide--aiq { background: var(--bg-primary); }
+
+  .aiq__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .aiq__left { }
+
+  .aiq__desc {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 24px;
+    margin-top: 16px;
+  }
+
+  .aiq__two-dims {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .aiq__dim {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .aiq__dim-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .aiq__dim-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .aiq__dim-components {
+    list-style: none;
+    padding: 0;
+  }
+
+  .aiq__dim-components li {
+    font-size: 14px;
+    color: var(--text-secondary);
+    padding: 4px 0 4px 14px;
+    position: relative;
+    line-height: 1.4;
+  }
+
+  .aiq__dim-components li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 10px;
+    width: 5px; height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  .aiq__right { }
+
+  .aiq__chart-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 16px;
+  }
+
+  .aiq__chart-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .aiq__chart-svg {
+    display: block;
+    margin: 0 auto;
+  }
+
+  .aiq__chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 16px;
+  }
+
+  .aiq__chart-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .aiq__chart-legend-swatch {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+  }
+
+  .aiq__scores {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+  }
+
+  .aiq__scores-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 13px;
+  }
+
+  .aiq__scores-row:last-child { border-bottom: none; }
+
+  .aiq__scores-row--header {
+    font-weight: 700;
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .aiq__scores-component { font-weight: 600; color: var(--text-primary); }
+  .aiq__scores-score { text-align: right; color: var(--text-secondary); }
+  .aiq__scores-gap { text-align: right; color: var(--accent); font-weight: 600; }
+
+  .aiq__scores-priority {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  .priority--critical { background: #fef2f2; color: #dc2626; }
+  .priority--high { background: #fff7ed; color: #c2410c; }
+  .priority--medium { background: #fefce8; color: #a16207; }
+  .priority--low { background: #f0fdf4; color: #16a34a; }
+
+  /* ============================================
+     APPENDIX: AI LEADERSHIP CANVAS
+     ============================================ */
+  .slide--canvas-full { background: var(--bg-primary); }
+
+  .canvas__frame {
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .canvas__title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    border-bottom: 3px solid var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .canvas__title-bar h3 {
+    font-family: var(--font-display);
+    font-size: 24px;
+    color: var(--text-primary);
+  }
+
+  .canvas__title-bar span {
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .canvas__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .canvas__cell {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+
+  .canvas__cell--full { grid-column: span 2; }
+
+  .canvas__cell-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .canvas__cell-prompt {
+    font-size: 15px;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+
+  .canvas__cell-example {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .canvas__footer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    background: var(--bg-dark);
+    border-radius: 10px;
+    padding: 16px 20px;
+  }
+
+  .canvas__footer-cell { text-align: center; }
+
+  .canvas__footer-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #fb923c;
+    margin-bottom: 4px;
+  }
+
+  .canvas__footer-prompt {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.4;
+  }
+
+  /* Slide counter */
+  .slide-counter {
+    position: fixed;
+    top: 24px;
+    right: 32px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    z-index: 100;
+    letter-spacing: 0.05em;
+  }
+
+  .confidential {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    z-index: 100;
+    opacity: 0.5;
+  }
+
+  @media (max-width: 900px) {
+    .slide { padding: 40px; }
+    .outcome__pillars { grid-template-columns: 1fr; }
+    .arc__timeline { grid-template-columns: 1fr; }
+    .arc__arrow { transform: rotate(90deg); padding: 8px 0; }
+    .mirror__layout { grid-template-columns: 1fr; }
+    .build__layout { grid-template-columns: 1fr; }
+    .commit__layout { grid-template-columns: 1fr; }
+    .aiq__layout { grid-template-columns: 1fr; }
+    .after__items { grid-template-columns: 1fr; }
+    .after__contacts { flex-direction: column; gap: 24px; }
+    .canvas__grid { grid-template-columns: 1fr; }
+    .canvas__cell--full { grid-column: span 1; }
+    .commit__canvas-grid { grid-template-columns: 1fr; }
+    .commit__canvas-cell--full { grid-column: span 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- ====== SLIDE 1: COVER ====== -->
+  <div class="slide slide--cover active" data-slide="0">
+    <div class="slide__inner" style="text-align: center;">
+      <img src="/slides/assets/logo.svg" alt="Acceler" class="cover__logo">
+      <div class="cover__title heading-xl">
+        AI Leadership<br><span class="accent">Accelerator</span>
+      </div>
+      <p class="cover__sub">
+        A 1-day, practitioner-led workshop that transforms how your leaders drive AI across the organization.
+      </p>
+      <div class="cover__context">
+        Prepared for <strong>Nevena</strong> &middot; <strong>Yettel (Etisalat Group)</strong> &mdash; March 2026
+      </div>
+      <div class="cover__badges">
+        <img src="/slides/assets/time-badge.png" alt="TIME Top 100 EdTech 2025" class="cover__badge">
+        <img src="/slides/assets/gsv-badge.png" alt="GSV 150 2025" class="cover__badge cover__badge--gsv">
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 2: THE OUTCOME ====== -->
+  <div class="slide slide--outcome" data-slide="1">
+    <div class="slide__inner">
+      <div class="outcome__layout">
+        <div class="eyebrow">The Promise</div>
+        <div class="outcome__promise">
+          &ldquo;By the end of the day, every leader will feel comfortable working with their teams to drive AI in their processes.&rdquo;
+        </div>
+        <div class="outcome__pillars">
+          <div class="outcome__pillar">
+            <div class="outcome__pillar-num">1</div>
+            <div class="outcome__pillar-title">Know Where You Stand</div>
+            <div class="outcome__pillar-desc">
+              See clearly where you are, where your team is, and where your organization is on AI &mdash; measured against the frontier.
+            </div>
+          </div>
+          <div class="outcome__pillar">
+            <div class="outcome__pillar-num">2</div>
+            <div class="outcome__pillar-title">Know How to Unlock It</div>
+            <div class="outcome__pillar-desc">
+              Walk away with a repeatable framework for AI process transformation &mdash; practiced on a real workflow from your org.
+            </div>
+          </div>
+          <div class="outcome__pillar">
+            <div class="outcome__pillar-num">3</div>
+            <div class="outcome__pillar-title">Commit to Action</div>
+            <div class="outcome__pillar-desc">
+              Leave with a public, peer-witnessed commitment card and a scheduled follow-up to ensure follow-through.
+            </div>
+          </div>
+        </div>
+        <div class="outcome__followup">
+          <strong>+ 2-Week Follow-Up:</strong> 1:1 with each leader to review commitments, unblock progress, and identify next steps.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 3: THREE BLOCKS ====== -->
+  <div class="slide slide--arc" data-slide="2">
+    <div class="slide__inner">
+      <div class="arc__header">
+        <div class="eyebrow">The Day</div>
+        <div class="heading-lg">Three blocks. <span class="accent">One arc.</span></div>
+        <p class="text-lg">A complete journey from diagnosis to commitment in a single day.</p>
+      </div>
+      <div class="arc__timeline">
+        <div class="arc__block">
+          <div class="arc__block-time">Block 1 &middot; ~1.5 hrs</div>
+          <div class="arc__block-title">The Mirror</div>
+          <div class="arc__block-subtitle">&ldquo;This is where you are.&rdquo;</div>
+          <div class="arc__block-desc">
+            Frontier anchor, AIQ diagnostic, spider chart visualization. Everyone sees the same picture.
+          </div>
+          <div class="arc__block-emotion">Clarity</div>
+        </div>
+        <div class="arc__arrow">&rarr;</div>
+        <div class="arc__block">
+          <div class="arc__block-time">Block 2 &middot; ~3 hrs</div>
+          <div class="arc__block-title">Re-engineer</div>
+          <div class="arc__block-subtitle">&ldquo;This is how to unlock it.&rdquo;</div>
+          <div class="arc__block-desc">
+            Framework for agentic acceleration. Live case study + hands-on redesign of a process from your org.
+          </div>
+          <div class="arc__block-emotion">Competence</div>
+        </div>
+        <div class="arc__arrow">&rarr;</div>
+        <div class="arc__block">
+          <div class="arc__block-time">Block 3 &middot; ~1.5 hrs</div>
+          <div class="arc__block-title">Commit</div>
+          <div class="arc__block-subtitle">&ldquo;This is what I&rsquo;ll do.&rdquo;</div>
+          <div class="arc__block-desc">
+            AI Leadership Canvas, peer presentations, public commitment, follow-up scheduled before leaving.
+          </div>
+          <div class="arc__block-emotion">Accountability</div>
+        </div>
+      </div>
+      <div class="arc__footer">
+        <div class="arc__result">
+          9:00 AM &ndash; 5:00 PM &nbsp;&middot;&nbsp; <span class="arc__result-accent">One day. Real transformation.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 4: THE MIRROR ====== -->
+  <div class="slide slide--mirror" data-slide="3">
+    <div class="slide__inner">
+      <div class="eyebrow">Block 1 &middot; The Mirror</div>
+      <div class="heading-md" style="margin-bottom: 28px;">
+        &ldquo;This is where you are &mdash;<br>this is where you could be.&rdquo;
+      </div>
+      <div class="mirror__layout">
+        <div class="mirror__flow">
+          <div class="mirror__step">
+            <div class="mirror__step-time">0&ndash;20 min</div>
+            <div class="mirror__step-text">
+              <strong>Frontier Anchor.</strong> What AI-native organizations look like today. Crisp, not a demo marathon.<br>
+              <span>&ldquo;This is what good looks like. Now let's talk about you.&rdquo;</span>
+            </div>
+          </div>
+          <div class="mirror__step">
+            <div class="mirror__step-time">20&ndash;50 min</div>
+            <div class="mirror__step-text">
+              <strong>AIQ Introduction.</strong> Walk through the six-component diagnostic framework. Position as the shared language for today and every future interaction.
+            </div>
+          </div>
+          <div class="mirror__step">
+            <div class="mirror__step-time">50&ndash;75 min</div>
+            <div class="mirror__step-text">
+              <strong>Self-Assessment.</strong> Leaders score themselves across six axes. Individual or in functional pairs. Quick, structured, honest.
+            </div>
+          </div>
+          <div class="mirror__step">
+            <div class="mirror__step-time">75&ndash;90 min</div>
+            <div class="mirror__step-text">
+              <strong>Spider Chart &amp; Gap Discussion.</strong> Aggregated results visualized. The room sees where the gaps cluster together.
+            </div>
+          </div>
+          <div class="mirror__outcome">
+            <strong>Outcome:</strong> Shared language + honest picture of where you are vs. where you could be.
+          </div>
+        </div>
+        <div class="mirror__right">
+          <div class="mirror__aiq-title">Enterprise AIQ</div>
+          <div class="mirror__aiq-section-label">Operational Capability</div>
+          <div class="mirror__aiq-axes">
+            <div class="mirror__aiq-axis">
+              <div class="mirror__aiq-axis-label">Process Maturity</div>
+              <div class="mirror__aiq-axis-desc">SOPs, consistency, KPIs, stability</div>
+            </div>
+            <div class="mirror__aiq-axis">
+              <div class="mirror__aiq-axis-label">Data Readiness</div>
+              <div class="mirror__aiq-axis-desc">Captured, accessible, structured, owned</div>
+            </div>
+          </div>
+          <div class="mirror__aiq-section-label" style="margin-top: 16px;">Enterprise AI Foundation</div>
+          <div class="mirror__aiq-axes">
+            <div class="mirror__aiq-axis">
+              <div class="mirror__aiq-axis-label">Aware</div>
+              <div class="mirror__aiq-axis-desc">Leadership AI understanding &amp; hands-on use</div>
+            </div>
+            <div class="mirror__aiq-axis">
+              <div class="mirror__aiq-axis-label">Strategising</div>
+              <div class="mirror__aiq-axis-desc">Roadmap, strategy alignment, learning</div>
+            </div>
+            <div class="mirror__aiq-axis">
+              <div class="mirror__aiq-axis-label">Organising</div>
+              <div class="mirror__aiq-axis-desc">Ownership, governance, tool decisions</div>
+            </div>
+            <div class="mirror__aiq-axis">
+              <div class="mirror__aiq-axis-label">Executing</div>
+              <div class="mirror__aiq-axis-desc">AI in production, economics &amp; ROI</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 5: RE-ENGINEER / BUILD ====== -->
+  <div class="slide slide--build" data-slide="4">
+    <div class="slide__inner">
+      <div class="eyebrow">Block 2 &middot; Re-engineer</div>
+      <div class="heading-md" style="margin-bottom: 28px;">
+        A framework that unlocks <span class="accent">agentic acceleration</span><br>through a common process.
+      </div>
+      <div class="build__layout">
+        <div class="build__left">
+          <div class="build__flow-title">Part 1: Instructor-Led Case Study</div>
+          <ul class="build__flow-items">
+            <li>Walk through a standard process end-to-end (e.g., recruiting pipeline: sourcing to offer)</li>
+            <li>Map current state: steps, handoffs, decision points, cycle time</li>
+            <li>Redesign for AI: what stays human, what becomes agentic, what disappears</li>
+            <li>Show the before/after metrics and what changed</li>
+          </ul>
+          <div class="build__flow-title">Part 2: Hands-On Activity</div>
+          <ul class="build__flow-items">
+            <li>Groups of 2&ndash;3 pick a real process from their function</li>
+            <li>Apply the framework: map &rarr; identify AI opportunities &rarr; redesign &rarr; measure</li>
+            <li>Expert review of each group&rsquo;s redesign &mdash; real feedback, not applause</li>
+          </ul>
+          <div class="build__outcome">
+            <strong>Outcome:</strong> You&rsquo;ve done the actual work of AI process engineering &mdash; not watched someone else do it.
+          </div>
+        </div>
+        <div class="build__right">
+          <div class="build__example">
+            <div class="build__example-label">Case Study Example</div>
+            <div class="build__example-title">Recruiting: Sourcing to Offer</div>
+            <div class="build__before-after">
+              <div class="build__ba-col">
+                <div class="build__ba-label">Before</div>
+                <ul class="build__ba-items">
+                  <li>45-day cycle time</li>
+                  <li>6 manual handoffs</li>
+                  <li>3 teams involved</li>
+                  <li>Inconsistent screening</li>
+                  <li>60% recruiter time on admin</li>
+                </ul>
+              </div>
+              <div class="build__ba-col">
+                <div class="build__ba-label build__ba-label--after">After AI Redesign</div>
+                <ul class="build__ba-items">
+                  <li>18-day cycle time</li>
+                  <li>2 human decision points</li>
+                  <li>AI-sourced candidate pool</li>
+                  <li>Consistent scoring model</li>
+                  <li>40% cost reduction</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="build__hands-on">
+            <div class="build__hands-on-label">The Key Insight</div>
+            <div class="build__hands-on-text">
+              The real leadership skill isn&rsquo;t building agents. It&rsquo;s <strong>deciding where AI goes in a process, what humans keep, and how to measure the change.</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 6: COMMITMENT ====== -->
+  <div class="slide slide--commit" data-slide="5">
+    <div class="slide__inner">
+      <div class="eyebrow">Block 3 &middot; Commit</div>
+      <div class="heading-md" style="margin-bottom: 28px;">
+        Everyone leaves with a commitment card.<br><span class="accent">Peer-to-peer accountability.</span>
+      </div>
+      <div class="commit__layout">
+        <div>
+          <div class="commit__steps">
+            <div class="commit__step">
+              <div class="commit__step-num">1</div>
+              <div class="commit__step-content">
+                <div class="commit__step-title">Fill In Your Canvas</div>
+                <div class="commit__step-desc">Work in pairs. 35 minutes. Identify your highest-value process, the prize, your AIQ gaps, your 90-day play, and your honest ask.</div>
+              </div>
+            </div>
+            <div class="commit__step">
+              <div class="commit__step-num">2</div>
+              <div class="commit__step-content">
+                <div class="commit__step-title">Present to the Room</div>
+                <div class="commit__step-desc">~2 minutes each. Public commitment in front of peers and Nevena. Everyone hears everyone&rsquo;s plan.</div>
+              </div>
+            </div>
+            <div class="commit__step">
+              <div class="commit__step-num">3</div>
+              <div class="commit__step-content">
+                <div class="commit__step-title">Schedule Your Follow-Up</div>
+                <div class="commit__step-desc">2-week check-in booked before leaving the room. Not via email later &mdash; in the room, on the calendar.</div>
+              </div>
+            </div>
+            <div class="commit__step">
+              <div class="commit__step-num">4</div>
+              <div class="commit__step-content">
+                <div class="commit__step-title">Synthesis &amp; Patterns</div>
+                <div class="commit__step-desc">Facilitator identifies common themes across all canvases: &ldquo;6 of you need help designing AI-native workflows. 4 need organizational change support.&rdquo;</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="commit__canvas-preview">
+            <div class="commit__canvas-title-bar">
+              <div class="commit__canvas-title">AI Leadership Canvas</div>
+              <div class="commit__canvas-meta">Name &middot; Function &middot; Date</div>
+            </div>
+            <div class="commit__canvas-grid">
+              <div class="commit__canvas-cell">
+                <div class="commit__canvas-cell-label">1. The Process</div>
+                <div class="commit__canvas-cell-text">What is the single highest-value process AI could transform?</div>
+              </div>
+              <div class="commit__canvas-cell">
+                <div class="commit__canvas-cell-label">2. The Prize</div>
+                <div class="commit__canvas-cell-text">What does it look like reimagined? What&rsquo;s the business impact?</div>
+              </div>
+              <div class="commit__canvas-cell">
+                <div class="commit__canvas-cell-label">3. Current vs Target (AIQ)</div>
+                <div class="commit__canvas-cell-text">Where on the AIQ axes today? Where does it need to be?</div>
+              </div>
+              <div class="commit__canvas-cell">
+                <div class="commit__canvas-cell-label">4. The 90-Day Play</div>
+                <div class="commit__canvas-cell-text">3 concrete actions in the next 90 days.</div>
+              </div>
+              <div class="commit__canvas-cell commit__canvas-cell--full">
+                <div class="commit__canvas-cell-label">5. The Honest Ask</div>
+                <div class="commit__canvas-cell-text">What can&rsquo;t you do alone? What help do you need?</div>
+              </div>
+            </div>
+            <div class="commit__canvas-footer">
+              <div class="commit__canvas-footer-cell">
+                <div class="commit__canvas-footer-label">Monday Action</div>
+                <div class="commit__canvas-footer-text">The one thing I&rsquo;ll do this Monday</div>
+              </div>
+              <div class="commit__canvas-footer-cell">
+                <div class="commit__canvas-footer-label">Key Conversation</div>
+                <div class="commit__canvas-footer-text">The one person I need to talk to first</div>
+              </div>
+              <div class="commit__canvas-footer-cell">
+                <div class="commit__canvas-footer-label">2-Week Check-In</div>
+                <div class="commit__canvas-footer-text">Date scheduled before leaving the room</div>
+              </div>
+            </div>
+          </div>
+          <div class="commit__outcome">
+            <strong>Outcome:</strong> A concrete artifact + scheduled accountability. No &ldquo;great workshop, nothing changes.&rdquo;
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== SLIDE 7: AFTER THE DAY ====== -->
+  <div class="slide slide--after" data-slide="6">
+    <div class="slide__inner" style="text-align: center;">
+      <img src="/slides/assets/logo-white.svg" alt="Acceler" class="after__logo">
+      <div class="heading-lg" style="color: #fff;">
+        After the Day
+      </div>
+      <p class="after__sub">
+        The workshop is the beginning. Accountability is what makes it work.
+      </p>
+      <div class="after__items">
+        <div class="after__item">
+          <div class="after__item-timing">Week 2</div>
+          <div class="after__item-title">1:1 Follow-Ups</div>
+          <div class="after__item-desc">
+            Individual call with each leader to review their commitment card, unblock progress, and identify what they need next.
+          </div>
+        </div>
+        <div class="after__item">
+          <div class="after__item-timing">Re-Run</div>
+          <div class="after__item-title">AIQ Re-Assessment</div>
+          <div class="after__item-desc">
+            Re-score against the six axes. See what moved. The AIQ becomes the persistent lens for tracking progress over time.
+          </div>
+        </div>
+        <div class="after__item">
+          <div class="after__item-timing">Ongoing</div>
+          <div class="after__item-title">Deeper Engagements</div>
+          <div class="after__item-desc">
+            Leaders ready for more move into function-specific programs, AI process re-engineering, or embedded co-build engagements.
+          </div>
+        </div>
+      </div>
+      <div class="after__contacts">
+        <div class="after__contact">
+          <div class="after__contact-name">Ryan Valles</div>
+          <div class="after__contact-role">CEO & Co-Founder</div>
+          <div class="after__contact-email">ryan@acceler.com</div>
+        </div>
+        <div class="after__contact">
+          <div class="after__contact-name">Soham Mehta</div>
+          <div class="after__contact-role">CPTO & Co-Founder</div>
+          <div class="after__contact-email">soham@acceler.com</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== APPENDIX SLIDE A1: AIQ FRAMEWORK ====== -->
+  <div class="slide slide--aiq" data-slide="7">
+    <div class="slide__inner">
+      <div class="eyebrow">Appendix &middot; Enterprise AIQ Framework</div>
+      <div class="heading-md" style="margin-bottom: 8px;">
+        Measuring and accelerating <span class="accent">enterprise AI readiness</span>
+      </div>
+      <div class="aiq__layout">
+        <div class="aiq__left">
+          <p class="aiq__desc">
+            The Enterprise AIQ Framework measures two things simultaneously: whether each business function has the <strong>operational capability</strong> that AI requires to work, and whether the enterprise has built the <strong>AI foundation</strong> needed to deliver transformation at scale. Together, they reveal where the real bottleneck lies.
+          </p>
+          <div class="aiq__two-dims">
+            <div class="aiq__dim">
+              <div class="aiq__dim-label">Dimension 1</div>
+              <div class="aiq__dim-title">Operational Capability</div>
+              <ul class="aiq__dim-components">
+                <li><strong>Process Maturity</strong> &mdash; SOPs documented, followed, measured, stable</li>
+                <li><strong>Data Readiness</strong> &mdash; Captured, accessible, structured, owned, AI-ready</li>
+              </ul>
+            </div>
+            <div class="aiq__dim">
+              <div class="aiq__dim-label">Dimension 2</div>
+              <div class="aiq__dim-title">Enterprise AIQ</div>
+              <ul class="aiq__dim-components">
+                <li><strong>Aware</strong> &mdash; Leadership AI understanding &amp; hands-on use</li>
+                <li><strong>Strategising</strong> &mdash; Roadmap, strategy, learning pathways</li>
+                <li><strong>Organising</strong> &mdash; Ownership, governance, tools, proficiency</li>
+                <li><strong>Executing</strong> &mdash; AI in production, economics &amp; operating model</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="aiq__right">
+          <div class="aiq__chart-container">
+            <div class="aiq__chart-title">Sample Assessment &mdash; Meridian Industrial Group</div>
+            <!-- SVG Spider Chart -->
+            <svg class="aiq__chart-svg" viewBox="0 0 400 340" width="400" height="340" xmlns="http://www.w3.org/2000/svg">
+              <g transform="translate(200,160)">
+                <!-- Grid rings -->
+                <polygon points="0,-130 112.6,-65 112.6,65 0,130 -112.6,65 -112.6,-65" fill="none" stroke="#e5e5e5" stroke-width="1" stroke-dasharray="4,4"/>
+                <polygon points="0,-97.5 84.4,-48.75 84.4,48.75 0,97.5 -84.4,48.75 -84.4,-48.75" fill="none" stroke="#e5e5e5" stroke-width="1" stroke-dasharray="4,4"/>
+                <polygon points="0,-65 56.3,-32.5 56.3,32.5 0,65 -56.3,32.5 -56.3,-32.5" fill="none" stroke="#e5e5e5" stroke-width="1" stroke-dasharray="4,4"/>
+                <polygon points="0,-32.5 28.1,-16.25 28.1,16.25 0,32.5 -28.1,16.25 -28.1,-16.25" fill="none" stroke="#e5e5e5" stroke-width="1" stroke-dasharray="4,4"/>
+                <!-- Axes -->
+                <line x1="0" y1="0" x2="0" y2="-130" stroke="#e5e5e5" stroke-width="1"/>
+                <line x1="0" y1="0" x2="112.6" y2="-65" stroke="#e5e5e5" stroke-width="1"/>
+                <line x1="0" y1="0" x2="112.6" y2="65" stroke="#e5e5e5" stroke-width="1"/>
+                <line x1="0" y1="0" x2="0" y2="130" stroke="#e5e5e5" stroke-width="1"/>
+                <line x1="0" y1="0" x2="-112.6" y2="65" stroke="#e5e5e5" stroke-width="1"/>
+                <line x1="0" y1="0" x2="-112.6" y2="-65" stroke="#e5e5e5" stroke-width="1"/>
+                <!-- Ideal (dashed green outline) -->
+                <polygon points="0,-130 112.6,-65 112.6,65 0,130 -112.6,65 -112.6,-65" fill="none" stroke="#22c55e" stroke-width="2" stroke-dasharray="6,4" opacity="0.5"/>
+                <!-- Ideal dots -->
+                <circle cx="0" cy="-130" r="4" fill="#22c55e" opacity="0.5"/>
+                <circle cx="112.6" cy="-65" r="4" fill="#22c55e" opacity="0.5"/>
+                <circle cx="112.6" cy="65" r="4" fill="#22c55e" opacity="0.5"/>
+                <circle cx="0" cy="130" r="4" fill="#22c55e" opacity="0.5"/>
+                <circle cx="-112.6" cy="65" r="4" fill="#22c55e" opacity="0.5"/>
+                <circle cx="-112.6" cy="-65" r="4" fill="#22c55e" opacity="0.5"/>
+                <!-- Actual data: Process=87, Data=67, Aware=17, Strategy=17, Org=7, Exec=0 (out of 100) -->
+                <!-- Scaled: P=0.87*130=113, D=0.67*130=87, A=0.17*130=22, S=0.17*130=22, O=0.07*130=9, E=0 -->
+                <!-- Coordinates: top, top-right, bottom-right, bottom, bottom-left, top-left -->
+                <!-- P: (0, -113), D: (75.3, -43.5), A: (19.1, 11), S: (0, 22), O: (-7.8, 4.5), E: (0, 0) -->
+                <polygon points="0,-113 75.3,-43.5 19.1,11 0,22 -7.8,4.5 0,0" fill="rgba(59,130,246,0.2)" stroke="#3b82f6" stroke-width="2.5"/>
+                <!-- Data points -->
+                <circle cx="0" cy="-113" r="5" fill="#3b82f6"/>
+                <circle cx="75.3" cy="-43.5" r="5" fill="#3b82f6"/>
+                <circle cx="19.1" cy="11" r="5" fill="#3b82f6"/>
+                <circle cx="0" cy="22" r="5" fill="#3b82f6"/>
+                <circle cx="-7.8" cy="4.5" r="5" fill="#3b82f6"/>
+                <circle cx="0" cy="0" r="5" fill="#3b82f6"/>
+              </g>
+              <!-- Labels -->
+              <text x="200" y="18" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1c1917">Process Maturity</text>
+              <text x="345" y="88" text-anchor="start" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1c1917">Data Readiness</text>
+              <text x="345" y="238" text-anchor="start" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1c1917">Aware</text>
+              <text x="200" y="320" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1c1917">Strategising</text>
+              <text x="55" y="238" text-anchor="end" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1c1917">Organising</text>
+              <text x="55" y="88" text-anchor="end" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1c1917">Executing</text>
+            </svg>
+            <div class="aiq__chart-legend">
+              <div class="aiq__chart-legend-item">
+                <div class="aiq__chart-legend-swatch" style="background: #3b82f6;"></div>
+                Current State
+              </div>
+              <div class="aiq__chart-legend-item">
+                <div class="aiq__chart-legend-swatch" style="background: #22c55e; opacity: 0.5;"></div>
+                Ideal (100)
+              </div>
+            </div>
+          </div>
+          <div class="aiq__scores">
+            <div class="aiq__scores-row aiq__scores-row--header">
+              <div>Component</div>
+              <div>Score</div>
+              <div>Gap</div>
+              <div>Priority</div>
+            </div>
+            <div class="aiq__scores-row">
+              <div class="aiq__scores-component">Process Maturity</div>
+              <div class="aiq__scores-score">87 / 100</div>
+              <div class="aiq__scores-gap">13 pts</div>
+              <div><span class="aiq__scores-priority priority--low">Low</span></div>
+            </div>
+            <div class="aiq__scores-row">
+              <div class="aiq__scores-component">Data Readiness</div>
+              <div class="aiq__scores-score">67 / 100</div>
+              <div class="aiq__scores-gap">33 pts</div>
+              <div><span class="aiq__scores-priority priority--medium">Medium</span></div>
+            </div>
+            <div class="aiq__scores-row">
+              <div class="aiq__scores-component">Aware</div>
+              <div class="aiq__scores-score">17 / 100</div>
+              <div class="aiq__scores-gap">83 pts</div>
+              <div><span class="aiq__scores-priority priority--critical">Critical</span></div>
+            </div>
+            <div class="aiq__scores-row">
+              <div class="aiq__scores-component">Strategising</div>
+              <div class="aiq__scores-score">17 / 100</div>
+              <div class="aiq__scores-gap">83 pts</div>
+              <div><span class="aiq__scores-priority priority--high">High</span></div>
+            </div>
+            <div class="aiq__scores-row">
+              <div class="aiq__scores-component">Organising</div>
+              <div class="aiq__scores-score">7 / 100</div>
+              <div class="aiq__scores-gap">93 pts</div>
+              <div><span class="aiq__scores-priority priority--high">High</span></div>
+            </div>
+            <div class="aiq__scores-row">
+              <div class="aiq__scores-component">Executing</div>
+              <div class="aiq__scores-score">0 / 100</div>
+              <div class="aiq__scores-gap">100 pts</div>
+              <div><span class="aiq__scores-priority priority--high">High</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== APPENDIX SLIDE A2: AI LEADERSHIP CANVAS ====== -->
+  <div class="slide slide--canvas-full" data-slide="8">
+    <div class="slide__inner">
+      <div class="eyebrow" style="text-align: center;">Appendix &middot; AI Leadership Canvas</div>
+      <div class="heading-md" style="text-align: center; margin-bottom: 28px;">
+        The artifact every leader leaves with
+      </div>
+      <div class="canvas__frame">
+        <div class="canvas__title-bar">
+          <h3>AI Leadership Canvas</h3>
+          <span>Name &bull; Function &bull; Date</span>
+        </div>
+        <div class="canvas__grid">
+          <div class="canvas__cell">
+            <div class="canvas__cell-label">1. The Process</div>
+            <div class="canvas__cell-prompt">What is the single highest-value process in your function that AI could transform?</div>
+            <div class="canvas__cell-example">e.g., &ldquo;Recruiting pipeline: sourcing to offer &mdash; takes 45 days, 6 handoffs, 3 teams involved&rdquo;</div>
+          </div>
+          <div class="canvas__cell">
+            <div class="canvas__cell-label">2. The Prize</div>
+            <div class="canvas__cell-prompt">What does this process look like reimagined? What&rsquo;s the business impact?</div>
+            <div class="canvas__cell-example">e.g., &ldquo;18-day cycle, 2 human decision points, 40% cost reduction in sourcing&rdquo;</div>
+          </div>
+          <div class="canvas__cell">
+            <div class="canvas__cell-label">3. Current vs Target (AIQ Lens)</div>
+            <div class="canvas__cell-prompt">Where does this process sit on the AIQ axes today? Where does it need to be? Which axis is the biggest gap?</div>
+            <div class="canvas__cell-example">e.g., &ldquo;Process: 3/5. Data: 2/5. Organization: 1/5 (no AI owner).&rdquo;</div>
+          </div>
+          <div class="canvas__cell">
+            <div class="canvas__cell-label">4. The 90-Day Play</div>
+            <div class="canvas__cell-prompt">What are 3 concrete actions you&rsquo;ll take in the next 90 days?</div>
+            <div class="canvas__cell-example">e.g., &ldquo;1) Week 1: Map the full sourcing workflow. 2) Month 1: Pilot AI screening on one role. 3) Month 2: Present results with business case.&rdquo;</div>
+          </div>
+          <div class="canvas__cell canvas__cell--full">
+            <div class="canvas__cell-label">5. The Honest Ask</div>
+            <div class="canvas__cell-prompt">What can&rsquo;t you do alone? What help, expertise, or resources would you need to actually make this happen?</div>
+            <div class="canvas__cell-example">e.g., &ldquo;Need help designing the AI-native workflow. Need someone who&rsquo;s done recruiting transformation before. Need data integration support from IT.&rdquo;</div>
+          </div>
+        </div>
+        <div class="canvas__footer">
+          <div class="canvas__footer-cell">
+            <div class="canvas__footer-label">Monday Action</div>
+            <div class="canvas__footer-prompt">The one thing I&rsquo;ll do this Monday</div>
+          </div>
+          <div class="canvas__footer-cell">
+            <div class="canvas__footer-label">Key Conversation</div>
+            <div class="canvas__footer-prompt">The one person I need to talk to first</div>
+          </div>
+          <div class="canvas__footer-cell">
+            <div class="canvas__footer-label">2-Week Check-In Date</div>
+            <div class="canvas__footer-prompt">Scheduled before leaving the room</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<nav class="nav" id="navBar">
+  <span class="nav__label" id="slideNum">1 / 9</span>
+  <button class="nav__dot active" data-goto="0"></button>
+  <button class="nav__dot" data-goto="1"></button>
+  <button class="nav__dot" data-goto="2"></button>
+  <button class="nav__dot" data-goto="3"></button>
+  <button class="nav__dot" data-goto="4"></button>
+  <button class="nav__dot" data-goto="5"></button>
+  <button class="nav__dot" data-goto="6"></button>
+  <div class="nav__sep"></div>
+  <button class="nav__dot appendix-dot" data-goto="7"></button>
+  <button class="nav__dot appendix-dot" data-goto="8"></button>
+</nav>
+
+<div class="confidential">Proprietary & Confidential</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.nav__dot');
+  const slideNum = document.getElementById('slideNum');
+  let current = 0;
+  const total = slides.length;
+
+  function goTo(n) {
+    if (n < 0 || n >= total) return;
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    slideNum.textContent = (current + 1) + ' / ' + total;
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      goTo(current + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      goTo(current - 1);
+    } else if (e.key === 'Home') {
+      goTo(0);
+    } else if (e.key === 'End') {
+      goTo(total - 1);
+    }
+  });
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => goTo(parseInt(dot.dataset.goto)));
+  });
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      diff > 0 ? goTo(current + 1) : goTo(current - 1);
+    }
+  });
+</script>
+
+</body>
+</html>
