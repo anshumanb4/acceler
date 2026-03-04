@@ -184,10 +184,30 @@
      ============================================ */
   .slide--cover { background: var(--bg-primary); text-align: center; }
 
+  .cover__logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    margin-bottom: 48px;
+  }
+
+  .cover__logos-sep {
+    width: 1px;
+    height: 32px;
+    background: var(--border);
+  }
+
   .cover__logo {
     width: 200px;
-    margin-bottom: 48px;
     opacity: 0.9;
+  }
+
+  .cover__client-logo {
+    height: 36px;
+    width: auto;
+    border-radius: 6px;
+    flex-shrink: 0;
   }
 
   .cover__title { max-width: 800px; margin: 0 auto 24px; }
@@ -214,13 +234,6 @@
   }
 
   .cover__context strong { color: #fff; font-weight: 600; }
-
-  .cover__client-logo {
-    height: 28px;
-    width: auto;
-    border-radius: 4px;
-    flex-shrink: 0;
-  }
 
   .cover__badges {
     display: flex;
@@ -412,7 +425,7 @@
   /* ============================================
      SLIDE 4: THE MIRROR
      ============================================ */
-  .slide--mirror { background: var(--bg-primary); }
+  .slide--mirror { background: var(--bg-primary); padding: 36px 60px 48px; justify-content: flex-start; }
 
   .mirror__layout {
     display: grid;
@@ -421,32 +434,82 @@
     align-items: start;
   }
 
-  .mirror__flow { display: flex; flex-direction: column; gap: 16px; }
+  .mirror__flow { display: flex; flex-direction: column; gap: 12px; }
+
+  .mirror__survey {
+    background: var(--bg-dark);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 4px;
+  }
+
+  .mirror__survey-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 12px;
+  }
+
+  .mirror__survey-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+  }
+
+  .mirror__survey-stat {
+    background: rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+
+  .mirror__survey-stat-num {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: #fb923c;
+    margin-bottom: 2px;
+  }
+
+  .mirror__survey-stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .mirror__survey-stat-text {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.4;
+  }
 
   .mirror__step {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     align-items: flex-start;
     background: var(--bg-card);
     border: 1px solid var(--border-light);
-    border-radius: 12px;
-    padding: 18px 20px;
+    border-radius: 10px;
+    padding: 12px 16px;
   }
 
   .mirror__step-time {
     flex-shrink: 0;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     color: var(--accent);
     background: var(--accent-light);
-    padding: 4px 10px;
+    padding: 3px 8px;
     border-radius: 6px;
     margin-top: 2px;
     white-space: nowrap;
   }
 
   .mirror__step-text {
-    font-size: 15px;
+    font-size: 13px;
     color: var(--text-primary);
     line-height: 1.5;
   }
@@ -465,27 +528,27 @@
 
   .mirror__aiq-title {
     font-family: var(--font-display);
-    font-size: 22px;
+    font-size: 18px;
     color: var(--text-primary);
-    margin-bottom: 20px;
+    margin-bottom: 14px;
     text-align: center;
   }
 
   .mirror__aiq-axes {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 8px;
   }
 
   .mirror__aiq-axis {
     background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: 10px;
-    padding: 14px 16px;
+    padding: 10px 12px;
   }
 
   .mirror__aiq-axis-label {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     color: var(--text-primary);
     margin-bottom: 2px;
@@ -524,11 +587,11 @@
   }
 
   .mirror__outcome {
-    margin-top: 16px;
+    margin-top: 8px;
     background: var(--bg-dark);
     border-radius: 10px;
-    padding: 16px 20px;
-    font-size: 14px;
+    padding: 12px 16px;
+    font-size: 13px;
     color: rgba(255,255,255,0.7);
     line-height: 1.5;
     text-align: center;
@@ -1241,7 +1304,11 @@
   <!-- ====== SLIDE 1: COVER ====== -->
   <div class="slide slide--cover active" data-slide="0">
     <div class="slide__inner" style="text-align: center;">
-      <img src="/slides/assets/logo.svg" alt="Acceler" class="cover__logo">
+      <div class="cover__logos">
+        <img src="/slides/assets/logo.svg" alt="Acceler" class="cover__logo">
+        <div class="cover__logos-sep"></div>
+        <img src="/slides/assets/Yettel_wordmark_logo.png" alt="Yettel" class="cover__client-logo">
+      </div>
       <div class="cover__title heading-xl">
         AI Leadership<br><span class="accent">Accelerator</span>
       </div>
@@ -1249,7 +1316,6 @@
         A one-day workshop, led by practitioners from the world's top AI companies, designed to help your leadership team build the confidence and capability to drive AI across the organization.
       </p>
       <div class="cover__context">
-        <img src="/slides/assets/Yettel_wordmark_logo.png" alt="Yettel" class="cover__client-logo">
         Prepared for <strong>Nevena</strong> &middot; <strong>Yettel (Etisalat Group)</strong> &mdash; March 2026
       </div>
       <div class="cover__badges">
@@ -1263,7 +1329,7 @@
   <div class="slide slide--outcome" data-slide="1">
     <div class="slide__inner">
       <div class="outcome__layout">
-        <div class="eyebrow">The Promise</div>
+        <div class="eyebrow">Goal for the Workshop</div>
         <div class="outcome__promise">
           &ldquo;By the end of the day, every leader will feel comfortable working with their teams to drive AI in their processes.&rdquo;
         </div>
@@ -1277,7 +1343,7 @@
           </div>
           <div class="outcome__pillar">
             <div class="outcome__pillar-num">2</div>
-            <div class="outcome__pillar-title">Know How to Unlock It</div>
+            <div class="outcome__pillar-title">Know How to Unlock ROI from AI</div>
             <div class="outcome__pillar-desc">
               Walk away with a repeatable framework for AI process transformation &mdash; practiced on a real workflow from your org.
             </div>
@@ -1353,16 +1419,36 @@
       </div>
       <div class="mirror__layout">
         <div class="mirror__flow">
+          <div class="mirror__survey">
+            <div class="mirror__survey-title">What your team told us (pre-session survey, 29 responses)</div>
+            <div class="mirror__survey-grid">
+              <div class="mirror__survey-stat">
+                <div class="mirror__survey-stat-num">#1</div>
+                <div class="mirror__survey-stat-label">blocker</div>
+                <div class="mirror__survey-stat-text">&ldquo;It requires a fundamentally different way of working, not just new tools&rdquo;</div>
+              </div>
+              <div class="mirror__survey-stat">
+                <div class="mirror__survey-stat-num">86%</div>
+                <div class="mirror__survey-stat-label">have experimented or run pilots</div>
+                <div class="mirror__survey-stat-text">but struggle to connect AI to real financial outcomes or get past pilot stage</div>
+              </div>
+              <div class="mirror__survey-stat">
+                <div class="mirror__survey-stat-num">#1</div>
+                <div class="mirror__survey-stat-label">ask from this session</div>
+                <div class="mirror__survey-stat-text">&ldquo;See what AI actually makes possible today &mdash; real demos, not slides&rdquo;</div>
+              </div>
+            </div>
+          </div>
           <div class="mirror__step">
             <div class="mirror__step-time">0&ndash;20 min</div>
             <div class="mirror__step-text">
-              <strong>Frontier Anchor.</strong> A concise look at what AI-native organizations actually look like today &mdash; setting the bar before we turn the lens inward.
+              <strong>What AI-native looks like today.</strong> We start by showing what leading organizations are actually doing with AI right now &mdash; setting the bar before turning the lens inward.
             </div>
           </div>
           <div class="mirror__step">
             <div class="mirror__step-time">20&ndash;50 min</div>
             <div class="mirror__step-text">
-              <strong>AIQ Introduction.</strong> Walk through the six-component diagnostic framework. Position as the shared language for today and every future interaction.
+              <strong>AIQ Diagnostic Framework.</strong> We introduce the six-component diagnostic that becomes the shared language for the rest of the day and every conversation that follows.
             </div>
           </div>
           <div class="mirror__step">
@@ -1374,7 +1460,7 @@
           <div class="mirror__step">
             <div class="mirror__step-time">75&ndash;90 min</div>
             <div class="mirror__step-text">
-              <strong>Spider Chart &amp; Gap Discussion.</strong> Aggregated results visualized. The room sees where the gaps cluster together.
+              <strong>Spider Chart &amp; Gap Discussion.</strong> Aggregated results are visualized so the room can see where the gaps cluster together.
             </div>
           </div>
           <div class="mirror__outcome">
