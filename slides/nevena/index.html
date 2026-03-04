@@ -56,6 +56,20 @@
     overflow: hidden;
   }
 
+  .slide--aiq {
+    padding: 28px 60px 48px;
+    justify-content: flex-start;
+  }
+
+  .slide--aiq .slide__inner {
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .slide--aiq .heading-md {
+    font-size: clamp(20px, 2.5vw, 28px);
+  }
+
   .slide.active { opacity: 1; pointer-events: auto; }
   .slide__inner { max-width: 1100px; width: 100%; }
 
@@ -200,6 +214,13 @@
   }
 
   .cover__context strong { color: #fff; font-weight: 600; }
+
+  .cover__client-logo {
+    height: 28px;
+    width: auto;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
 
   .cover__badges {
     display: flex;
@@ -914,47 +935,47 @@
   .aiq__layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 48px;
+    gap: 32px;
     align-items: start;
   }
 
   .aiq__left { }
 
   .aiq__desc {
-    font-size: 16px;
+    font-size: 14px;
     color: var(--text-secondary);
-    line-height: 1.7;
-    margin-bottom: 24px;
-    margin-top: 16px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    margin-top: 8px;
   }
 
   .aiq__two-dims {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 12px;
   }
 
   .aiq__dim {
     background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: 12px;
-    padding: 20px;
+    padding: 14px 16px;
   }
 
   .aiq__dim-label {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--accent);
-    margin-bottom: 8px;
+    margin-bottom: 4px;
   }
 
   .aiq__dim-title {
     font-family: var(--font-display);
-    font-size: 18px;
+    font-size: 16px;
     color: var(--text-primary);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
   .aiq__dim-components {
@@ -963,9 +984,9 @@
   }
 
   .aiq__dim-components li {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--text-secondary);
-    padding: 4px 0 4px 14px;
+    padding: 2px 0 2px 14px;
     position: relative;
     line-height: 1.4;
   }
@@ -973,7 +994,7 @@
   .aiq__dim-components li::before {
     content: '';
     position: absolute;
-    left: 0; top: 10px;
+    left: 0; top: 8px;
     width: 5px; height: 5px;
     background: var(--accent);
     border-radius: 50%;
@@ -985,30 +1006,32 @@
     background: var(--bg-card);
     border: 1px solid var(--border-light);
     border-radius: 16px;
-    padding: 28px;
-    margin-bottom: 16px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
   }
 
   .aiq__chart-title {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--text-muted);
-    margin-bottom: 16px;
+    margin-bottom: 8px;
     text-align: center;
   }
 
   .aiq__chart-svg {
     display: block;
     margin: 0 auto;
+    max-height: 210px;
+    width: auto;
   }
 
   .aiq__chart-legend {
     display: flex;
     justify-content: center;
     gap: 24px;
-    margin-top: 16px;
+    margin-top: 8px;
   }
 
   .aiq__chart-legend-item {
@@ -1028,17 +1051,17 @@
     background: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 16px 20px;
+    padding: 8px 14px;
   }
 
   .aiq__scores-row {
     display: grid;
     grid-template-columns: 1fr auto auto auto;
-    gap: 12px;
+    gap: 10px;
     align-items: center;
-    padding: 8px 0;
+    padding: 4px 0;
     border-bottom: 1px solid var(--border-light);
-    font-size: 13px;
+    font-size: 11px;
   }
 
   .aiq__scores-row:last-child { border-bottom: none; }
@@ -1223,9 +1246,10 @@
         AI Leadership<br><span class="accent">Accelerator</span>
       </div>
       <p class="cover__sub">
-        A 1-day, practitioner-led workshop that transforms how your leaders drive AI across the organization.
+        A one-day workshop, led by practitioners from the world's top AI companies, designed to help your leadership team build the confidence and capability to drive AI across the organization.
       </p>
       <div class="cover__context">
+        <img src="/slides/assets/Yettel_wordmark_logo.png" alt="Yettel" class="cover__client-logo">
         Prepared for <strong>Nevena</strong> &middot; <strong>Yettel (Etisalat Group)</strong> &mdash; March 2026
       </div>
       <div class="cover__badges">
@@ -1278,8 +1302,8 @@
     <div class="slide__inner">
       <div class="arc__header">
         <div class="eyebrow">The Day</div>
-        <div class="heading-lg">Three blocks. <span class="accent">One arc.</span></div>
-        <p class="text-lg">A complete journey from diagnosis to commitment in a single day.</p>
+        <div class="heading-lg">Three blocks, <span class="accent">one arc</span></div>
+        <p class="text-lg">The day takes leaders from an honest assessment of where they stand, through hands-on process redesign, to a concrete commitment they present to their peers.</p>
       </div>
       <div class="arc__timeline">
         <div class="arc__block">
@@ -1287,7 +1311,7 @@
           <div class="arc__block-title">The Mirror</div>
           <div class="arc__block-subtitle">&ldquo;This is where you are.&rdquo;</div>
           <div class="arc__block-desc">
-            Frontier anchor, AIQ diagnostic, spider chart visualization. Everyone sees the same picture.
+            An honest assessment of where you stand on AI today, using a structured diagnostic that gives the whole room a shared picture.
           </div>
           <div class="arc__block-emotion">Clarity</div>
         </div>
@@ -1297,7 +1321,7 @@
           <div class="arc__block-title">Re-engineer</div>
           <div class="arc__block-subtitle">&ldquo;This is how to unlock it.&rdquo;</div>
           <div class="arc__block-desc">
-            Framework for agentic acceleration. Live case study + hands-on redesign of a process from your org.
+            Learn a repeatable framework for AI process transformation, then apply it hands-on to a real workflow from your organization.
           </div>
           <div class="arc__block-emotion">Competence</div>
         </div>
@@ -1307,14 +1331,14 @@
           <div class="arc__block-title">Commit</div>
           <div class="arc__block-subtitle">&ldquo;This is what I&rsquo;ll do.&rdquo;</div>
           <div class="arc__block-desc">
-            AI Leadership Canvas, peer presentations, public commitment, follow-up scheduled before leaving.
+            Each leader fills out an AI Leadership Canvas, presents their plan to the room, and schedules a follow-up before leaving.
           </div>
           <div class="arc__block-emotion">Accountability</div>
         </div>
       </div>
       <div class="arc__footer">
         <div class="arc__result">
-          9:00 AM &ndash; 5:00 PM &nbsp;&middot;&nbsp; <span class="arc__result-accent">One day. Real transformation.</span>
+          9:00 AM &ndash; 5:00 PM &nbsp;&middot;&nbsp; <span class="arc__result-accent">From assessment to action plan in a single day</span>
         </div>
       </div>
     </div>
@@ -1332,8 +1356,7 @@
           <div class="mirror__step">
             <div class="mirror__step-time">0&ndash;20 min</div>
             <div class="mirror__step-text">
-              <strong>Frontier Anchor.</strong> What AI-native organizations look like today. Crisp, not a demo marathon.<br>
-              <span>&ldquo;This is what good looks like. Now let's talk about you.&rdquo;</span>
+              <strong>Frontier Anchor.</strong> A concise look at what AI-native organizations actually look like today &mdash; setting the bar before we turn the lens inward.
             </div>
           </div>
           <div class="mirror__step">
@@ -1345,7 +1368,7 @@
           <div class="mirror__step">
             <div class="mirror__step-time">50&ndash;75 min</div>
             <div class="mirror__step-text">
-              <strong>Self-Assessment.</strong> Leaders score themselves across six axes. Individual or in functional pairs. Quick, structured, honest.
+              <strong>Self-Assessment.</strong> Leaders score themselves across all six axes, individually or in functional pairs, using a structured scoring rubric.
             </div>
           </div>
           <div class="mirror__step">
@@ -1355,7 +1378,7 @@
             </div>
           </div>
           <div class="mirror__outcome">
-            <strong>Outcome:</strong> Shared language + honest picture of where you are vs. where you could be.
+            <strong>Outcome:</strong> A shared language for talking about AI readiness, and a clear picture of where you are today versus where you could be.
           </div>
         </div>
         <div class="mirror__right">
@@ -1400,7 +1423,7 @@
     <div class="slide__inner">
       <div class="eyebrow">Block 2 &middot; Re-engineer</div>
       <div class="heading-md" style="margin-bottom: 28px;">
-        A framework that unlocks <span class="accent">agentic acceleration</span><br>through a common process.
+        A repeatable framework for redesigning<br>processes with <span class="accent">AI at the center</span>
       </div>
       <div class="build__layout">
         <div class="build__left">
@@ -1415,10 +1438,10 @@
           <ul class="build__flow-items">
             <li>Groups of 2&ndash;3 pick a real process from their function</li>
             <li>Apply the framework: map &rarr; identify AI opportunities &rarr; redesign &rarr; measure</li>
-            <li>Expert review of each group&rsquo;s redesign &mdash; real feedback, not applause</li>
+            <li>Each group presents their redesign for expert review and constructive feedback</li>
           </ul>
           <div class="build__outcome">
-            <strong>Outcome:</strong> You&rsquo;ve done the actual work of AI process engineering &mdash; not watched someone else do it.
+            <strong>Outcome:</strong> Every leader has personally gone through the work of AI process engineering on a real workflow from their own function.
           </div>
         </div>
         <div class="build__right">
@@ -1451,7 +1474,7 @@
           <div class="build__hands-on">
             <div class="build__hands-on-label">The Key Insight</div>
             <div class="build__hands-on-text">
-              The real leadership skill isn&rsquo;t building agents. It&rsquo;s <strong>deciding where AI goes in a process, what humans keep, and how to measure the change.</strong>
+              The leadership skill here isn&rsquo;t building AI agents &mdash; it&rsquo;s being able to <strong>look at a process and decide where AI should go, what should stay human, and how to measure whether the change worked.</strong>
             </div>
           </div>
         </div>
@@ -1464,7 +1487,7 @@
     <div class="slide__inner">
       <div class="eyebrow">Block 3 &middot; Commit</div>
       <div class="heading-md" style="margin-bottom: 28px;">
-        Everyone leaves with a commitment card.<br><span class="accent">Peer-to-peer accountability.</span>
+        Every leader leaves the room with a filled-out<br>canvas and a <span class="accent">scheduled follow-up</span>
       </div>
       <div class="commit__layout">
         <div>
@@ -1473,28 +1496,28 @@
               <div class="commit__step-num">1</div>
               <div class="commit__step-content">
                 <div class="commit__step-title">Fill In Your Canvas</div>
-                <div class="commit__step-desc">Work in pairs. 35 minutes. Identify your highest-value process, the prize, your AIQ gaps, your 90-day play, and your honest ask.</div>
+                <div class="commit__step-desc">Working in pairs over 35 minutes, each leader identifies their highest-value process, the prize, their AIQ gaps, a 90-day play, and what help they need.</div>
               </div>
             </div>
             <div class="commit__step">
               <div class="commit__step-num">2</div>
               <div class="commit__step-content">
                 <div class="commit__step-title">Present to the Room</div>
-                <div class="commit__step-desc">~2 minutes each. Public commitment in front of peers and Nevena. Everyone hears everyone&rsquo;s plan.</div>
+                <div class="commit__step-desc">Each leader presents their canvas to the room in about 2 minutes, making their commitment visible to peers and to Nevena.</div>
               </div>
             </div>
             <div class="commit__step">
               <div class="commit__step-num">3</div>
               <div class="commit__step-content">
                 <div class="commit__step-title">Schedule Your Follow-Up</div>
-                <div class="commit__step-desc">2-week check-in booked before leaving the room. Not via email later &mdash; in the room, on the calendar.</div>
+                <div class="commit__step-desc">A 2-week check-in is booked before anyone leaves the room &mdash; it goes on the calendar that day, not as a follow-up email.</div>
               </div>
             </div>
             <div class="commit__step">
               <div class="commit__step-num">4</div>
               <div class="commit__step-content">
                 <div class="commit__step-title">Synthesis &amp; Patterns</div>
-                <div class="commit__step-desc">Facilitator identifies common themes across all canvases: &ldquo;6 of you need help designing AI-native workflows. 4 need organizational change support.&rdquo;</div>
+                <div class="commit__step-desc">The facilitator pulls together common themes from all the canvases &mdash; surfacing where the organization&rsquo;s shared gaps and opportunities cluster.</div>
               </div>
             </div>
           </div>
@@ -1543,7 +1566,7 @@
             </div>
           </div>
           <div class="commit__outcome">
-            <strong>Outcome:</strong> A concrete artifact + scheduled accountability. No &ldquo;great workshop, nothing changes.&rdquo;
+            <strong>Outcome:</strong> Every leader walks out with a concrete plan and a scheduled check-in to make sure it actually happens.
           </div>
         </div>
       </div>
@@ -1558,28 +1581,28 @@
         After the Day
       </div>
       <p class="after__sub">
-        The workshop is the beginning. Accountability is what makes it work.
+        The workshop is the starting point. What happens in the weeks after is what makes the difference.
       </p>
       <div class="after__items">
         <div class="after__item">
           <div class="after__item-timing">Week 2</div>
           <div class="after__item-title">1:1 Follow-Ups</div>
           <div class="after__item-desc">
-            Individual call with each leader to review their commitment card, unblock progress, and identify what they need next.
+            A one-on-one call with each leader to review their canvas, help unblock any progress, and figure out what they need next.
           </div>
         </div>
         <div class="after__item">
           <div class="after__item-timing">Re-Run</div>
           <div class="after__item-title">AIQ Re-Assessment</div>
           <div class="after__item-desc">
-            Re-score against the six axes. See what moved. The AIQ becomes the persistent lens for tracking progress over time.
+            Leaders re-score themselves against the same six axes. The AIQ becomes a persistent lens for tracking progress over time.
           </div>
         </div>
         <div class="after__item">
           <div class="after__item-timing">Ongoing</div>
           <div class="after__item-title">Deeper Engagements</div>
           <div class="after__item-desc">
-            Leaders ready for more move into function-specific programs, AI process re-engineering, or embedded co-build engagements.
+            For leaders who are ready to go further, we offer function-specific programs, AI process re-engineering, and embedded co-build engagements.
           </div>
         </div>
       </div>
@@ -1674,10 +1697,10 @@
               <!-- Labels -->
               <text x="200" y="18" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1c1917">Process Maturity</text>
               <text x="345" y="88" text-anchor="start" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1c1917">Data Readiness</text>
-              <text x="345" y="238" text-anchor="start" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1c1917">Aware</text>
+              <text x="340" y="238" text-anchor="start" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1c1917">Aware</text>
               <text x="200" y="320" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1c1917">Strategising</text>
-              <text x="55" y="238" text-anchor="end" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1c1917">Organising</text>
-              <text x="55" y="88" text-anchor="end" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1c1917">Executing</text>
+              <text x="60" y="238" text-anchor="end" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1c1917">Organising</text>
+              <text x="60" y="88" text-anchor="end" font-family="DM Sans, sans-serif" font-size="12" font-weight="700" fill="#1c1917">Executing</text>
             </svg>
             <div class="aiq__chart-legend">
               <div class="aiq__chart-legend-item">
@@ -1858,6 +1881,10 @@
       diff > 0 ? goTo(current + 1) : goTo(current - 1);
     }
   });
+
+  // Allow ?s=N to start on a specific slide
+  const startSlide = new URLSearchParams(location.search).get('s');
+  if (startSlide !== null) goTo(parseInt(startSlide));
 </script>
 
 </body>
