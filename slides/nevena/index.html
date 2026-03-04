@@ -605,148 +605,170 @@
   /* ============================================
      SLIDE 5: RE-ENGINEER / BUILD
      ============================================ */
-  .slide--build { background: var(--bg-primary); }
+  .slide--build { background: var(--bg-primary); padding: 36px 60px 48px; justify-content: flex-start; }
+
+  .build__intro {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 720px;
+    margin-bottom: 24px;
+  }
 
   .build__layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 48px;
+    gap: 36px;
     align-items: start;
   }
 
   .build__left { }
+  .build__right { }
 
-  .build__flow-title {
-    font-size: 15px;
+  /* X-Ray Steps */
+  .xray__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .xray__step {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .xray__step-num {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  .xray__step-body { }
+
+  .xray__step-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    color: var(--text-primary);
+    margin-bottom: 3px;
+  }
+
+  .xray__step-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .xray__step-desc strong {
+    color: var(--text-primary);
+  }
+
+  /* X-Ray Zones */
+  .xray__zones {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+
+  .xray__zones-title {
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 16px;
-    margin-top: 24px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
   }
 
-  .build__flow-title:first-of-type { margin-top: 0; }
-
-  .build__flow-items {
-    list-style: none;
-    padding: 0;
-  }
-
-  .build__flow-items li {
-    font-size: 16px;
-    color: var(--text-secondary);
-    padding: 10px 0 10px 20px;
-    position: relative;
+  .xray__zone {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 8px 0;
     border-bottom: 1px solid var(--border-light);
-    line-height: 1.5;
   }
 
-  .build__flow-items li:last-child { border-bottom: none; }
+  .xray__zone:last-child { border-bottom: none; }
 
-  .build__flow-items li::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 16px;
-    width: 6px; height: 6px;
-    background: var(--accent);
-    border-radius: 50%;
+  .xray__zone-icon {
+    flex-shrink: 0;
+    font-size: 10px;
+    margin-top: 4px;
   }
 
-  .build__right { }
+  .xray__zone--ai .xray__zone-icon { color: #22c55e; }
+  .xray__zone--collab .xray__zone-icon { color: #f59e0b; }
+  .xray__zone--human .xray__zone-icon { color: #ef4444; }
 
-  .build__example {
-    background: var(--bg-card);
-    border: 1px solid var(--border-light);
-    border-radius: 16px;
-    padding: 28px;
-    margin-bottom: 20px;
-  }
-
-  .build__example-label {
-    font-size: 12px;
+  .xray__zone-name {
+    font-size: 14px;
     font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 12px;
-  }
-
-  .build__example-title {
-    font-family: var(--font-display);
-    font-size: 20px;
     color: var(--text-primary);
-    margin-bottom: 12px;
+    margin-bottom: 2px;
   }
 
-  .build__before-after {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 12px;
+  .xray__zone-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
   }
 
-  .build__ba-col { }
+  /* Session Flow */
+  .xray__session {
+    background: var(--bg-dark);
+    border-radius: 14px;
+    padding: 16px 20px;
+  }
 
-  .build__ba-label {
+  .xray__session-label {
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 8px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 12px;
   }
 
-  .build__ba-label--after { color: var(--accent); }
-
-  .build__ba-items {
-    list-style: none;
-    padding: 0;
+  .xray__session-flow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 
-  .build__ba-items li {
-    font-size: 14px;
-    color: var(--text-secondary);
-    padding: 4px 0;
-    line-height: 1.5;
-  }
-
-  .build__hands-on {
-    background: var(--bg-dark);
-    border-radius: 16px;
-    padding: 28px;
-  }
-
-  .build__hands-on-label {
+  .xray__session-step {
+    flex: 1;
     font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #fb923c;
-    margin-bottom: 10px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.4;
   }
 
-  .build__hands-on-text {
-    font-size: 16px;
-    color: rgba(255,255,255,0.7);
-    line-height: 1.6;
-  }
-
-  .build__hands-on-text strong {
+  .xray__session-step strong {
     color: #fff;
     font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
   }
 
-  .build__outcome {
-    margin-top: 20px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px 20px;
-    font-size: 15px;
-    color: var(--text-primary);
-    line-height: 1.5;
-    text-align: center;
+  .xray__session-time {
+    font-size: 11px;
+    font-weight: 600;
+    color: #fb923c;
+    margin-top: 6px;
+  }
+
+  .xray__session-arrow {
+    color: rgba(255,255,255,0.2);
+    font-size: 16px;
+    flex-shrink: 0;
   }
 
   /* ============================================
@@ -1279,6 +1301,217 @@
     opacity: 0.5;
   }
 
+  /* ============================================
+     APPENDIX: PROCESS X-RAY CANVAS
+     ============================================ */
+  .slide--xray-full {
+    padding: 28px 60px 48px;
+    justify-content: flex-start;
+  }
+
+  .xray-canvas {
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .xray-canvas__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    border-bottom: 2px solid var(--accent);
+    background: var(--bg-secondary);
+  }
+
+  .xray-canvas__title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--text-primary);
+  }
+
+  .xray-canvas__meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .xray-canvas__header-right {
+    display: flex;
+    gap: 16px;
+  }
+
+  .xray-canvas__metric {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--bg-primary);
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+
+  .xray-canvas__body {
+    padding: 16px 20px;
+  }
+
+  .xray-canvas__section-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+  }
+
+  .xray-canvas__three-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .xray-canvas__col {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+
+  .xray-canvas__col-header {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .xray-canvas__col-header--decisions { color: #7c3aed; }
+  .xray-canvas__col-header--data { color: #0284c7; }
+  .xray-canvas__col-header--actions { color: #059669; }
+
+  .xray-canvas__col-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  .xray-canvas__line {
+    height: 1px;
+    border-bottom: 1px dashed var(--border);
+    margin: 14px 0;
+  }
+
+  .xray-canvas__diagnose {
+    border-top: 1px solid var(--border-light);
+    padding-top: 14px;
+  }
+
+  .xray-canvas__questions {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 12px;
+  }
+
+  .xray-canvas__q {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .xray-canvas__q-hint {
+    font-weight: 400;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
+  .xray-canvas__zone-sort {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+
+  .xray-canvas__zone-box {
+    border-radius: 8px;
+    padding: 10px 12px;
+    min-height: 36px;
+  }
+
+  .xray-canvas__zone-box--ai { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); }
+  .xray-canvas__zone-box--collab { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); }
+  .xray-canvas__zone-box--human { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); }
+
+  .xray-canvas__zone-box-label {
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .xray-canvas__zone-box--ai .xray-canvas__zone-box-label { color: #16a34a; }
+  .xray-canvas__zone-box--collab .xray-canvas__zone-box-label { color: #d97706; }
+  .xray-canvas__zone-box--human .xray-canvas__zone-box-label { color: #dc2626; }
+
+  .xray-canvas__zone-box-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .xray-canvas__footer {
+    border-top: 2px solid var(--accent);
+    background: var(--bg-secondary);
+    padding: 14px 20px;
+  }
+
+  .xray-canvas__prototype {
+    margin-bottom: 12px;
+  }
+
+  .xray-canvas__prototype-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  .xray-canvas__prototype-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+
+  .xray-canvas__prototype-cell {
+    background: var(--bg-card);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    min-height: 36px;
+  }
+
+  .xray-canvas__prototype-cell-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .xray-canvas__target {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .xray-canvas__target-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+
+  .xray-canvas__target-metrics {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
   @media (max-width: 900px) {
     .slide { padding: 40px; }
     .outcome__pillars { grid-template-columns: 1fr; }
@@ -1286,6 +1519,9 @@
     .arc__arrow { transform: rotate(90deg); padding: 8px 0; }
     .mirror__layout { grid-template-columns: 1fr; }
     .build__layout { grid-template-columns: 1fr; }
+    .xray-canvas__three-cols { grid-template-columns: 1fr; }
+    .xray-canvas__zone-sort { grid-template-columns: 1fr; }
+    .xray-canvas__prototype-grid { grid-template-columns: 1fr; }
     .commit__layout { grid-template-columns: 1fr; }
     .aiq__layout { grid-template-columns: 1fr; }
     .after__items { grid-template-columns: 1fr; }
@@ -1345,7 +1581,7 @@
             <div class="outcome__pillar-num">2</div>
             <div class="outcome__pillar-title">Know How to Unlock ROI from AI</div>
             <div class="outcome__pillar-desc">
-              Walk away with a repeatable framework for AI process transformation &mdash; practiced on a real workflow from your org.
+              Walk away with the Process X-Ray&trade; &mdash; a repeatable framework for AI process transformation, practiced on a real workflow from your organization.
             </div>
           </div>
           <div class="outcome__pillar">
@@ -1387,7 +1623,7 @@
           <div class="arc__block-title">Re-engineer</div>
           <div class="arc__block-subtitle">&ldquo;This is how to unlock it.&rdquo;</div>
           <div class="arc__block-desc">
-            Learn a repeatable framework for AI process transformation, then apply it hands-on to a real workflow from your organization.
+            Apply the Process X-Ray&trade; to decompose a real workflow, identify where AI fits, and prototype one AI collaboration live in the room.
           </div>
           <div class="arc__block-emotion">Competence</div>
         </div>
@@ -1508,59 +1744,85 @@
   <div class="slide slide--build" data-slide="4">
     <div class="slide__inner">
       <div class="eyebrow">Block 2 &middot; Re-engineer</div>
-      <div class="heading-md" style="margin-bottom: 28px;">
-        A repeatable framework for redesigning<br>processes with <span class="accent">AI at the center</span>
+      <div class="heading-md" style="margin-bottom: 24px;">
+        The Process X-Ray&trade;
       </div>
+      <p class="build__intro">Most organizations try to &ldquo;add AI&rdquo; to existing processes. That doesn&rsquo;t work. The X-Ray goes deeper &mdash; decomposing any process into three types of <em>work</em>, then diagnosing where AI actually fits.</p>
       <div class="build__layout">
         <div class="build__left">
-          <div class="build__flow-title">Part 1: Instructor-Led Case Study</div>
-          <ul class="build__flow-items">
-            <li>Walk through a standard process end-to-end (e.g., recruiting pipeline: sourcing to offer)</li>
-            <li>Map current state: steps, handoffs, decision points, cycle time</li>
-            <li>Redesign for AI: what stays human, what becomes agentic, what disappears</li>
-            <li>Show the before/after metrics and what changed</li>
-          </ul>
-          <div class="build__flow-title">Part 2: Hands-On Activity</div>
-          <ul class="build__flow-items">
-            <li>Groups of 2&ndash;3 pick a real process from their function</li>
-            <li>Apply the framework: map &rarr; identify AI opportunities &rarr; redesign &rarr; measure</li>
-            <li>Each group presents their redesign for expert review and constructive feedback</li>
-          </ul>
-          <div class="build__outcome">
-            <strong>Outcome:</strong> Every leader has personally gone through the work of AI process engineering on a real workflow from their own function.
-          </div>
-        </div>
-        <div class="build__right">
-          <div class="build__example">
-            <div class="build__example-label">Case Study Example</div>
-            <div class="build__example-title">Recruiting: Sourcing to Offer</div>
-            <div class="build__before-after">
-              <div class="build__ba-col">
-                <div class="build__ba-label">Before</div>
-                <ul class="build__ba-items">
-                  <li>45-day cycle time</li>
-                  <li>6 manual handoffs</li>
-                  <li>3 teams involved</li>
-                  <li>Inconsistent screening</li>
-                  <li>60% recruiter time on admin</li>
-                </ul>
+          <div class="xray__steps">
+            <div class="xray__step">
+              <div class="xray__step-num">1</div>
+              <div class="xray__step-body">
+                <div class="xray__step-title">Decompose</div>
+                <div class="xray__step-desc">Break the process into three types of work: <strong>Decisions</strong> (where someone applies judgment), <strong>Data Moves</strong> (where information flows between people or systems), and <strong>Actions</strong> (where something gets created, sent, or checked).</div>
               </div>
-              <div class="build__ba-col">
-                <div class="build__ba-label build__ba-label--after">After AI Redesign</div>
-                <ul class="build__ba-items">
-                  <li>18-day cycle time</li>
-                  <li>2 human decision points</li>
-                  <li>AI-sourced candidate pool</li>
-                  <li>Consistent scoring model</li>
-                  <li>40% cost reduction</li>
-                </ul>
+            </div>
+            <div class="xray__step">
+              <div class="xray__step-num">2</div>
+              <div class="xray__step-body">
+                <div class="xray__step-title">Diagnose</div>
+                <div class="xray__step-desc">For each item, ask three questions: Is it <strong>pattern-based</strong>? Is the <strong>data available</strong>? What&rsquo;s the <strong>cost of error</strong>? The answers sort each piece of work into one of three zones.</div>
+              </div>
+            </div>
+            <div class="xray__step">
+              <div class="xray__step-num">3</div>
+              <div class="xray__step-body">
+                <div class="xray__step-title">Design</div>
+                <div class="xray__step-desc">Draw the new process using the three zones. Then pick one item from the Collaboration Zone and <strong>prototype it live</strong> &mdash; define what AI needs to see, what it should produce, and what the human checks.</div>
+              </div>
+            </div>
+            <div class="xray__step">
+              <div class="xray__step-num">4</div>
+              <div class="xray__step-body">
+                <div class="xray__step-title">Defend</div>
+                <div class="xray__step-desc">Quantify the before and after. Build the business case: new time, cost, error rate. Identify what&rsquo;s needed to make it real.</div>
               </div>
             </div>
           </div>
-          <div class="build__hands-on">
-            <div class="build__hands-on-label">The Key Insight</div>
-            <div class="build__hands-on-text">
-              The leadership skill here isn&rsquo;t building AI agents &mdash; it&rsquo;s being able to <strong>look at a process and decide where AI should go, what should stay human, and how to measure whether the change worked.</strong>
+        </div>
+        <div class="build__right">
+          <div class="xray__zones">
+            <div class="xray__zones-title">The Three Zones</div>
+            <div class="xray__zone xray__zone--ai">
+              <div class="xray__zone-icon">&#9679;</div>
+              <div>
+                <div class="xray__zone-name">AI Zone</div>
+                <div class="xray__zone-desc">Pattern-based, data available, low error cost. AI runs it, humans monitor exceptions.</div>
+              </div>
+            </div>
+            <div class="xray__zone xray__zone--collab">
+              <div class="xray__zone-icon">&#9679;</div>
+              <div>
+                <div class="xray__zone-name">Collaboration Zone</div>
+                <div class="xray__zone-desc">Pattern-based but high error cost, or partially structured. AI prepares and recommends, the human decides.</div>
+              </div>
+            </div>
+            <div class="xray__zone xray__zone--human">
+              <div class="xray__zone-icon">&#9679;</div>
+              <div>
+                <div class="xray__zone-name">Human Zone</div>
+                <div class="xray__zone-desc">Novel, ambiguous, relationship-driven, or ethical. Stays fully human.</div>
+              </div>
+            </div>
+          </div>
+          <div class="xray__session">
+            <div class="xray__session-label">How the session works</div>
+            <div class="xray__session-flow">
+              <div class="xray__session-step">
+                <strong>Case study</strong><br>Practitioner walks through a full X-Ray on a real process
+                <div class="xray__session-time">45 min</div>
+              </div>
+              <div class="xray__session-arrow">&rarr;</div>
+              <div class="xray__session-step">
+                <strong>Hands-on</strong><br>Teams X-Ray their own process and prototype one AI collaboration live
+                <div class="xray__session-time">75 min</div>
+              </div>
+              <div class="xray__session-arrow">&rarr;</div>
+              <div class="xray__session-step">
+                <strong>Present</strong><br>Each group shares their X-Ray and prototype for expert feedback
+                <div class="xray__session-time">30 min</div>
+              </div>
             </div>
           </div>
         </div>
@@ -1707,8 +1969,110 @@
     </div>
   </div>
 
-  <!-- ====== APPENDIX SLIDE A1: AIQ FRAMEWORK ====== -->
-  <div class="slide slide--aiq" data-slide="7">
+  <!-- ====== APPENDIX SLIDE A1: PROCESS X-RAY CANVAS ====== -->
+  <div class="slide slide--xray-full" data-slide="7">
+    <div class="slide__inner">
+      <div class="eyebrow" style="text-align: center;">Appendix &middot; Process X-Ray&trade;</div>
+      <div class="heading-md" style="text-align: center; margin-bottom: 20px;">
+        The canvas teams fill out during Block 2
+      </div>
+      <div class="xray-canvas">
+        <div class="xray-canvas__header">
+          <div class="xray-canvas__header-left">
+            <div class="xray-canvas__title">Process X-Ray&trade;</div>
+            <div class="xray-canvas__meta">Process: _______________ &nbsp;&nbsp; Outcome it produces: _______________</div>
+          </div>
+          <div class="xray-canvas__header-right">
+            <div class="xray-canvas__metric">Today: ___ days</div>
+            <div class="xray-canvas__metric">$___ cost</div>
+            <div class="xray-canvas__metric">___% error</div>
+          </div>
+        </div>
+        <div class="xray-canvas__body">
+          <div class="xray-canvas__decompose">
+            <div class="xray-canvas__section-label">1. Decompose &mdash; what types of work make up this process?</div>
+            <div class="xray-canvas__three-cols">
+              <div class="xray-canvas__col">
+                <div class="xray-canvas__col-header xray-canvas__col-header--decisions">Decisions</div>
+                <div class="xray-canvas__col-sub">Where someone applies judgment</div>
+                <div class="xray-canvas__col-lines">
+                  <div class="xray-canvas__line"></div>
+                  <div class="xray-canvas__line"></div>
+                  <div class="xray-canvas__line"></div>
+                  <div class="xray-canvas__line"></div>
+                </div>
+              </div>
+              <div class="xray-canvas__col">
+                <div class="xray-canvas__col-header xray-canvas__col-header--data">Data Moves</div>
+                <div class="xray-canvas__col-sub">Where information flows</div>
+                <div class="xray-canvas__col-lines">
+                  <div class="xray-canvas__line"></div>
+                  <div class="xray-canvas__line"></div>
+                  <div class="xray-canvas__line"></div>
+                  <div class="xray-canvas__line"></div>
+                </div>
+              </div>
+              <div class="xray-canvas__col">
+                <div class="xray-canvas__col-header xray-canvas__col-header--actions">Actions</div>
+                <div class="xray-canvas__col-sub">Where something gets created or checked</div>
+                <div class="xray-canvas__col-lines">
+                  <div class="xray-canvas__line"></div>
+                  <div class="xray-canvas__line"></div>
+                  <div class="xray-canvas__line"></div>
+                  <div class="xray-canvas__line"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="xray-canvas__diagnose">
+            <div class="xray-canvas__section-label">2. Diagnose &mdash; for each item above, ask:</div>
+            <div class="xray-canvas__questions">
+              <div class="xray-canvas__q">Pattern-based? <span class="xray-canvas__q-hint">Yes &rarr; AI candidate</span></div>
+              <div class="xray-canvas__q">Data available? <span class="xray-canvas__q-hint">No &rarr; fix this first</span></div>
+              <div class="xray-canvas__q">Cost of error? <span class="xray-canvas__q-hint">High &rarr; keep human in loop</span></div>
+            </div>
+            <div class="xray-canvas__zone-sort">
+              <div class="xray-canvas__zone-box xray-canvas__zone-box--ai">
+                <div class="xray-canvas__zone-box-label">&#9679; AI Zone</div>
+                <div class="xray-canvas__zone-box-desc">AI runs it, humans monitor</div>
+              </div>
+              <div class="xray-canvas__zone-box xray-canvas__zone-box--collab">
+                <div class="xray-canvas__zone-box-label">&#9679; Collaboration Zone</div>
+                <div class="xray-canvas__zone-box-desc">AI prepares, human decides</div>
+              </div>
+              <div class="xray-canvas__zone-box xray-canvas__zone-box--human">
+                <div class="xray-canvas__zone-box-label">&#9679; Human Zone</div>
+                <div class="xray-canvas__zone-box-desc">Stays fully human</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="xray-canvas__footer">
+          <div class="xray-canvas__prototype">
+            <div class="xray-canvas__prototype-label">3. Prototype &mdash; pick one item from the Collaboration Zone</div>
+            <div class="xray-canvas__prototype-grid">
+              <div class="xray-canvas__prototype-cell">
+                <div class="xray-canvas__prototype-cell-label">What does AI need to see?</div>
+              </div>
+              <div class="xray-canvas__prototype-cell">
+                <div class="xray-canvas__prototype-cell-label">What should AI produce?</div>
+              </div>
+              <div class="xray-canvas__prototype-cell">
+                <div class="xray-canvas__prototype-cell-label">What does the human check?</div>
+              </div>
+            </div>
+          </div>
+          <div class="xray-canvas__target">
+            <div class="xray-canvas__target-label">4. Defend</div>
+            <div class="xray-canvas__target-metrics">Target: ___ days &nbsp;|&nbsp; $___ cost &nbsp;|&nbsp; ___% error &nbsp;&nbsp;&middot;&nbsp;&nbsp; First step this week: _______________</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== APPENDIX SLIDE A2: AIQ FRAMEWORK ====== -->
+  <div class="slide slide--aiq" data-slide="8">
     <div class="slide__inner">
       <div class="eyebrow">Appendix &middot; Enterprise AIQ&trade; Framework</div>
       <div class="heading-md" style="margin-bottom: 8px;">
@@ -1849,7 +2213,7 @@
   </div>
 
   <!-- ====== APPENDIX SLIDE A2: AI LEADERSHIP CANVAS ====== -->
-  <div class="slide slide--canvas-full" data-slide="8">
+  <div class="slide slide--canvas-full" data-slide="9">
     <div class="slide__inner">
       <div class="eyebrow" style="text-align: center;">Appendix &middot; AI Leadership Canvas&trade;</div>
       <div class="heading-md" style="text-align: center; margin-bottom: 28px;">
@@ -1909,7 +2273,7 @@
 
 <!-- Navigation -->
 <nav class="nav" id="navBar">
-  <span class="nav__label" id="slideNum">1 / 9</span>
+  <span class="nav__label" id="slideNum">1 / 10</span>
   <button class="nav__dot active" data-goto="0"></button>
   <button class="nav__dot" data-goto="1"></button>
   <button class="nav__dot" data-goto="2"></button>
@@ -1920,6 +2284,7 @@
   <div class="nav__sep"></div>
   <button class="nav__dot appendix-dot" data-goto="7"></button>
   <button class="nav__dot appendix-dot" data-goto="8"></button>
+  <button class="nav__dot appendix-dot" data-goto="9"></button>
 </nav>
 
 <div class="confidential">Proprietary & Confidential</div>
